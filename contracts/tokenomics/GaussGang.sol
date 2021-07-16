@@ -30,7 +30,7 @@ import "../dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol";
 
 
 
-contract Gauss is BEP20 {
+contract GaussGang is BEP20 {
     
     using SafeMath for uint256;
     using Address for address;
