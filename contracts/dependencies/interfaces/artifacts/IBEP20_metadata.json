@@ -254,7 +254,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/interfaces/IBEP20.sol": "IBEP20"
+			"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": "IBEP20"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -268,7 +268,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/interfaces/IBEP20.sol": {
+		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
 			"keccak256": "0x64a7b1ceae1a6b491348f26a495a1cf72c8727b2abb9120d225b86e3950f4edb",
 			"license": "MIT",
 			"urls": [

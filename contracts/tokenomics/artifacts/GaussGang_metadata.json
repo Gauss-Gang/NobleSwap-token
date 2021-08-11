@@ -6,6 +6,11 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -75,6 +80,110 @@
 				"type": "event"
 			},
 			{
+				"inputs": [],
+				"name": "_charitableFundFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_gangFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_liquidityFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_name",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_redistributionFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_symbol",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_totalFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -139,6 +248,86 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newCharitableAddress",
+						"type": "address"
+					}
+				],
+				"name": "changeCharitableWallet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newGaussGangAddress",
+						"type": "address"
+					}
+				],
+				"name": "changeGaussGangWallet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newLiquidityAddress",
+						"type": "address"
+					}
+				],
+				"name": "changeLiquidityWallet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newRedistributionAddress",
+						"type": "address"
+					}
+				],
+				"name": "changeRedistributionWallet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newRedistributionFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newCharitableFundFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newLiquidityFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newGangFee",
+						"type": "uint256"
+					}
+				],
+				"name": "changeTransactionFees",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -262,6 +451,45 @@
 			},
 			{
 				"inputs": [],
+				"name": "pancakeswapPair",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pancakeswapRouter",
+				"outputs": [
+					{
+						"internalType": "contract IPancakeSwapRouter02",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newRouter",
+						"type": "address"
+					}
+				],
+				"name": "setRouterAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "symbol",
 				"outputs": [
 					{
@@ -276,6 +504,19 @@
 			{
 				"inputs": [],
 				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalTransactionFee",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -370,7 +611,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/contracts/BEP20.sol": "BEP20"
+			"GaussGang/contracts/tokenomics/GaussGang.sol": "GaussGang"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -416,6 +657,38 @@
 				"dweb:/ipfs/QmX6iyCB58q1MbTAvUkDX2rSivokQzieb1fxsQ7QdhPJqL"
 			]
 		},
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": {
+			"keccak256": "0xd7198d39c3c9c65a26149fa90bf315d84eda159299c2a35d5977ac1d82720380",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f1bb430ea482d13e0c1e2b92b46f4eafcc42ff6fea15501073ad7a4468875699",
+				"dweb:/ipfs/QmfKjES7ye45XGSrd1prufUVZSPsmZsQZdm36PVBoJPdM1"
+			]
+		},
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": {
+			"keccak256": "0x7d9532239a13becdeed81b91550011314222138e9ae76be18e224ec5bd6f826e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3f6b875b1d38a2d49615455f5ff893bbd4678729b7104fb1b93a27dec5f19287",
+				"dweb:/ipfs/QmQTxprgyaQs7SmrwvebZ7pTC1idASXHfj7iB3vfj3NhJD"
+			]
+		},
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter01.sol": {
+			"keccak256": "0x6fdea9a336f1634dc16410863b7146f3cc37c8a544767bec1f9ef78e16510b94",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d8066cab7e3da1f3695b6c1f680db6faecfc68b5c755fa405bb202002063bb70",
+				"dweb:/ipfs/QmbkAbcqqVCKWVY1KBsuu52d7TXEtZFxUoreo2wh8Scj4A"
+			]
+		},
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": {
+			"keccak256": "0x5164248128e604bb56809cd3cd5724a376450ddc5443cb79c1161c56a284165e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b0f66735768ada1c7f1599a7dfb45ac9056cada956c8633ae25e3a6edaae4fb6",
+				"dweb:/ipfs/QmXZtgiGH8YuD3HdjUaKk8tfG2CDjMC44AaVd8jD4K3ah4"
+			]
+		},
 		"GaussGang/contracts/dependencies/libraries/Address.sol": {
 			"keccak256": "0x2aaabce5ee52bc8276e6714dc2350cf10fd1d66e2fc5304a180a90a191f6b6b1",
 			"license": "MIT",
@@ -430,6 +703,22 @@
 			"urls": [
 				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
 				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
+			]
+		},
+		"GaussGang/contracts/tokenomics/GaussGang.sol": {
+			"keccak256": "0x00a31ff27fde6a6e2e4bb7924285b0cec2214fc9f4a8fa84d6833f4ca3a65e69",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c1418f69ffe4c38c661240be6efecd064cf46b24b5d8ff0b52620dc2d51aed51",
+				"dweb:/ipfs/QmTSrLBWygY9Y8R9fAZDfeASrxR9PCQo4wnr76Sk932Utp"
+			]
+		},
+		"GaussGang/contracts/tokenomics/GaussGangTokenLock.sol": {
+			"keccak256": "0x5a89320ad127b461255737861999e8e68b1c7263f9aeedb80d9dbc5febc4f7db",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://ed154d3a5f684b119acc006a97608aa82f2b8eb0f3216ccf122571ab2c973937",
+				"dweb:/ipfs/QmQHubD2YGGE1xtYnHgNfJJkMWFt5KaNx9vgUPfsDkmdqx"
 			]
 		}
 	},

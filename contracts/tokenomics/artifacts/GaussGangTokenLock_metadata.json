@@ -1,0 +1,198 @@
+{
+	"compiler": {
+		"version": "0.8.4+commit.c7e474f2"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IBEP20",
+						"name": "token_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "beneficiary_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "releaseTime_",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "beneficiary",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "release",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "releaseTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token",
+				"outputs": [
+					{
+						"internalType": "contract IBEP20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"GaussGang/contracts/tokenomics/GaussGangTokenLock.sol": "GaussGangTokenLock"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"GaussGang/contracts/dependencies/contracts/Context.sol": {
+			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0fa6fdbc5420fe8e590e09c61e161734c48996df6455484cec5316dff926bffe",
+				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
+			]
+		},
+		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
+			"keccak256": "0xaa91bf17312c2bb4e4c018167e98361df3af3c2a2f84a038bb8c2f18a93556a3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f90ee24db00002d0f3df3560b5300e7083ea79f9a72ef4d2d8ce23a263b9f313",
+				"dweb:/ipfs/QmUrRoRhrF8MmNDDCJZYYAEHwqJ3zSdLdfwTxe4rZxfHNS"
+			]
+		},
+		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
+			"keccak256": "0x64a7b1ceae1a6b491348f26a495a1cf72c8727b2abb9120d225b86e3950f4edb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2b3ee0d79db8ce7cdd3ac6e65a72fc6e69309f1153c96a0098312e845d6ef9e2",
+				"dweb:/ipfs/QmX6iyCB58q1MbTAvUkDX2rSivokQzieb1fxsQ7QdhPJqL"
+			]
+		},
+		"GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0x2aaabce5ee52bc8276e6714dc2350cf10fd1d66e2fc5304a180a90a191f6b6b1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e7bf6b611e73d8a2d237e9ec617de8cd70ba6a6572dfe832efa3cf1316c72ae2",
+				"dweb:/ipfs/QmeHPcrvqKmgTT5WoN6KZQbNgLGPdqJXjKgLGjpK2JCgRy"
+			]
+		},
+		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
+			"keccak256": "0x530b87843e152aa51b6bf98a68e01806ecb38e69e183dc7a03d478905138d433",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
+				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
+			]
+		},
+		"GaussGang/contracts/tokenomics/GaussGangTokenLock.sol": {
+			"keccak256": "0x5a89320ad127b461255737861999e8e68b1c7263f9aeedb80d9dbc5febc4f7db",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://ed154d3a5f684b119acc006a97608aa82f2b8eb0f3216ccf122571ab2c973937",
+				"dweb:/ipfs/QmQHubD2YGGE1xtYnHgNfJJkMWFt5KaNx9vgUPfsDkmdqx"
+			]
+		}
+	},
+	"version": 1
+}
