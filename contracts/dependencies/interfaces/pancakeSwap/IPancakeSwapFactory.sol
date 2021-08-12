@@ -4,7 +4,7 @@ pragma solidity >=0.8.4 <0.9.0;
 
 
 
-// Official PancakeSwap used to create a token pair on the Pancakeswap Exchange
+// Official PancakeSwap factory used to create a token pair on the Pancakeswap Exchange
 interface IPancakeSwapFactory {
     
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);

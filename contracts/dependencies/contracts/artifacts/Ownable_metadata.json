@@ -64,7 +64,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/contracts/Ownable.sol": "Ownable"
+			"GaussGang/contracts/dependencies/contracts/Ownable.sol": "Ownable"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -78,7 +78,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/contracts/Context.sol": {
+		"GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
 			"urls": [
@@ -86,7 +86,7 @@
 				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
 			]
 		},
-		"contracts/dependencies/contracts/Ownable.sol": {
+		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
 			"keccak256": "0xaa91bf17312c2bb4e4c018167e98361df3af3c2a2f84a038bb8c2f18a93556a3",
 			"license": "MIT",
 			"urls": [

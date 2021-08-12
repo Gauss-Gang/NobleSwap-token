@@ -216,25 +216,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "mint",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "name",
 				"outputs": [
@@ -385,11 +366,11 @@
 	},
 	"sources": {
 		"GaussGang/contracts/dependencies/contracts/BEP20.sol": {
-			"keccak256": "0x5c076308ab31c4690466d16c610431f2579e548355a5dc763474522f235c379e",
+			"keccak256": "0x4701be868c5a92853b8e5817c15a828f366c673040ce66d19c11b5ca30b871d5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b4782866595bc06d9adbf3bbf458e078c59d59cadd7866c72e90b991e949a58",
-				"dweb:/ipfs/QmNMToryZrtkgWqSpHNfKQB3cCHZzo4NCgofw1DeA6DwgV"
+				"bzz-raw://15570fff1096a7914553a62403744f584c5c2671c861a60a1a9ff4be2949c8cf",
+				"dweb:/ipfs/QmbmQ18QPUCRaiYTkAHLBD41DvLpt1NAa9hzKkghVr5m13"
 			]
 		},
 		"GaussGang/contracts/dependencies/contracts/Context.sol": {
@@ -409,11 +390,11 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
-			"keccak256": "0x64a7b1ceae1a6b491348f26a495a1cf72c8727b2abb9120d225b86e3950f4edb",
+			"keccak256": "0xbe27147f54c8a62c39cb5e748d732710a49a1e36407936596ed1b2985774914b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2b3ee0d79db8ce7cdd3ac6e65a72fc6e69309f1153c96a0098312e845d6ef9e2",
-				"dweb:/ipfs/QmX6iyCB58q1MbTAvUkDX2rSivokQzieb1fxsQ7QdhPJqL"
+				"bzz-raw://d9c8e0b4aaca38ba83911bf09cc75a7b2e806cc20b4bb985a3ce6282e1182ac8",
+				"dweb:/ipfs/QmPixZNPCrdY69y5VwxEen9WBthGjJYvAqC8qHHXW8J7tJ"
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/Address.sol": {

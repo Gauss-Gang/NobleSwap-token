@@ -182,7 +182,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": "IPancakeSwapFactory"
+			"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": "IPancakeSwapFactory"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -196,12 +196,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": {
-			"keccak256": "0xd7198d39c3c9c65a26149fa90bf315d84eda159299c2a35d5977ac1d82720380",
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": {
+			"keccak256": "0x36964c0a766794695daf0be1124fa1a473e2c811fcd1d3d96320ce49ba4cef65",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f1bb430ea482d13e0c1e2b92b46f4eafcc42ff6fea15501073ad7a4468875699",
-				"dweb:/ipfs/QmfKjES7ye45XGSrd1prufUVZSPsmZsQZdm36PVBoJPdM1"
+				"bzz-raw://38cb1eadf7a6df226c346a58553298b58f75d0ce30e788a12b9f99782033b8d5",
+				"dweb:/ipfs/QmX7YdAjEkRM91Qddf2LLYw9aTuDTK1ixmZtbUaXJDY612"
 			]
 		}
 	},

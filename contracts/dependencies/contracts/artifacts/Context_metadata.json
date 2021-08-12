@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/contracts/Context.sol": "Context"
+			"GaussGang/contracts/dependencies/contracts/Context.sol": "Context"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -32,7 +32,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/contracts/Context.sol": {
+		"GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
 			"urls": [

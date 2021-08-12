@@ -4,7 +4,7 @@ pragma solidity >=0.8.4 <0.9.0;
 
 
 
-// BEP20 Interface that creates basic functions for a BEP20 token. The Gauss Contract inherits it's core functions from this interface.
+// BEP20 Interface that creates basic functions for a BEP20 token. The Gauss(Gang) Contract inherits it's core functions from this interface.
 interface IBEP20 {
     
     
@@ -40,14 +40,7 @@ interface IBEP20 {
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 
 
-    /* Returns the remaining tokens that the 'spender' address can spend on behalf of the 'owner' address through the {transferFrom} function.
-        -TODO: Consider use of aforementioned solution ->
-        IMPORTANT: Beware that changing an allowance with this method brings the risk
-        that someone may use both the old and the new allowance by unfortunate
-        transaction ordering. One possible solution to mitigate this race
-        condition is to first reduce the spender's allowance to 0 and set the
-        desired value afterwards:
-        https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729  */
+    // Returns the remaining tokens that the 'spender' address can spend on behalf of the 'owner' address through the {transferFrom} function.
     function allowance(address _owner, address spender) external view returns (uint256);
    
     

@@ -37,6 +37,7 @@ contract GaussGangTokenLock is Context, Ownable {
     uint256 private immutable _releaseTime;
 
 
+    // The constructor sets internal the values of _token, _beneficiary, and _releaseTime to the variables passed in when called externally
     constructor(IBEP20 token_, address beneficiary_, uint256 releaseTime_) {
         
         require(releaseTime_ > block.timestamp, "GaussGangTokenLock: release time is before current time");

@@ -970,7 +970,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": "IPancakeSwapRouter02"
+			"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": "IPancakeSwapRouter02"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -984,7 +984,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter01.sol": {
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter01.sol": {
 			"keccak256": "0x6fdea9a336f1634dc16410863b7146f3cc37c8a544767bec1f9ef78e16510b94",
 			"license": "MIT",
 			"urls": [
@@ -992,7 +992,7 @@
 				"dweb:/ipfs/QmbkAbcqqVCKWVY1KBsuu52d7TXEtZFxUoreo2wh8Scj4A"
 			]
 		},
-		"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": {
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": {
 			"keccak256": "0x5164248128e604bb56809cd3cd5724a376450ddc5443cb79c1161c56a284165e",
 			"license": "MIT",
 			"urls": [

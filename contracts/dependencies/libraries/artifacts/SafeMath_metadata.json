@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/libraries/SafeMath.sol": "SafeMath"
+			"GaussGang/contracts/dependencies/libraries/SafeMath.sol": "SafeMath"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -32,7 +32,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/libraries/SafeMath.sol": {
+		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
 			"keccak256": "0x530b87843e152aa51b6bf98a68e01806ecb38e69e183dc7a03d478905138d433",
 			"license": "MIT",
 			"urls": [

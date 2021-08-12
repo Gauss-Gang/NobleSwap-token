@@ -5,7 +5,7 @@
     Deployed to      : TODO
     Name             : Gauss
     Symbol           : GANG
-    Total supply     : 250000000
+    Total supply     : 250,000,000 (250 Million)
     Transaction Fee  : 12%
 
     MIT Licence. (c) 2021 Gauss Gang Inc. 
@@ -32,7 +32,9 @@ contract GaussGang is BEP20 {
     
     using SafeMath for uint256;
     using Address for address;
-
+    
+    
+    // TODO: Create comment
     mapping (address => uint256) private _balances;
     mapping (address => mapping (address => uint256)) private _allowances;
     mapping (address => bool) private _excludedFromFee;
@@ -53,7 +55,8 @@ contract GaussGang is BEP20 {
     address public pancakeswapPair;
     IPancakeSwapRouter02 public pancakeswapRouter;
 
-
+    
+    // TODO: Create comment
     constructor() {
         _name = "Gauss";
         _symbol = "GANG";
@@ -114,6 +117,7 @@ contract GaussGang is BEP20 {
         require(recipient != address(0), "BEP20: transfer to the zero address");
         
         
+        // Checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true
         if (_excludedFromFee[msg.sender] == true) {
             _balances[sender] = _balances[sender].sub(amount, "BEP20: transfer amount exceeds balance");
             _balances[recipient] = _balances[recipient].add(amount);
@@ -122,12 +126,21 @@ contract GaussGang is BEP20 {
         
         
         else {
+            
+            // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee
             uint256 redistributionAmount = amount.mul(_redistributionFee) / 100;
             uint256 charitableFundAmount = amount.mul(_charitableFundFee) / 100;
             uint256 liquidityAmount = amount.mul(_liquidityFee) / 100;
             uint256 gangAmount = amount.mul(_gangFee) / 100;
             uint256 finalAmount = amount.sub(redistributionAmount).sub(charitableFundAmount).sub(liquidityAmount).sub(gangAmount);
             
+            
+            
+            /* This section performs the balance transfer from "sender" to "recipient" 
+                    - First ensuring the original "amount" is removed from the "sender" and the "finalAmount" ("amount" - transaction fee)
+                        is sent to the "recipient"
+                    - After that transaction is complete, the transaction fee is divided up and sent to the respective pool addresses
+            */
             _balances[sender] = _balances[sender].sub(amount, "BEP20: transfer amount exceeds balance");
             _balances[recipient] = _balances[recipient].add(finalAmount);
             _balances[_redistributionWallet] = _balances[_redistributionWallet].add(redistributionAmount);
@@ -310,7 +323,7 @@ contract GaussGang is BEP20 {
                 (address),      // charitableFundWallet4
                 (address),      // charitableFundWallet5
                 (address),      // charitableFundWallet6
-                (address)      // charitableFundWallet7
+                (address)       // charitableFundWallet7
             ];
         
 

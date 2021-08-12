@@ -140,42 +140,4 @@ abstract contract BEP20 is Context, IBEP20, Ownable {
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
-
-    
-    // TODO: May or may not remove, left as template for now
-    // Creates `amount` tokens and assigns them to `msg.sender`, increasing the total supply.
-    function mint(uint256 amount) public onlyOwner returns (bool) {
-        _mint(_msgSender(), amount);
-        return true;
-    }
-
-    
-    // TODO: May or may not remove, left as template for now
-    // Creates `amount` tokens and assigns them to `account`, increasing the total supply.
-    function _mint(address account, uint256 amount) internal {
-        require(account != address(0), 'BEP20: mint to the zero address');
-
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
-        emit Transfer(address(0), account, amount);
-    }
-
-
-    // TODO: May or may not remove, left as template for now
-    // Destroys `amount` tokens from `account`, reducing the total supply.
-    function _burn(address account, uint256 amount) internal {
-        require(account != address(0), 'BEP20: burn from the zero address');
-
-        _balances[account] = _balances[account].sub(amount, 'BEP20: burn amount exceeds balance');
-        _totalSupply = _totalSupply.sub(amount);
-        emit Transfer(account, address(0), amount);
-    }
-
-    
-    // TODO: May or may not remove, left as template for now
-    // Destroys `amount` tokens from `account`.`amount` is then deducted from the caller's allowance.
-    function _burnFrom(address account, uint256 amount) internal {
-        _burn(account, amount);
-        _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, 'BEP20: burn amount exceeds allowance'));
-    }
 }

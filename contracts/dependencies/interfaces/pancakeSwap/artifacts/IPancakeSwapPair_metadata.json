@@ -670,7 +670,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": "IPancakeSwapPair"
+			"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": "IPancakeSwapPair"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -684,7 +684,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": {
+		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": {
 			"keccak256": "0x7d9532239a13becdeed81b91550011314222138e9ae76be18e224ec5bd6f826e",
 			"license": "MIT",
 			"urls": [
