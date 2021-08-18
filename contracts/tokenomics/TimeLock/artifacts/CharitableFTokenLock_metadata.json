@@ -14,12 +14,17 @@
 					},
 					{
 						"internalType": "address",
+						"name": "sender_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
 						"name": "beneficiary_",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "releaseTime_",
+						"name": "amount_",
 						"type": "uint256"
 					}
 				],
@@ -60,6 +65,26 @@
 			},
 			{
 				"inputs": [],
+				"name": "lockTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lockedAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -86,6 +111,19 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "sender",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -131,7 +169,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/TokenLock.sol": "GaussGangTokenLock"
+			"GaussGang/contracts/tokenomics/TimeLock/CharitableFundTokenLock.sol": "CharitableFTokenLock"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -139,7 +177,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -185,12 +223,12 @@
 				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
 			]
 		},
-		"GaussGang/contracts/tokenomics/TokenLock.sol": {
-			"keccak256": "0xdb5577ecac392d9c50e9c029fa659ca2a59cdbbc9c4e50ef329fd9476471ea98",
+		"GaussGang/contracts/tokenomics/TimeLock/CharitableFundTokenLock.sol": {
+			"keccak256": "0x0e1c8c73ea14afa5a8fe89814e3053f9f069928dcc762ea72fcf6a5a5ef8cfd9",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://bd1d0828d645056530246d5bd034229c777ca080c64a4944f3dd20003c4b0263",
-				"dweb:/ipfs/QmTjG1i1WXxsFdJjfCqgdXfSLBD8WUzvkCLndCKc7DvRwX"
+				"bzz-raw://56e1071ed093172b7eba7d95852e6a302d392849c7dbc4b7ccd5d1c7c5d5b52c",
+				"dweb:/ipfs/QmdMTBZ8zy9nYRPJYbRP2FGwKWN4QSbfxMXu4YpZsFad1R"
 			]
 		}
 	},

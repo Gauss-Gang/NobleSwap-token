@@ -359,7 +359,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -398,11 +398,11 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x2aaabce5ee52bc8276e6714dc2350cf10fd1d66e2fc5304a180a90a191f6b6b1",
+			"keccak256": "0x9d20a199283ef9f90ae8178ddf61bd13ccbf2dd62b8429b3684df32ae002ac65",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e7bf6b611e73d8a2d237e9ec617de8cd70ba6a6572dfe832efa3cf1316c72ae2",
-				"dweb:/ipfs/QmeHPcrvqKmgTT5WoN6KZQbNgLGPdqJXjKgLGjpK2JCgRy"
+				"bzz-raw://77f1542f3891335fb1ca64aa777c7de4e5ad4bb6971357328a1222b5a17f62dc",
+				"dweb:/ipfs/QmWeEVwU89UjzM65xnD2ZH92kxWRenYcZjfKMM9NDENTXH"
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {

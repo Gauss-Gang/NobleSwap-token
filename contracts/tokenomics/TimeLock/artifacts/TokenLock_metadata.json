@@ -14,8 +14,18 @@
 					},
 					{
 						"internalType": "address",
+						"name": "sender_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
 						"name": "beneficiary_",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount_",
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
@@ -60,6 +70,26 @@
 			},
 			{
 				"inputs": [],
+				"name": "lockTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lockedAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "owner",
 				"outputs": [
 					{
@@ -86,6 +116,19 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "sender",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -131,7 +174,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/TokenLock.sol": "GaussGangTokenLock"
+			"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": "TokenLock"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -185,12 +228,12 @@
 				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
 			]
 		},
-		"GaussGang/contracts/tokenomics/TokenLock.sol": {
-			"keccak256": "0xdb5577ecac392d9c50e9c029fa659ca2a59cdbbc9c4e50ef329fd9476471ea98",
+		"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
+			"keccak256": "0xe69358693f59ece010ea3844d946b1c3b907b96f7f846091a73378e9c35dd10a",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://bd1d0828d645056530246d5bd034229c777ca080c64a4944f3dd20003c4b0263",
-				"dweb:/ipfs/QmTjG1i1WXxsFdJjfCqgdXfSLBD8WUzvkCLndCKc7DvRwX"
+				"bzz-raw://c7280479c93ee810696324dbf72094257af824e722782b8e40ccf2c864641e94",
+				"dweb:/ipfs/QmayQ6P681aHa83s54hSeDhx6P5yKBCVtUKMJxAKDV7FEj"
 			]
 		}
 	},

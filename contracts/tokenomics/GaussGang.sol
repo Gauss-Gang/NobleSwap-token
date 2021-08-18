@@ -8,7 +8,7 @@
     Total supply     : 250,000,000 (250 Million)
     Transaction Fee  : 12%
 
-    MIT Licence. (c) 2021 Gauss Gang Inc. 
+    MIT License. (c) 2021 Gauss Gang Inc. 
     
     _____________________________________________________________________________
 */
@@ -25,7 +25,14 @@ import "../dependencies/interfaces/pancakeSwap/IPancakeSwapRouter01.sol";
 import "../dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol";
 import "../dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol";
 import "../dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol";
-import "./GaussGangTokenLock.sol";
+import "./TimeLock/TokenLock.sol";
+import "./TimeLock/CommunityTokenLock.sol";
+import "./TimeLock/LiquidityTokenLock.sol";
+import "./TimeLock/CharitableFundTokenLock.sol";
+import "./TimeLock/AdvisorTokenLock.sol";
+import "./TimeLock/CoreTeamTokenLock.sol";
+// import "./TimeLock/FunctionLockController.sol";
+
 
 
 contract GaussGang is BEP20 {
@@ -73,10 +80,10 @@ contract GaussGang is BEP20 {
         // TODO: Add actual wallet addresses to initialized wallet variables
         // Sets Pancakeswap Router Address, as well as wallet addresses for each of the Pools spliting the Transaction Fee
         setRouterAddress(0x10ED43C718714eb63d5aA57B78B54704E256024E);
-    //  _redistributionWallet = (Address);
-    //  _charitableFundWallet = (Address);
-    //  _liquidityWallet = (Address);
-    //  _gangWallet = (Address);
+        _redistributionWallet = (0x9C34db8a1467c0F0F152C13Db098d7e0Ca0CE918);
+        _charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
+        _liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
+        _gangWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
     
         
         // TODO: Add more exclusions if needed
@@ -88,13 +95,8 @@ contract GaussGang is BEP20 {
         _excludedFromFee[_gangWallet] = true;
         
         
-        // Vests the Community, Liquidity, Company, Core Team, and Advisor wallets. Vesting schedule is explained above each internal function called
-        _vestCommunityWallets;
-        _vestLiquidityWallets;
-        _vestCharitableFundWallets;
-        _vestAdvisorWallets;
-        _vestCoreWallets;
-        _setCompanyWallets;
+        // Vests the Community, Liquidity, Company, Core Team, and Advisor wallets. Vesting schedule is explained in detail in each TimeLock Contract
+        _initializeTokenDistribution();
 
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -220,230 +222,59 @@ contract GaussGang is BEP20 {
         _gangWallet = newGaussGangAddress;
     }
     
-    
-    
-    // TODO Write in actual wallet addresses
-    // TODO: Consider writing actual token amounts instead or in addition to for the comment
-    /* Internal function only called by the constructor, Time-Locks each Community Pool Wallet according to a set schedule
-        - Once these wallets are unlocked, the tokens will be distributed into the community supply pool
-        
-            Release Schedule is as follows:
-                Launch, Month 0:    10% of total alloted community pool tokens released
-                Month 1:            6% of total alloted community pool tokens released
-                Month 2:            5% of total alloted community pool tokens released
-                Month 3:            6% of total alloted community pool tokens released
-                Months 5,9:         5% of total alloted community pool tokens released
-                Months 13,16,19:    3% of total alloted community pool tokens released
-                Month 22:           2.15% of total alloted community pool tokens released
-    */
-    function _vestCommunityWallets() internal onlyOwner() {
-        
-        // Sets each Community Wallet Address
-        address[10] memory communityAddressList = 
-            [   (address),      // communityWallet0
-                (address),      // communityWallet1
-                (address),      // communityWallet2
-                (address),      // communityWallet3
-                (address),      // communityWallet4
-                (address),      // communityWallet5
-                (address),      // communityWallet6
-                (address),      // communityWallet7
-                (address),      // communityWallet8
-                (address)       // communityWallet9
-            ];
-        
-
-        // Sets each wallet's initial amount
-        uint256[] memory communityTokenAmountsList = 
-            [   25000000,       // communityAmount0
-                14062500,       // communityAmount1
-                11250000,       // communityAmount2
-                14062500,       // communityAmount3
-                11250000,       // communityAmount4
-                11250000,       // communityAmount5
-                6750000,        // communityAmount6
-                6750000,        // communityAmount7
-                6750000,        // communityAmount8
-                5375000         // communityAmount9
-            ];
-
-
-        // TODO Set the gangToken feild to an amount transfer from "owner"
-        GaussGangTokenLock communityLock0 = new GaussGangTokenLock(IBEP20, communityAddressList[0], 1 days);
-        GaussGangTokenLock communityLock1 = new GaussGangTokenLock(IBEP20, communityAddressList[1], 30 days);
-        GaussGangTokenLock communityLock2 = new GaussGangTokenLock(IBEP20, communityAddressList[2], 60 days);
-        GaussGangTokenLock communityLock3 = new GaussGangTokenLock(IBEP20, communityAddressList[3], 90 days);
-        GaussGangTokenLock communityLock4 = new GaussGangTokenLock(IBEP20, communityAddressList[4], 150 days);
-        GaussGangTokenLock communityLock5 = new GaussGangTokenLock(IBEP20, communityAddressList[5], 270 days);
-        GaussGangTokenLock communityLock6 = new GaussGangTokenLock(IBEP20, communityAddressList[6], (1 years + 30 days));
-        GaussGangTokenLock communityLock7 = new GaussGangTokenLock(IBEP20, communityAddressList[7], (1 years + 120 days));
-        GaussGangTokenLock communityLock8 = new GaussGangTokenLock(IBEP20, communityAddressList[8], (1 years + 210 days));
-        GaussGangTokenLock communityLock9 = new GaussGangTokenLock(IBEP20, communityAddressList[9], (1 years + 300 days));
-    }
-    
-    
-    
-    // TODO: Write out comment for function
-    // TODO Write in actual wallet addresses
-    // Internal function only called by the constructor, Time-Locks each Liquidity Pool Wallet
-    function _vestLiquidityWallets() internal onlyOwner() {
-        
-        // Sets each Liquidity Wallet Address
-        address[] calldata liquidityAddressList = 
-            [   (address),      // liquidityWallet0
-                (address)       // liquidityWallet1
-            ];
-        
-
-        // Sets each wallet's initial amount
-        uint256[] memory liquidityTokenAmountsList = 
-            [   10000000,       // liquidityAmount0
-                10000000        // liquidityAmount1
-            ];
-
-
-        // TODO Set the gangToken feild to an amount transfer from "owner"
-        GaussGangTokenLock liquidityLock0 = new GaussGangTokenLock(IBEP20, liquidityAddressList[0], 120 days);
-        GaussGangTokenLock liquidityLock1 = new GaussGangTokenLock(IBEP20, liquidityAddressList[1], 240 days);
-    }
-    
-    
-    
-    // TODO: Write out comment for function
-    // TODO Write in actual wallet addresses
-    // Internal function only called by the constructor, Time-Locks each Company Wallet
-    function _vestCharitableFundWallets() internal onlyOwner() {
-        
-        // Sets each Charitable Fund Wallet Address
-        address[] calldata charitableFundAddressList = 
-            [   (address),      // charitableFundWallet0
-                (address),      // charitableFundWallet1
-                (address),      // charitableFundWallet2
-                (address),      // charitableFundWallet3
-                (address),      // charitableFundWallet4
-                (address),      // charitableFundWallet5
-                (address),      // charitableFundWallet6
-                (address)       // charitableFundWallet7
-            ];
-        
-
-        // Sets each wallet's initial amount
-        uint256[] memory charitableFundTokenAmountsList = 
-            [   13888889,       // charitableFundAmount0
-                1,              // charitableFundAmount1
-                10,             // charitableFundAmount2
-                100,            // charitableFundAmount3
-                1000,           // charitableFundAmount4
-                10000,          // charitableFundAmount5
-                100000,         // charitableFundAmount6
-                1000000         // charitableFundAmount7
-            ];
-
-
-        // TODO Set the gangToken feild to an amount transfer from "owner"
-        GaussGangTokenLock charitableFundLock0 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[0], 180 days);
-        GaussGangTokenLock charitableFundLock1 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[1], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock2 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[2], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock3 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[3], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock4 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[4], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock5 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[5], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock6 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[6], (2 years + 30 days));
-        GaussGangTokenLock charitableFundLock7 = new GaussGangTokenLock(IBEP20, charitableFundAddressList[7], (2 years + 30 days));
-    }
-    
-    
-    
-    // TODO: Write out comment for function
-    // TODO Write in actual wallet addresses
-    // Internal function only called by the constructor, Time-Locks each Advisor Wallet
-    function _vestAdvisorWallets() internal onlyOwner() {
-        
-        // Sets each Advisor Wallet Address
-        address[] calldata advisorAddressList = 
-            [   (address),      // advisorWallet0
-                (address),      // advisorWallet1
-                (address),      // advisorWallet2
-                (address),      // advisorWallet3
-                (address),      // advisorWallet4
-                (address),      // advisorWallet5
-                (address)       // advisorWallet6
-            ];
-        
-
-        // Sets each wallet's initial amount
-        uint256[] memory advisorTokenAmountsList = 
-            [   6500000,        // advisorAmount0
-                4750000,        // advisorAmount1
-                4750000,        // advisorAmount2
-                4750000,        // advisorAmount3
-                4750000,        // advisorAmount4
-                4750000,        // advisorAmount5
-                4750000         // advisorAmount6
-            ];
-
-
-        // Consider changing the vesting period for wallet 0
-        // TODO Set the gangToken feild to an amount transfer from "owner"
-        GaussGangTokenLock advisorLock0 = new GaussGangTokenLock(IBEP20, advisorAddressList[0], 1 days);
-        GaussGangTokenLock advisorLock1 = new GaussGangTokenLock(IBEP20, advisorAddressList[1], 1 days);
-        GaussGangTokenLock advisorLock2 = new GaussGangTokenLock(IBEP20, advisorAddressList[2], 120 days);
-        GaussGangTokenLock advisorLock3 = new GaussGangTokenLock(IBEP20, advisorAddressList[3], 240 days);
-        GaussGangTokenLock advisorLock4 = new GaussGangTokenLock(IBEP20, advisorAddressList[4], 1 years);
-        GaussGangTokenLock advisorLock5 = new GaussGangTokenLock(IBEP20, advisorAddressList[5], (1 years + 120 days));
-        GaussGangTokenLock advisorLock6 = new GaussGangTokenLock(IBEP20, advisorAddressList[6], (1 years + 240 days));
-    }
-    
-    
-    
-    // TODO: Write out comment for function
-    // TODO: Write in actual wallet addresses
-    // Internal function only called by the constructor, Time-Locks each Core Team members Wallet
-    function _vestCoreWallets() internal onlyOwner() {
-        
-        // Sets each Core Team Wallet Address
-        address[] calldata coreTeamAddressList = 
-            [   (address),      // coreTeamWallet0
-                (address),      // coreTeamWallet1
-                (address),      // coreTeamWallet2
-                (address)       // coreTeamWallet3
-            ];
-        
-
-        // Sets each wallet's initial amount
-        uint256[] memory coreTeamTokenAmountsList = 
-            [   6250000,        // coreTeamAmount0
-                6250000,        // coreTeamAmount1
-                6250000,        // coreTeamAmount2
-                6250000         // coreTeamAmount3
-            ];
-
-
-        // TODO Set the gangToken feild to an amount transfer from "owner"
-        GaussGangTokenLock coreTeamLock0 = new GaussGangTokenLock(IBEP20, coreTeamAddressList[0], 150 days);
-        GaussGangTokenLock coreTeamLock1 = new GaussGangTokenLock(IBEP20, coreTeamAddressList[1], 300 days);
-        GaussGangTokenLock coreTeamLock2 = new GaussGangTokenLock(IBEP20, coreTeamAddressList[2], (1 years + 90 days));
-        GaussGangTokenLock coreTeamLock3 = new GaussGangTokenLock(IBEP20, coreTeamAddressList[3], (1 years + 240 days));
-    }
-    
-    
 
     // TODO: Write out comment for function
     // TODO: Write in actual wallet addresses
-    // Internal function only called by the constructor, moves an initial allotted amount to Company Wallet
-    function _setCompanyWallets() internal onlyOwner() {
+    // Time-Locks the specified wallet address for the given time, Function can only be called by owner, 
+    function _vestWallet(address sender, address beneficiary, uint256 amount, uint256 releaseTime) public onlyOwner() {
+        TokenLock newVestedWallet = new TokenLock(IBEP20(address(this)), sender, beneficiary, amount, releaseTime);
+        newVestedWallet.lockTokens();
+    }
+    
+    
+    // Initializes the Community, Liquidity, Charity, and Company Pools with their alotted number of tokens over their specified vesting period.
+    function _initializeTokenDistribution() internal onlyOwner() {
         
-        // Sets each Company Wallet Address
+        IBEP20 gaussToken = IBEP20(address(this));
+        
+        // Sets the addresses for each wallet used for and by the company
+        address communityWallet;
+        address liquidityWallet;
+        address charitableFundWallet;
+        address advisorWallet;
+        address coreTeamWallet;
         address marketingWallet;
         address operationsAndDevelopementWallet;
         address vestingIncentiveWallet;
         
-
-        // Sets each wallet's initial amount
+        
+        // Sets each of the Company's wallets initial amount
+        uint256 communityAmount = 112500000;
+        uint256 liquidityAmount = 20000000;
+        uint256 charitableFundAmount = 15000000;
+        uint256 advisorAmount = 35000000;
+        uint256 coreTeamAmount = 15000000;
         uint256 marketingAmount = 15000000;
         uint256 opsDevAmount = 15000000;
         uint256 incentiveAmount = 12500000;
         
         
+        // Creates instance of of each TokenLock contract
+        CommunityTokenLock communityLock = new CommunityTokenLock(gaussToken, owner(), communityWallet, communityAmount);
+        LiquidityTokenLock liquidityLock = new LiquidityTokenLock(gaussToken, owner(), liquidityWallet, liquidityAmount);
+        CharitableFundTokenLock charitableFundLock = new CharitableFundTokenLock(gaussToken, owner(), charitableFundWallet, charitableFundAmount);
+        AdvisorTokenLock advisorLock = new AdvisorTokenLock(gaussToken, owner(), advisorWallet, advisorAmount);
+        CoreTeamTokenLock coreTeamLock = new CoreTeamTokenLock(gaussToken, owner(), coreTeamWallet, coreTeamAmount);
+        
+ 
+        // Transfers the tokens to the respective TokenLock contracts for each pool
+        communityLock.lockTokens();
+        liquidityLock.lockTokens();
+        charitableFundLock.lockTokens();
+        advisorLock.lockTokens();
+        coreTeamLock.lockTokens();
+        
+
         // Transfers initial tokens to Company Wallets
         _balances[owner()] = _balances[owner()].sub(marketingAmount, "BEP20: transfer amount exceeds balance");
         _balances[marketingWallet] = _balances[marketingWallet].add(marketingAmount);
@@ -457,14 +288,6 @@ contract GaussGang is BEP20 {
         emit Transfer(owner(), marketingWallet, marketingAmount);
         emit Transfer(owner(), operationsAndDevelopementWallet, opsDevAmount);
         emit Transfer(owner(), vestingIncentiveWallet, incentiveAmount);
-    }
-    
-    
-    
-    // TODO: Write out comment for function
-    // TODO: Write in actual wallet addresses
-    // Time-Locks the specified wallet address for the given time, Function can only be called by owner, 
-    function _vestWallet(address wallet, uint256 releaseTime, IBEP20 token) internal onlyOwner() {
-        GaussGangTokenLock newVestedWallet = new GaussGangTokenLock(token, wallet, releaseTime);
+        
     }
 }

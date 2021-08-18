@@ -187,6 +187,34 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "releaseTime",
+						"type": "uint256"
+					}
+				],
+				"name": "_vestWallet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "owner",
 						"type": "address"
 					},
@@ -405,25 +433,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "mint",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "name",
 				"outputs": [
@@ -626,11 +635,11 @@
 	},
 	"sources": {
 		"GaussGang/contracts/dependencies/contracts/BEP20.sol": {
-			"keccak256": "0x5c076308ab31c4690466d16c610431f2579e548355a5dc763474522f235c379e",
+			"keccak256": "0x4701be868c5a92853b8e5817c15a828f366c673040ce66d19c11b5ca30b871d5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b4782866595bc06d9adbf3bbf458e078c59d59cadd7866c72e90b991e949a58",
-				"dweb:/ipfs/QmNMToryZrtkgWqSpHNfKQB3cCHZzo4NCgofw1DeA6DwgV"
+				"bzz-raw://15570fff1096a7914553a62403744f584c5c2671c861a60a1a9ff4be2949c8cf",
+				"dweb:/ipfs/QmbmQ18QPUCRaiYTkAHLBD41DvLpt1NAa9hzKkghVr5m13"
 			]
 		},
 		"GaussGang/contracts/dependencies/contracts/Context.sol": {
@@ -650,19 +659,19 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
-			"keccak256": "0x64a7b1ceae1a6b491348f26a495a1cf72c8727b2abb9120d225b86e3950f4edb",
+			"keccak256": "0xbe27147f54c8a62c39cb5e748d732710a49a1e36407936596ed1b2985774914b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2b3ee0d79db8ce7cdd3ac6e65a72fc6e69309f1153c96a0098312e845d6ef9e2",
-				"dweb:/ipfs/QmX6iyCB58q1MbTAvUkDX2rSivokQzieb1fxsQ7QdhPJqL"
+				"bzz-raw://d9c8e0b4aaca38ba83911bf09cc75a7b2e806cc20b4bb985a3ce6282e1182ac8",
+				"dweb:/ipfs/QmPixZNPCrdY69y5VwxEen9WBthGjJYvAqC8qHHXW8J7tJ"
 			]
 		},
 		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": {
-			"keccak256": "0xd7198d39c3c9c65a26149fa90bf315d84eda159299c2a35d5977ac1d82720380",
+			"keccak256": "0x36964c0a766794695daf0be1124fa1a473e2c811fcd1d3d96320ce49ba4cef65",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f1bb430ea482d13e0c1e2b92b46f4eafcc42ff6fea15501073ad7a4468875699",
-				"dweb:/ipfs/QmfKjES7ye45XGSrd1prufUVZSPsmZsQZdm36PVBoJPdM1"
+				"bzz-raw://38cb1eadf7a6df226c346a58553298b58f75d0ce30e788a12b9f99782033b8d5",
+				"dweb:/ipfs/QmX7YdAjEkRM91Qddf2LLYw9aTuDTK1ixmZtbUaXJDY612"
 			]
 		},
 		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": {
@@ -690,11 +699,11 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x2aaabce5ee52bc8276e6714dc2350cf10fd1d66e2fc5304a180a90a191f6b6b1",
+			"keccak256": "0x9d20a199283ef9f90ae8178ddf61bd13ccbf2dd62b8429b3684df32ae002ac65",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e7bf6b611e73d8a2d237e9ec617de8cd70ba6a6572dfe832efa3cf1316c72ae2",
-				"dweb:/ipfs/QmeHPcrvqKmgTT5WoN6KZQbNgLGPdqJXjKgLGjpK2JCgRy"
+				"bzz-raw://77f1542f3891335fb1ca64aa777c7de4e5ad4bb6971357328a1222b5a17f62dc",
+				"dweb:/ipfs/QmWeEVwU89UjzM65xnD2ZH92kxWRenYcZjfKMM9NDENTXH"
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
@@ -706,19 +715,59 @@
 			]
 		},
 		"GaussGang/contracts/tokenomics/GaussGang.sol": {
-			"keccak256": "0x00a31ff27fde6a6e2e4bb7924285b0cec2214fc9f4a8fa84d6833f4ca3a65e69",
+			"keccak256": "0xa03dfe0391003e31092d2412d0269c96ea46092d2167dbc77fc67c5f0be86373",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c1418f69ffe4c38c661240be6efecd064cf46b24b5d8ff0b52620dc2d51aed51",
-				"dweb:/ipfs/QmTSrLBWygY9Y8R9fAZDfeASrxR9PCQo4wnr76Sk932Utp"
+				"bzz-raw://091ba6a23aaa49beae9174f24fc504a5a76d0275a1cf744acd746bdd6e520157",
+				"dweb:/ipfs/QmdoL5gFDzZnZMR6RpoNyG7Kfx9t1C9x5FgWETkE8m2Qnf"
 			]
 		},
-		"GaussGang/contracts/tokenomics/GaussGangTokenLock.sol": {
-			"keccak256": "0x5a89320ad127b461255737861999e8e68b1c7263f9aeedb80d9dbc5febc4f7db",
+		"GaussGang/contracts/tokenomics/TimeLock/AdvisorTokenLock.sol": {
+			"keccak256": "0xecf70dd1bef2a63232d00dc5fd4d05e92dfb1509111c05d9c7c2699cfe1f43b4",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://ed154d3a5f684b119acc006a97608aa82f2b8eb0f3216ccf122571ab2c973937",
-				"dweb:/ipfs/QmQHubD2YGGE1xtYnHgNfJJkMWFt5KaNx9vgUPfsDkmdqx"
+				"bzz-raw://de2850bb7d220849dce047d100db8215c53a370bdc823ce7408088c97ae0184b",
+				"dweb:/ipfs/QmX4fakeeb5BH9z9emXo4QyQA1XzfufruaogCXzaXYVPgc"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/CharitableFundTokenLock.sol": {
+			"keccak256": "0xd8de388a55ffdd47df74845aaf7a029da656670eae4384e7c4dda71c6c89d56f",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://5f666fde5d062e4b5e6aa2103280f570fcca67be7b28539aa7bede98566f6bc9",
+				"dweb:/ipfs/QmNNJw2WDNTHv7at1DV3ATkuS3bbWtXZHore6bqDmu8CLG"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/CommunityTokenLock.sol": {
+			"keccak256": "0x9ab1206f97f8d873cabca7ed75b2e983deeac49c301ac2d42211aafaeb2dcdc2",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://cb8444256d62ef428d8ba7d98f750f48114c4718e102f2a2f0ea9c4742d6a685",
+				"dweb:/ipfs/QmbidKJLrgdJZgC8rfKxRh2WP4GvDBasyYrJFAaztq7pZw"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/CoreTeamTokenLock.sol": {
+			"keccak256": "0x0b3aedbb973bd7dc94c37c0ae74d61d1e6ee9032bdee4ed092ec8314257a1552",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://a2ee18beafe9d90f4c19b00166a44f880516e89cddf0a5037480e61e672f8d3c",
+				"dweb:/ipfs/QmSXTtZQoR9xw4FMq4spTCBmvSuWdQim5i2q2au2qLjnyT"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/LiquidityTokenLock.sol": {
+			"keccak256": "0xefb1b6f45f90b3cb49dcfb355fc7190ef1ec928c45960d71e6fdc2d60c86ca29",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://5e26fa0c32a081c835dccb8428e66d88f954bbadf5c61b1870befea1510334ed",
+				"dweb:/ipfs/QmcD1SNcx3Qy8dstWMApV1g7ct34Sv91Ya9cdorLMjT7X2"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
+			"keccak256": "0xe69358693f59ece010ea3844d946b1c3b907b96f7f846091a73378e9c35dd10a",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://c7280479c93ee810696324dbf72094257af824e722782b8e40ccf2c864641e94",
+				"dweb:/ipfs/QmayQ6P681aHa83s54hSeDhx6P5yKBCVtUKMJxAKDV7FEj"
 			]
 		}
 	},
