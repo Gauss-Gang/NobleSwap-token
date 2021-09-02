@@ -1,14 +1,3 @@
-/*  _____________________________________________________________________________
-
-    Gauss(Gang) Core Team Token Lock Contract
-
-    Deployed to      : TODO
-
-    MIT License. (c) 2021 Gauss Gang Inc. 
-    
-    _____________________________________________________________________________
-*/
-
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 pragma solidity >=0.8.4 <0.9.0;
@@ -21,7 +10,9 @@ import "../../dependencies/libraries/SafeMath.sol";
 import "../../dependencies/libraries/Address.sol";
 
 
-contract CoreTeamTokenLock is Context, Ownable {
+
+// Creates a Scheduled Time Lock contract for tokens transferred to it, releasing tokens over specific "lockTimes"
+contract ScheduledTokenLock is Context, Ownable {
     
     using SafeMath for uint256;
     using Address for address;
@@ -40,38 +31,35 @@ contract CoreTeamTokenLock is Context, Ownable {
     uint256 private _releaseTime;
     
     // Sets amount to be transfered into Time Lock contract
-    uint256 private immutable _amount;
+    uint256 private _lockedAmount;
     
     // Incremental Counter to keep track of the Lock Timestamp
     uint private _lockCounter = 0;
     
     // Initializes the amounts to be released over time
-    uint256[] private _coreTeamTokenAmountsList = 
-        [   6250000,
-            6250000,
-            6250000,
-            6250000
-        ];
+    uint256[] private _tokenAmountsList;
         
     // Initializes the time periods that tokens will be released over
-    uint256[] private _coreTeamLockTimes = 
-        [   150 days,
-            300 days,
-            455 days,
-            605 days
-        ];
-        
+    uint256[] private _tokenLockTimes;
 
 
-    // The constructor sets internal the values of _token, _beneficiary, and _releaseTime to the variables passed in when called externally
-    constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_) onlyOwner() {
+    // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally
+    constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) onlyOwner() {
         
         _token = token_;
         _sender = sender_;
         _beneficiary = beneficiary_;
-        _amount = amount_;
-        _releaseTime = _coreTeamLockTimes[0];
+        _lockedAmount = amount_;
+        _tokenAmountsList = amountsList_;
+        _tokenLockTimes = lockTimes_;
+        _releaseTime = _tokenLockTimes[0];
         
+    }
+    
+    
+    // Returns the address that this ScheduledTokenLock contract is deployed to
+    function contractAddress() public view virtual returns (address) {
+        return address(this);
     }
 
 
@@ -95,7 +83,7 @@ contract CoreTeamTokenLock is Context, Ownable {
     
     // Returns the amount being held in the TimeLock contract
     function lockedAmount() public view virtual returns (uint256) {
-        return _amount;
+        return _lockedAmount;
     }
 
 
@@ -107,21 +95,22 @@ contract CoreTeamTokenLock is Context, Ownable {
     
     // Initializes the transfer of tokens from the "sender" to the the Time Lock contract  
     function lockTokens() public virtual {
-        _token.transferFrom(_sender, address(this), _amount);
+        _token.transferFrom(_sender, address(this), _lockedAmount);
     }
     
     
     // Transfers tokens held by CommunityTimeLock to beneficiary.
     function release() public virtual {
         
-        require(block.timestamp >= releaseTime(), "TokenLock: current time is before release time");
+        require(block.timestamp >= releaseTime(), "ScheduledTokenLock: current time is before release time");
         
-        uint256 amount = _coreTeamTokenAmountsList[_lockCounter];
-        require(amount > 0, "CommunityTokenLock: no tokens to release");
+        uint256 amount = _tokenAmountsList[_lockCounter];
+        require(amount > 0, "ScheduledTokenLock: no tokens to release");
 
         token().transfer(beneficiary(), amount);
         
         _lockCounter = _lockCounter + 1;
-        _releaseTime = _coreTeamLockTimes[_lockCounter];
+        _releaseTime = _tokenLockTimes[_lockCounter];
+        _lockedAmount = _lockedAmount - amount;
     }
 }

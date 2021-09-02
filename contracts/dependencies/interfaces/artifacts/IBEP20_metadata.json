@@ -269,11 +269,11 @@
 	},
 	"sources": {
 		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
-			"keccak256": "0xbe27147f54c8a62c39cb5e748d732710a49a1e36407936596ed1b2985774914b",
+			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d9c8e0b4aaca38ba83911bf09cc75a7b2e806cc20b4bb985a3ce6282e1182ac8",
-				"dweb:/ipfs/QmPixZNPCrdY69y5VwxEen9WBthGjJYvAqC8qHHXW8J7tJ"
+				"bzz-raw://a27d18ab746735e715cc87b5f72645e06bdeb2758d1f6d1f88e3d346b8918db4",
+				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
 			]
 		}
 	},

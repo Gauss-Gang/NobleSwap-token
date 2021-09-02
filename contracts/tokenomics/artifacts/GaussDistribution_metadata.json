@@ -6,29 +6,20 @@
 	"output": {
 		"abi": [
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					},
-					{
-						"indexed": false,
 						"internalType": "uint256",
-						"name": "value",
+						"name": "amount",
 						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "gaussGANGAddress",
+						"type": "address"
 					}
 				],
-				"name": "Approval",
-				"type": "event"
+				"stateMutability": "nonpayable",
+				"type": "constructor"
 			},
 			{
 				"anonymous": false,
@@ -50,92 +41,13 @@
 				"type": "event"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					}
-				],
-				"name": "Transfer",
-				"type": "event"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					}
-				],
-				"name": "allowance",
+				"inputs": [],
+				"name": "advisorLockAddress",
 				"outputs": [
 					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "approve",
-				"outputs": [
-					{
-						"internalType": "bool",
 						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "account",
 						"type": "address"
-					}
-				],
-				"name": "balanceOf",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -143,44 +55,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "decimals",
-				"outputs": [
-					{
-						"internalType": "uint8",
-						"name": "",
-						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "subtractedValue",
-						"type": "uint256"
-					}
-				],
-				"name": "decreaseAllowance",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getOwner",
+				"name": "advisorWallet",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -192,37 +67,169 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "addedValue",
-						"type": "uint256"
-					}
-				],
-				"name": "increaseAllowance",
+				"inputs": [],
+				"name": "charitableFundLockAddress",
 				"outputs": [
 					{
-						"internalType": "bool",
+						"internalType": "address",
 						"name": "",
-						"type": "bool"
+						"type": "address"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "name",
+				"name": "charitableFundWallet",
 				"outputs": [
 					{
-						"internalType": "string",
+						"internalType": "address",
 						"name": "",
-						"type": "string"
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "communityLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "communityWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "coreTeamLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "coreTeamWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "incentiveLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "liquidityLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "liquidityWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "marketingLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "marketingWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "operationsAndDevelopementWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "opsDevLockAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -242,56 +249,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "symbol",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "totalSupply",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "recipient",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "transfer",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -300,21 +257,31 @@
 					},
 					{
 						"internalType": "address",
-						"name": "recipient",
+						"name": "beneficiary",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
 						"name": "amount",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amountsList",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "lockTimes",
+						"type": "uint256[]"
 					}
 				],
-				"name": "transferFrom",
+				"name": "scheduledVesting",
 				"outputs": [
 					{
-						"internalType": "bool",
+						"internalType": "address",
 						"name": "",
-						"type": "bool"
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -332,15 +299,58 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "releaseTime",
+						"type": "uint256"
+					}
+				],
+				"name": "vestTokens",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vestingIncentiveWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
 			"kind": "dev",
-			"methods": {
-				"getOwner()": {
-					"details": "Sets the values for {name} and {symbol}, initializes {decimals} with a default value of 18. To select a different value for {decimals}, use {_setupDecimals}. All three of these values are immutable: they can only be set once during construction. constructor(string memory name, string memory symbol) public { _name = name; _symbol = symbol; _decimals = 18; }"
-				}
-			},
+			"methods": {},
 			"version": 1
 		},
 		"userdoc": {
@@ -351,7 +361,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/contracts/BEP20.sol": "BEP20"
+			"GaussGang/contracts/tokenomics/GaussDistribution.sol": "GaussDistribution"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -365,14 +375,6 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/contracts/BEP20.sol": {
-			"keccak256": "0x4701be868c5a92853b8e5817c15a828f366c673040ce66d19c11b5ca30b871d5",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://15570fff1096a7914553a62403744f584c5c2671c861a60a1a9ff4be2949c8cf",
-				"dweb:/ipfs/QmbmQ18QPUCRaiYTkAHLBD41DvLpt1NAa9hzKkghVr5m13"
-			]
-		},
 		"GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
@@ -411,6 +413,30 @@
 			"urls": [
 				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
 				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
+			]
+		},
+		"GaussGang/contracts/tokenomics/GaussDistribution.sol": {
+			"keccak256": "0xb62b6ce2fd7f5d906ef09313213247f9da87f65016eacf51d8e45c34292752ca",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://720474aca82afe1637e584f6319abafc58a5bde3c2d5a080cae0a98e5dc79b8d",
+				"dweb:/ipfs/QmbNq1gysVJmhofdUxGqERXxvVuSwqFXULfxu1Lnxk3K6E"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/ScheduledTokenLock.sol": {
+			"keccak256": "0x268088041466ccc3e9cf9e75d1be93ae60e8e237bdba500e979dafddfc3e63c8",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://d9ae9d64248683ed5b625b9f8edc5a47c21f54fd79c63991c67ebd22cf84c2d6",
+				"dweb:/ipfs/QmdEEHis8HPCsvy6AzeHwMX5ECwnbsfpZJGmSSMcKpm6Fg"
+			]
+		},
+		"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
+			"keccak256": "0x29f659fa5564a45a4da7f79c6360ed0c17758c942e2a09ab0e72029a60d46736",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://3cba9890de383781c4f9bdf51a2cb22dfde83d70650f43ab8ec9990f3ad2bafd",
+				"dweb:/ipfs/QmaWKMhDhbcAoEGiS3aYoGTWWXR6ynukM8shjCBaNYBY9A"
 			]
 		}
 	},

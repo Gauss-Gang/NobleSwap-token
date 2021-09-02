@@ -1,14 +1,3 @@
-/*  _____________________________________________________________________________
-
-    Gauss(Gang) Token Lock Contract
-
-    Deployed to      : TODO
-
-    MIT License. (c) 2021 Gauss Gang Inc. 
-    
-    _____________________________________________________________________________
-*/
-
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 pragma solidity >=0.8.4 <0.9.0;
@@ -21,6 +10,8 @@ import "../../dependencies/libraries/SafeMath.sol";
 import "../../dependencies/libraries/Address.sol";
 
 
+
+// Creates a Time Lock contract for tokens transferred to it, releasing tokens after the specified "_releaseTime"
 contract TokenLock is Context, Ownable {
     
     using SafeMath for uint256;
@@ -54,6 +45,12 @@ contract TokenLock is Context, Ownable {
         _amount = amount_;
         _releaseTime = releaseTime_;
         
+    }
+    
+    
+    // Returns the address that this ScheduledTokenLock contract is deployed to
+    function contractAddress() public view virtual returns (address) {
+        return address(this);
     }
 
 

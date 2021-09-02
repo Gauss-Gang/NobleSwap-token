@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.4+commit.c7e474f2"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -181,34 +181,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "beneficiary",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "releaseTime",
-						"type": "uint256"
-					}
-				],
-				"name": "_vestWallet",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -460,45 +432,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "pancakeswapPair",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "pancakeswapRouter",
-				"outputs": [
-					{
-						"internalType": "contract IPancakeSwapRouter02",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newRouter",
-						"type": "address"
-					}
-				],
-				"name": "setRouterAddress",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "symbol",
 				"outputs": [
 					{
@@ -622,7 +555,7 @@
 		"compilationTarget": {
 			"GaussGang/contracts/tokenomics/GaussGang.sol": "GaussGang"
 		},
-		"evmVersion": "istanbul",
+		"evmVersion": "london",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -659,43 +592,11 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
-			"keccak256": "0xbe27147f54c8a62c39cb5e748d732710a49a1e36407936596ed1b2985774914b",
+			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d9c8e0b4aaca38ba83911bf09cc75a7b2e806cc20b4bb985a3ce6282e1182ac8",
-				"dweb:/ipfs/QmPixZNPCrdY69y5VwxEen9WBthGjJYvAqC8qHHXW8J7tJ"
-			]
-		},
-		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapFactory.sol": {
-			"keccak256": "0x36964c0a766794695daf0be1124fa1a473e2c811fcd1d3d96320ce49ba4cef65",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://38cb1eadf7a6df226c346a58553298b58f75d0ce30e788a12b9f99782033b8d5",
-				"dweb:/ipfs/QmX7YdAjEkRM91Qddf2LLYw9aTuDTK1ixmZtbUaXJDY612"
-			]
-		},
-		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapPair.sol": {
-			"keccak256": "0x7d9532239a13becdeed81b91550011314222138e9ae76be18e224ec5bd6f826e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://3f6b875b1d38a2d49615455f5ff893bbd4678729b7104fb1b93a27dec5f19287",
-				"dweb:/ipfs/QmQTxprgyaQs7SmrwvebZ7pTC1idASXHfj7iB3vfj3NhJD"
-			]
-		},
-		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter01.sol": {
-			"keccak256": "0x6fdea9a336f1634dc16410863b7146f3cc37c8a544767bec1f9ef78e16510b94",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://d8066cab7e3da1f3695b6c1f680db6faecfc68b5c755fa405bb202002063bb70",
-				"dweb:/ipfs/QmbkAbcqqVCKWVY1KBsuu52d7TXEtZFxUoreo2wh8Scj4A"
-			]
-		},
-		"GaussGang/contracts/dependencies/interfaces/pancakeSwap/IPancakeSwapRouter02.sol": {
-			"keccak256": "0x5164248128e604bb56809cd3cd5724a376450ddc5443cb79c1161c56a284165e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://b0f66735768ada1c7f1599a7dfb45ac9056cada956c8633ae25e3a6edaae4fb6",
-				"dweb:/ipfs/QmXZtgiGH8YuD3HdjUaKk8tfG2CDjMC44AaVd8jD4K3ah4"
+				"bzz-raw://a27d18ab746735e715cc87b5f72645e06bdeb2758d1f6d1f88e3d346b8918db4",
+				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/Address.sol": {
@@ -715,59 +616,11 @@
 			]
 		},
 		"GaussGang/contracts/tokenomics/GaussGang.sol": {
-			"keccak256": "0xa03dfe0391003e31092d2412d0269c96ea46092d2167dbc77fc67c5f0be86373",
+			"keccak256": "0xdfb40fd28a06e974b64c27f914176f5532dcec56b8c2ed8489f49f5b30adbc6f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://091ba6a23aaa49beae9174f24fc504a5a76d0275a1cf744acd746bdd6e520157",
-				"dweb:/ipfs/QmdoL5gFDzZnZMR6RpoNyG7Kfx9t1C9x5FgWETkE8m2Qnf"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/AdvisorTokenLock.sol": {
-			"keccak256": "0xecf70dd1bef2a63232d00dc5fd4d05e92dfb1509111c05d9c7c2699cfe1f43b4",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://de2850bb7d220849dce047d100db8215c53a370bdc823ce7408088c97ae0184b",
-				"dweb:/ipfs/QmX4fakeeb5BH9z9emXo4QyQA1XzfufruaogCXzaXYVPgc"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/CharitableFundTokenLock.sol": {
-			"keccak256": "0xd8de388a55ffdd47df74845aaf7a029da656670eae4384e7c4dda71c6c89d56f",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://5f666fde5d062e4b5e6aa2103280f570fcca67be7b28539aa7bede98566f6bc9",
-				"dweb:/ipfs/QmNNJw2WDNTHv7at1DV3ATkuS3bbWtXZHore6bqDmu8CLG"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/CommunityTokenLock.sol": {
-			"keccak256": "0x9ab1206f97f8d873cabca7ed75b2e983deeac49c301ac2d42211aafaeb2dcdc2",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://cb8444256d62ef428d8ba7d98f750f48114c4718e102f2a2f0ea9c4742d6a685",
-				"dweb:/ipfs/QmbidKJLrgdJZgC8rfKxRh2WP4GvDBasyYrJFAaztq7pZw"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/CoreTeamTokenLock.sol": {
-			"keccak256": "0x0b3aedbb973bd7dc94c37c0ae74d61d1e6ee9032bdee4ed092ec8314257a1552",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://a2ee18beafe9d90f4c19b00166a44f880516e89cddf0a5037480e61e672f8d3c",
-				"dweb:/ipfs/QmSXTtZQoR9xw4FMq4spTCBmvSuWdQim5i2q2au2qLjnyT"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/LiquidityTokenLock.sol": {
-			"keccak256": "0xefb1b6f45f90b3cb49dcfb355fc7190ef1ec928c45960d71e6fdc2d60c86ca29",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://5e26fa0c32a081c835dccb8428e66d88f954bbadf5c61b1870befea1510334ed",
-				"dweb:/ipfs/QmcD1SNcx3Qy8dstWMApV1g7ct34Sv91Ya9cdorLMjT7X2"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
-			"keccak256": "0xe69358693f59ece010ea3844d946b1c3b907b96f7f846091a73378e9c35dd10a",
-			"license": "GPL-3.0-or-later",
-			"urls": [
-				"bzz-raw://c7280479c93ee810696324dbf72094257af824e722782b8e40ccf2c864641e94",
-				"dweb:/ipfs/QmayQ6P681aHa83s54hSeDhx6P5yKBCVtUKMJxAKDV7FEj"
+				"bzz-raw://144bd4dc9f52f5444760958fb9072ea9944b2281da1c94569770e5c9d6ebd62f",
+				"dweb:/ipfs/QmSG2TLp54iJLX9nggnPFWjLF1KEAocy6VoDsmekvG67jt"
 			]
 		}
 	},
