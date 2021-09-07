@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.7+commit.e28d00a7"
+		"version": "0.8.4+commit.c7e474f2"
 	},
 	"language": "Solidity",
 	"output": {
@@ -40,25 +40,6 @@
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "previousOwner",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "newOwner",
-						"type": "address"
-					}
-				],
-				"name": "OwnershipTransferred",
-				"type": "event"
 			},
 			{
 				"inputs": [],
@@ -101,19 +82,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -164,19 +132,6 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newOwner",
-						"type": "address"
-					}
-				],
-				"name": "transferOwnership",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -192,9 +147,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/TimeLock/ScheduledTokenLock.sol": "ScheduledTokenLock"
+			"Gauss Gang/GaussGang/contracts/tokenomics/TimeLock/ScheduledTokenLock.sol": "ScheduledTokenLock"
 		},
-		"evmVersion": "london",
+		"evmVersion": "istanbul",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -206,7 +161,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/contracts/Context.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
 			"urls": [
@@ -214,7 +169,7 @@
 				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
 			]
 		},
-		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Ownable.sol": {
 			"keccak256": "0xaa91bf17312c2bb4e4c018167e98361df3af3c2a2f84a038bb8c2f18a93556a3",
 			"license": "MIT",
 			"urls": [
@@ -222,7 +177,7 @@
 				"dweb:/ipfs/QmUrRoRhrF8MmNDDCJZYYAEHwqJ3zSdLdfwTxe4rZxfHNS"
 			]
 		},
-		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
 			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
 			"license": "MIT",
 			"urls": [
@@ -230,28 +185,20 @@
 				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x9d20a199283ef9f90ae8178ddf61bd13ccbf2dd62b8429b3684df32ae002ac65",
+		"Gauss Gang/GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0x530d76853547b4ced7ba754f9a6f4e5bbceafb44e0b28f0ebaf0f8c721352b27",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://77f1542f3891335fb1ca64aa777c7de4e5ad4bb6971357328a1222b5a17f62dc",
-				"dweb:/ipfs/QmWeEVwU89UjzM65xnD2ZH92kxWRenYcZjfKMM9NDENTXH"
+				"bzz-raw://df56f4118ac905aa1cf9081f376f4b33993363c471052fc26877b33eddd8b18f",
+				"dweb:/ipfs/QmNseZmEV21bHMiwL9zMRTJwGpGqE2VWmpca9bHTcnqoyj"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
-			"keccak256": "0x530b87843e152aa51b6bf98a68e01806ecb38e69e183dc7a03d478905138d433",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
-				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/ScheduledTokenLock.sol": {
-			"keccak256": "0x268088041466ccc3e9cf9e75d1be93ae60e8e237bdba500e979dafddfc3e63c8",
+		"Gauss Gang/GaussGang/contracts/tokenomics/TimeLock/ScheduledTokenLock.sol": {
+			"keccak256": "0xa8eebfafcf3d2f6d5cea15270a7fa31d22e9e203cf474e75203f42e0400ed8f7",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://d9ae9d64248683ed5b625b9f8edc5a47c21f54fd79c63991c67ebd22cf84c2d6",
-				"dweb:/ipfs/QmdEEHis8HPCsvy6AzeHwMX5ECwnbsfpZJGmSSMcKpm6Fg"
+				"bzz-raw://a4276028fb0f97d1364e3f7bb81e84c1dbc4a8e90bff37ba9ed4601ab3d7bc0c",
+				"dweb:/ipfs/QmeHv4Ngeh2h5Phz7ADnjX4m3Qm1Z75qcc7CNr1o7mxV4m"
 			]
 		}
 	},

@@ -20,7 +20,7 @@ library Address {
                 - a contract in construction
                 - an address where a contract will be created
                 - an address where a contract lived, but was destroyed
-     */
+    */
     function isContract(address account) internal view returns (bool) {
         
         /* According to EIP-1052, 0x0 is the value returned for not-yet created accounts
@@ -34,26 +34,19 @@ library Address {
         assembly {
             codehash := extcodehash(account)
         }
+        
         return (codehash != accountHash && codehash != 0x0);
     }
-
 
     
     // TODO: Make comment more concise, look over listed links
     /*  Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
-     
-        https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost
-            of certain opcodes, possibly making contracts go over the 2300 gas limit
-            imposed by `transfer`, making them unable to receive funds via
-            `transfer`. {sendValue} removes this limitation.
-     
-        https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].
-     
+
         IMPORTANT: because control is transferred to `recipient`, care must be
             taken to not create reentrancy vulnerabilities. Consider using
             {ReentrancyGuard} or the
             https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
-     */
+    */
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, 'Address: insufficient balance');
 
@@ -63,20 +56,17 @@ library Address {
     }
 
 
-
-    /*  Performs a Solidity function call using a low level `call`. A   plain`call` is an unsafe replacement for a function call: use this function instead.
-     
+    /*  Performs a Solidity function call using a low level `call`. A 'plaincall' is an unsafe replacement for a function call: use this function instead.
             - If `target` reverts with a revert reason, it is bubbled up by this function (like regular Solidity function calls).
-            - Returns the raw returned data. To convert to the expected return value, use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].
+            - Returns the raw returned data.
      
         Requirements:
             - `target` must be a contract.
             - calling `target` with `data` must not revert.
-     */
+    */
     function functionCall(address target, bytes memory data) internal returns (bytes memory) {
         return functionCall(target, data, 'Address: low-level call failed');
     }
-
 
 
     //  Same as `functionCall`, but with `errorMessage` as a fallback revert reason when `target` reverts.
@@ -85,18 +75,16 @@ library Address {
     }
 
 
-
     /*  Same as 'functionCall`, but also transferring `value` wei to `target`.
      
         Requirements:
-            - the calling contract must have an ETH balance of at least `value`.
+            - the calling contract must have an BNB balance of at least `value`.
             - the called Solidity function must be `payable`.
 
-     */
+    */
     function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
         return functionCallWithValue(target, data, value, 'Address: low-level call with value failed');
     }
-
 
 
     // Same as `functionCallWithValue`, but with `errorMessage` as a fallback revert reason when `target` reverts.

@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.7+commit.e28d00a7"
+		"version": "0.8.4+commit.c7e474f2"
 	},
 	"language": "Solidity",
 	"output": {
@@ -94,12 +94,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "_decimals",
+				"name": "_charitableFundWallet",
 				"outputs": [
 					{
-						"internalType": "uint8",
+						"internalType": "address",
 						"name": "",
-						"type": "uint8"
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -107,12 +107,25 @@
 			},
 			{
 				"inputs": [],
-				"name": "_gangFee",
+				"name": "_ggFee",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "_ggWallet",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -133,12 +146,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "_name",
+				"name": "_liquidityWallet",
 				"outputs": [
 					{
-						"internalType": "string",
+						"internalType": "address",
 						"name": "",
-						"type": "string"
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -159,25 +172,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "_symbol",
+				"name": "_redistributionWallet",
 				"outputs": [
 					{
-						"internalType": "string",
+						"internalType": "address",
 						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "_totalFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -321,7 +321,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "newGangFee",
+						"name": "newGGFee",
 						"type": "uint256"
 					}
 				],
@@ -538,11 +538,7 @@
 		],
 		"devdoc": {
 			"kind": "dev",
-			"methods": {
-				"getOwner()": {
-					"details": "Sets the values for {name} and {symbol}, initializes {decimals} with a default value of 18. To select a different value for {decimals}, use {_setupDecimals}. All three of these values are immutable: they can only be set once during construction. constructor(string memory name, string memory symbol) public { _name = name; _symbol = symbol; _decimals = 18; }"
-				}
-			},
+			"methods": {},
 			"version": 1
 		},
 		"userdoc": {
@@ -553,9 +549,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/GaussGang.sol": "GaussGang"
+			"Gauss Gang/GaussGang/contracts/tokenomics/GaussGang.sol": "GaussGang"
 		},
-		"evmVersion": "london",
+		"evmVersion": "istanbul",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -567,15 +563,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/contracts/BEP20.sol": {
-			"keccak256": "0x4701be868c5a92853b8e5817c15a828f366c673040ce66d19c11b5ca30b871d5",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://15570fff1096a7914553a62403744f584c5c2671c861a60a1a9ff4be2949c8cf",
-				"dweb:/ipfs/QmbmQ18QPUCRaiYTkAHLBD41DvLpt1NAa9hzKkghVr5m13"
-			]
-		},
-		"GaussGang/contracts/dependencies/contracts/Context.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
 			"urls": [
@@ -583,7 +571,7 @@
 				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
 			]
 		},
-		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Ownable.sol": {
 			"keccak256": "0xaa91bf17312c2bb4e4c018167e98361df3af3c2a2f84a038bb8c2f18a93556a3",
 			"license": "MIT",
 			"urls": [
@@ -591,7 +579,7 @@
 				"dweb:/ipfs/QmUrRoRhrF8MmNDDCJZYYAEHwqJ3zSdLdfwTxe4rZxfHNS"
 			]
 		},
-		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
 			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
 			"license": "MIT",
 			"urls": [
@@ -599,28 +587,20 @@
 				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x9d20a199283ef9f90ae8178ddf61bd13ccbf2dd62b8429b3684df32ae002ac65",
+		"Gauss Gang/GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0x530d76853547b4ced7ba754f9a6f4e5bbceafb44e0b28f0ebaf0f8c721352b27",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://77f1542f3891335fb1ca64aa777c7de4e5ad4bb6971357328a1222b5a17f62dc",
-				"dweb:/ipfs/QmWeEVwU89UjzM65xnD2ZH92kxWRenYcZjfKMM9NDENTXH"
+				"bzz-raw://df56f4118ac905aa1cf9081f376f4b33993363c471052fc26877b33eddd8b18f",
+				"dweb:/ipfs/QmNseZmEV21bHMiwL9zMRTJwGpGqE2VWmpca9bHTcnqoyj"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
-			"keccak256": "0x530b87843e152aa51b6bf98a68e01806ecb38e69e183dc7a03d478905138d433",
+		"Gauss Gang/GaussGang/contracts/tokenomics/GaussGang.sol": {
+			"keccak256": "0x8782a8b11e5ddf4818cb16728cf0a0b03f7e8b041971262d19e25dda2681a8dc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
-				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
-			]
-		},
-		"GaussGang/contracts/tokenomics/GaussGang.sol": {
-			"keccak256": "0xdfb40fd28a06e974b64c27f914176f5532dcec56b8c2ed8489f49f5b30adbc6f",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://144bd4dc9f52f5444760958fb9072ea9944b2281da1c94569770e5c9d6ebd62f",
-				"dweb:/ipfs/QmSG2TLp54iJLX9nggnPFWjLF1KEAocy6VoDsmekvG67jt"
+				"bzz-raw://8944f04a100958966b3cb1ada7ed665e04748563063ca1334c8067e257178b54",
+				"dweb:/ipfs/QmdvCXZoWsXEzodvAKraoXeJrfqrHmhT7ft8sJN3WtxRGd"
 			]
 		}
 	},

@@ -2,49 +2,46 @@
 
 pragma solidity >=0.8.4 <0.9.0;
 
-
 import "../../dependencies/contracts/Context.sol";
 import "../../dependencies/contracts/Ownable.sol";
 import "../../dependencies/interfaces/IBEP20.sol";
-import "../../dependencies/libraries/SafeMath.sol";
 import "../../dependencies/libraries/Address.sol";
 
 
 
 // Creates a Scheduled Time Lock contract for tokens transferred to it, releasing tokens over specific "lockTimes"
-contract ScheduledTokenLock is Context, Ownable {
-    
-    using SafeMath for uint256;
+contract ScheduledTokenLock is Context {
+
     using Address for address;
 
-
-    // BEP20 basic token contract being held
+    // BEP20 basic token contract being held.
     IBEP20 private immutable _token;
     
-    // Sender of tokens to be Time Locked
+    // Sender of tokens to be Time Locked.
     address private immutable _sender;
 
-    // Beneficiary of tokens after they are released
+    // Beneficiary of tokens after they are released.
     address private immutable _beneficiary;
 
-    // Timestamp when token release is enabled
+    // Timestamp when token release is enabled.
     uint256 private _releaseTime;
     
-    // Sets amount to be transfered into Time Lock contract
+    // Sets amount to be transfered into Time Lock contract.
     uint256 private _lockedAmount;
     
-    // Incremental Counter to keep track of the Lock Timestamp
+    // Incremental Counter to keep track of the Lock Timestamp.
     uint private _lockCounter = 0;
     
-    // Initializes the amounts to be released over time
+    // Initializes the amounts to be released over time.
     uint256[] private _tokenAmountsList;
         
-    // Initializes the time periods that tokens will be released over
+    // Initializes the time periods that tokens will be released over.
     uint256[] private _tokenLockTimes;
+    
 
 
-    // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally
-    constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) onlyOwner() {
+    // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally.
+    constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) {
         
         _token = token_;
         _sender = sender_;
@@ -52,12 +49,12 @@ contract ScheduledTokenLock is Context, Ownable {
         _lockedAmount = amount_;
         _tokenAmountsList = amountsList_;
         _tokenLockTimes = lockTimes_;
-        _releaseTime = _tokenLockTimes[0];
+        _releaseTime = (block.timestamp + _tokenLockTimes[0]);
         
     }
     
-    
-    // Returns the address that this ScheduledTokenLock contract is deployed to
+
+    // Returns the address that this ScheduledTokenLock contract is deployed to.
     function contractAddress() public view virtual returns (address) {
         return address(this);
     }
@@ -81,7 +78,7 @@ contract ScheduledTokenLock is Context, Ownable {
     }
     
     
-    // Returns the amount being held in the TimeLock contract
+    // Returns the amount being held in the TimeLock contract.
     function lockedAmount() public view virtual returns (uint256) {
         return _lockedAmount;
     }
@@ -93,13 +90,13 @@ contract ScheduledTokenLock is Context, Ownable {
     }
     
     
-    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract  
+    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract.  
     function lockTokens() public virtual {
         _token.transferFrom(_sender, address(this), _lockedAmount);
     }
     
     
-    // Transfers tokens held by CommunityTimeLock to beneficiary.
+    // Transfers tokens held by TimeLock to beneficiary.
     function release() public virtual {
         
         require(block.timestamp >= releaseTime(), "ScheduledTokenLock: current time is before release time");

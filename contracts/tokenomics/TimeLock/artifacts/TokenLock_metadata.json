@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.7+commit.e28d00a7"
+		"version": "0.8.4+commit.c7e474f2"
 	},
 	"language": "Solidity",
 	"output": {
@@ -35,25 +35,6 @@
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "previousOwner",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "newOwner",
-						"type": "address"
-					}
-				],
-				"name": "OwnershipTransferred",
-				"type": "event"
 			},
 			{
 				"inputs": [],
@@ -96,19 +77,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -159,19 +127,6 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newOwner",
-						"type": "address"
-					}
-				],
-				"name": "transferOwnership",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -187,9 +142,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": "TokenLock"
+			"Gauss Gang/GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": "TokenLock"
 		},
-		"evmVersion": "london",
+		"evmVersion": "istanbul",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -201,7 +156,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/contracts/Context.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Context.sol": {
 			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
 			"license": "MIT",
 			"urls": [
@@ -209,7 +164,7 @@
 				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
 			]
 		},
-		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/contracts/Ownable.sol": {
 			"keccak256": "0xaa91bf17312c2bb4e4c018167e98361df3af3c2a2f84a038bb8c2f18a93556a3",
 			"license": "MIT",
 			"urls": [
@@ -217,7 +172,7 @@
 				"dweb:/ipfs/QmUrRoRhrF8MmNDDCJZYYAEHwqJ3zSdLdfwTxe4rZxfHNS"
 			]
 		},
-		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
+		"Gauss Gang/GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
 			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
 			"license": "MIT",
 			"urls": [
@@ -225,28 +180,20 @@
 				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x9d20a199283ef9f90ae8178ddf61bd13ccbf2dd62b8429b3684df32ae002ac65",
+		"Gauss Gang/GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0x530d76853547b4ced7ba754f9a6f4e5bbceafb44e0b28f0ebaf0f8c721352b27",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://77f1542f3891335fb1ca64aa777c7de4e5ad4bb6971357328a1222b5a17f62dc",
-				"dweb:/ipfs/QmWeEVwU89UjzM65xnD2ZH92kxWRenYcZjfKMM9NDENTXH"
+				"bzz-raw://df56f4118ac905aa1cf9081f376f4b33993363c471052fc26877b33eddd8b18f",
+				"dweb:/ipfs/QmNseZmEV21bHMiwL9zMRTJwGpGqE2VWmpca9bHTcnqoyj"
 			]
 		},
-		"GaussGang/contracts/dependencies/libraries/SafeMath.sol": {
-			"keccak256": "0x530b87843e152aa51b6bf98a68e01806ecb38e69e183dc7a03d478905138d433",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://ebd73a8ff5b53f0921bf21bdac7e46310cbaadcb2bc0c53b1ba8f5dc3df0a7c6",
-				"dweb:/ipfs/Qmf26AqboPHUj49qKJpke5e34wZgMqBT3p1MxjRqKJAiNK"
-			]
-		},
-		"GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
-			"keccak256": "0x29f659fa5564a45a4da7f79c6360ed0c17758c942e2a09ab0e72029a60d46736",
+		"Gauss Gang/GaussGang/contracts/tokenomics/TimeLock/TokenLock.sol": {
+			"keccak256": "0xfbd0c6666533daa6bbfd34227d5aa7e36ceea1b1b04de429ac17af6887218dd0",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://3cba9890de383781c4f9bdf51a2cb22dfde83d70650f43ab8ec9990f3ad2bafd",
-				"dweb:/ipfs/QmaWKMhDhbcAoEGiS3aYoGTWWXR6ynukM8shjCBaNYBY9A"
+				"bzz-raw://86f7ce0c1dc28f0fe0c78c3cddab46ebbbcb2d92b25e106e8044c04abd97e855",
+				"dweb:/ipfs/QmfH1V6qsYFg7REwZ67RSYdfbKqCwGhwWotDGn3dHRNcZ5"
 			]
 		}
 	},

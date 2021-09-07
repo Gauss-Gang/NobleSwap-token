@@ -19,7 +19,7 @@ import "../../dependencies/contracts/Ownable.sol";
   to position this {TimelockController} as the owner of a smart contract, with
   a multisig or a DAO as the sole proposer.
  */
-contract TimelockController is Ownable {
+contract FunctionLockController is Ownable {
     bytes32 public constant TIMELOCK_ADMIN_ROLE = keccak256("TIMELOCK_ADMIN_ROLE");
     bytes32 public constant PROPOSER_ROLE = keccak256("PROPOSER_ROLE");
     bytes32 public constant EXECUTOR_ROLE = keccak256("EXECUTOR_ROLE");
@@ -28,22 +28,19 @@ contract TimelockController is Ownable {
     mapping(bytes32 => uint256) private _timestamps;
     uint256 private _minDelay;
 
-
     // Emitted when a call is scheduled as part of operation `id`.
     event CallScheduled(bytes32 indexed id, uint256 indexed index, address target, uint256 value, bytes data, bytes32 predecessor, uint256 delay);
-
 
     // Emitted when a call is performed as part of operation `id`.
     event CallExecuted(bytes32 indexed id, uint256 indexed index, address target, uint256 value, bytes data);
 
-
     // Emitted when operation `id` is cancelled.
     event Cancelled(bytes32 indexed id);
-
 
     // Emitted when the minimum delay for future operations is modified.
     event MinDelayChange(uint256 oldDuration, uint256 newDuration);
 
+    
     
     // Initializes the contract with a given `minDelay`.
     constructor(uint256 minDelay, address[] memory proposers, address[] memory executors) {

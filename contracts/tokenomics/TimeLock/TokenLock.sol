@@ -2,40 +2,36 @@
 
 pragma solidity >=0.8.4 <0.9.0;
 
-
 import "../../dependencies/contracts/Context.sol";
 import "../../dependencies/contracts/Ownable.sol";
 import "../../dependencies/interfaces/IBEP20.sol";
-import "../../dependencies/libraries/SafeMath.sol";
 import "../../dependencies/libraries/Address.sol";
 
 
 
-// Creates a Time Lock contract for tokens transferred to it, releasing tokens after the specified "_releaseTime"
-contract TokenLock is Context, Ownable {
+// Creates a Time Lock contract for tokens transferred to it, releasing tokens after the specified "_releaseTime".
+contract TokenLock is Context {
     
-    using SafeMath for uint256;
     using Address for address;
 
-
-    // BEP20 basic token contract being held
+    // BEP20 basic token contract being held.
     IBEP20 private immutable _token;
     
-    // Sender of tokens to be Time Locked
+    // Sender of tokens to be Time Locked.
     address private immutable _sender;
 
-    // Beneficiary of tokens after they are released
+    // Beneficiary of tokens after they are released.
     address private immutable _beneficiary;
 
-    // Timestamp when token release is enabled
+    // Timestamp when token release is enabled.
     uint256 private immutable _releaseTime;
     
-    // Sets amount to be transfered into Time Lock contract
+    // Sets amount to be transfered into Time Lock contract.
     uint256 private immutable _amount;
 
 
 
-    // The constructor sets internal the values of _token, _beneficiary, and _releaseTime to the variables passed in when called externally
+    // The constructor sets internal the values of _token, _beneficiary, and _releaseTime to the variables passed in when called externally.
     constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256 releaseTime_) {
         
         require(releaseTime_ > block.timestamp, "TokenLock: release time is before current time");
@@ -43,12 +39,12 @@ contract TokenLock is Context, Ownable {
         _sender = sender_;
         _beneficiary = beneficiary_;
         _amount = amount_;
-        _releaseTime = releaseTime_;
+        _releaseTime = (block.timestamp + releaseTime_);
         
     }
+
     
-    
-    // Returns the address that this ScheduledTokenLock contract is deployed to
+    // Returns the address that this TokenLock contract is deployed to.
     function contractAddress() public view virtual returns (address) {
         return address(this);
     }
@@ -72,7 +68,7 @@ contract TokenLock is Context, Ownable {
     }
     
     
-    // Returns the amount being held in the TimeLock contract
+    // Returns the amount being held in the TimeLock contract.
     function lockedAmount() public view virtual returns (uint256) {
         return _amount;
     }
@@ -84,7 +80,7 @@ contract TokenLock is Context, Ownable {
     }
     
     
-    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract  
+    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract.
     function lockTokens() public virtual {
         _token.transferFrom(_sender, address(this), _amount);
     }
