@@ -1,0 +1,101 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Unpaused",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"GaussGang/contracts/dependencies/security/Pausable.sol": "Pausable"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"GaussGang/contracts/dependencies/security/Pausable.sol": {
+			"keccak256": "0x64d11e24f71526ab6be936aef2fed9ded2921e15157224730c10e37b9f585118",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1170dec1f936dd409f5935f5ddb1445fd85ae61e9d2d98296c41cbb687dffea8",
+				"dweb:/ipfs/QmVZ8wcqSzWpB7LFcNL455BdFibzmBYadqfUbdazyedDzN"
+			]
+		},
+		"GaussGang/contracts/dependencies/utilities/Context.sol": {
+			"keccak256": "0xddf9498771ad602106a748d0099a248f80a48ee81b7e91fba0929bab00a1540c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://57debd7fdd80ece7d9321cfe23079e797c057c25e048c929cfa3c81742f68d8f",
+				"dweb:/ipfs/QmV6Tps6B4iRDdeUivfAUjfGKsSzEgi7ySmnos2or4yHj3"
+			]
+		},
+		"GaussGang/contracts/dependencies/utilities/Initializable.sol": {
+			"keccak256": "0x1c54c9b9e2b726786d50579c986f78e6651354e207101775fd16ec27e6ec711d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fa398e7e4ed6fa15ebcc59e462f6d6416a5b6e88fd530b9a4e5cdf25e8b37a99",
+				"dweb:/ipfs/QmSQFeEWpG2LyCE3Zx2CRM2VmyAQM7NYV84sfUea79g9KE"
+			]
+		}
+	},
+	"version": 1
+}

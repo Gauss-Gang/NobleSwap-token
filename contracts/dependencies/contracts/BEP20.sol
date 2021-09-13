@@ -1,53 +1,64 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.8.4 <0.9.0;
-
-import "./Context.sol";
-import "./Ownable.sol";
+import "../utilities/Initializable.sol";
+import "../utilities/Context.sol";
+import "../access/Ownable.sol";
+import "../security/Pausable.sol";
 import "../interfaces/IBEP20.sol";
-import "../libraries/SafeMath.sol";
 import "../libraries/Address.sol";
 
 
 
-// Implementation of the IBEP20 Interface.
-abstract contract BEP20 is Context, IBEP20, Ownable {
-    using SafeMath for uint256;
+// Implementation of the IBEP20 Interface, using Context, Pausable, Ownable, and Snapshot Extenstions.
+contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
+    
+    // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
     using Address for address;
 
-    mapping(address => uint256) private _balances;
+    // Creates mapping for the collections of balances and allowances
+    mapping(address => uint256) public _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
-
-    uint256 private _totalSupply;
+    
+    // Initializes variables for the name, symbol, decimals, and the total Supply of the BEP20 token.
     string private _name;
     string private _symbol;
     uint8 private _decimals;
+    uint256 private _totalSupply;
+
     
-
-    /**
-     * @dev Sets the values for {name} and {symbol}, initializes {decimals} with
-     * a default value of 18.
-     *
-     * To select a different value for {decimals}, use {_setupDecimals}.
-     *
-     * All three of these values are immutable: they can only be set once during
-     * construction.
-     
-    constructor(string memory name, string memory symbol) public {
-        _name = name;
-        _symbol = symbol;
-        _decimals = 18;
-    }
-    
-    */
-
-
-
-    // Returns the BEP20 token owner.
-    function getOwner() external override view returns (address) {
-        return owner();
+    // Sets the values for {name}, {symbol}, {decimals}, and {totalSupply}
+    function __BEP20_init(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
+        __Context_init_unchained();
+        __Ownable_init();
+        __Pausable_init();
+        __BEP20_init_unchained(name_, symbol_, decimals_, totalSupply_);
     }
 
+
+    // Internal function to set the values for {name}, {symbol}, {decimals}, and {totalSupply}
+    function __BEP20_init_unchained(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
+        _name = name_;
+        _symbol = symbol_;
+        _decimals = decimals_;
+        _totalSupply = totalSupply_;
+        _balances[msg.sender] = _totalSupply;
+
+        emit Transfer(address(0), msg.sender, _totalSupply);
+    }
+    
+    
+    // Allows "owner" to Pause the token transactions, used during maintenance periods or when upgrading token to new version. 
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    
+    // Allows "owner" to Un-Pause the token transactions, called after maintenance periods are finished or once upgrade is complete.
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+    
 
     // Returns the token name.
     function name() public override view returns (string memory) {
@@ -87,14 +98,19 @@ abstract contract BEP20 is Context, IBEP20, Ownable {
     
     // Atomically increases the allowance granted to `spender` by the caller.
     function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].add(addedValue));
+        _approve(_msgSender(), spender, (_allowances[_msgSender()][spender] + addedValue));
         return true;
     }
     
     
     // Atomically decreases the allowance granted to `spender` by the caller.
     function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, 'BEP20: decreased allowance below zero'));
+        require((_allowances[_msgSender()][spender] - subtractedValue) >= 0, "BEP20: decreased allowance below zero");
+        
+        unchecked {
+            _approve(_msgSender(), spender, (_allowances[_msgSender()][spender] - subtractedValue));
+        }
+        
         return true;
     }
 
@@ -117,65 +133,66 @@ abstract contract BEP20 is Context, IBEP20, Ownable {
     
     
     // Transfers an 'amount' of tokens from the callers account to the referenced 'recipient' address. Emits a {Transfer} event.
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
+    function transfer(address recipient, uint256 amount) public override whenNotPaused returns (bool) {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
 
 
     // Transfers an 'amount' of tokens from the 'sender' address to the 'recipient' address. Emits a {Transfer} event.
-    function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) public override whenNotPaused returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, 'BEP20: transfer amount exceeds allowance'));
+        
+        require(amount <= _allowances[sender][_msgSender()], "BEP20: transfer amount exceeds allowance");
+        
+        unchecked {
+            _approve(sender, _msgSender(), (_allowances[sender][_msgSender()] - amount));
+        }
+        
         return true;
     }
     
     
     // Internal function that moves tokens `amount` from `sender` to `recipient`.
-    function _transfer(address sender, address recipient, uint256 amount)internal virtual {
+    function _transfer(address sender, address recipient, uint256 amount) internal virtual {
         require(sender != address(0), 'BEP20: transfer from the zero address');
         require(recipient != address(0), 'BEP20: transfer to the zero address');
-
-        _balances[sender] = _balances[sender].sub(amount, 'BEP20: transfer amount exceeds balance');
-        _balances[recipient] = _balances[recipient].add(amount);
+        
+        _beforeTokenTransfer(sender, recipient, amount);
+        
+        require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
+        
+        unchecked {
+            _balances[sender] = _balances[sender] - amount;
+        }
+        
+        _balances[recipient] = _balances[recipient] + amount;
+        
         emit Transfer(sender, recipient, amount);
     }
-
     
-    // TODO: May or may not remove, left as template for now
-    // Creates `amount` tokens and assigns them to `msg.sender`, increasing the total supply.
-    function mint(uint256 amount) public onlyOwner returns (bool) {
-        _mint(_msgSender(), amount);
-        return true;
-    }
-
     
-    // TODO: May or may not remove, left as template for now
-    // Creates `amount` tokens and assigns them to `account`, increasing the total supply.
-    function _mint(address account, uint256 amount) internal {
-        require(account != address(0), 'BEP20: mint to the zero address');
+    /*  Hook that is called before any transfer of tokens. This includes minting and burning.
+     
+        Calling conditions:
+            - when `from` and `to` are both non-zero, `amount` of ``from``'s tokens will be transferred to `to`.
+            - when `from` is zero, `amount` tokens will be minted for `to`.
+            - when `to` is zero, `amount` of ``from``'s tokens will be burned.
+            - `from` and `to` are never both zero.
 
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
-        emit Transfer(address(0), account, amount);
-    }
+    */
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual {}
 
 
-    // TODO: May or may not remove, left as template for now
-    // Destroys `amount` tokens from `account`, reducing the total supply.
-    function _burn(address account, uint256 amount) internal {
-        require(account != address(0), 'BEP20: burn from the zero address');
-
-        _balances[account] = _balances[account].sub(amount, 'BEP20: burn amount exceeds balance');
-        _totalSupply = _totalSupply.sub(amount);
-        emit Transfer(account, address(0), amount);
-    }
-
+    /*  Hook that is called after any transfer of tokens. This includes minting and burning.
+     
+        Calling conditions:
+            - when `from` and `to` are both non-zero, `amount` of ``from``'s tokenshas been transferred to `to`.
+            - when `from` is zero, `amount` tokens have been minted for `to`.
+            - when `to` is zero, `amount` of ``from``'s tokens have been burned.
+            - `from` and `to` are never both zero.
+     */
+    function _afterTokenTransfer(address from, address to, uint256 amount) internal virtual {}
     
-    // TODO: May or may not remove, left as template for now
-    // Destroys `amount` tokens from `account`.`amount` is then deducted from the caller's allowance.
-    function _burnFrom(address account, uint256 amount) internal {
-        _burn(account, amount);
-        _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, 'BEP20: burn amount exceeds allowance'));
-    }
+    uint256[45] private __gap;
 }

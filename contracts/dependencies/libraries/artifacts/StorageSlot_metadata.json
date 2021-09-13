@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/libraries/Address.sol": "Address"
+			"GaussGang/contracts/dependencies/libraries/StorageSlot.sol": "StorageSlot"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -32,12 +32,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x4c9c38c9c8b972f09e662bbc3dc5778f7e6ef77770695ed062b5978c044f1216",
+		"GaussGang/contracts/dependencies/libraries/StorageSlot.sol": {
+			"keccak256": "0x22ec69b9ee95f78bbe2f3bb35b7e8d27f7bc74db262936d679229f25035d4463",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://015bfa0e7be6f82bbe2a9806a7a431d4d70f1afafd64b7ad04c3da90986c888d",
-				"dweb:/ipfs/QmUGntFz8s7QK1Vmpb1y9XgXGUJrofv8GHcGtW8urM9YCs"
+				"bzz-raw://61c6a681cd89640c4be44ae1d5eb2f90ca0c1333d432d94116738df8581cff6d",
+				"dweb:/ipfs/Qmd94cN94eQJZtsMzT9ptKBL6UF9f5Pq28pLMGy9LjUhkE"
 			]
 		}
 	},

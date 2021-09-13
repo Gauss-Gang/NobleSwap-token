@@ -1,0 +1,154 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "previousAdmin",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "newAdmin",
+						"type": "address"
+					}
+				],
+				"name": "AdminChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "beacon",
+						"type": "address"
+					}
+				],
+				"name": "BeaconUpgraded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "implementation",
+						"type": "address"
+					}
+				],
+				"name": "Upgraded",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newImplementation",
+						"type": "address"
+					}
+				],
+				"name": "upgradeTo",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newImplementation",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"name": "upgradeToAndCall",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"GaussGang/contracts/dependencies/utilities/UUPSUpgradable.sol": "UUPSUpgradeable"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"GaussGang/contracts/dependencies/interfaces/IBeacon.sol": {
+			"keccak256": "0x164c7ab772401790ba580a6510c9b39b50f8d7e83fe693499364d6e7e7d637fd",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://44ca0082f5c7c0d80cf087b41bb625a6bbb7291d8b4377d56fed5fe06888940c",
+				"dweb:/ipfs/QmeuZwHtTG4bAMyqNg1Dp2ZTqSBq5cgniLSHbbrgUKh5rK"
+			]
+		},
+		"GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0x4c9c38c9c8b972f09e662bbc3dc5778f7e6ef77770695ed062b5978c044f1216",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://015bfa0e7be6f82bbe2a9806a7a431d4d70f1afafd64b7ad04c3da90986c888d",
+				"dweb:/ipfs/QmUGntFz8s7QK1Vmpb1y9XgXGUJrofv8GHcGtW8urM9YCs"
+			]
+		},
+		"GaussGang/contracts/dependencies/libraries/StorageSlot.sol": {
+			"keccak256": "0x22ec69b9ee95f78bbe2f3bb35b7e8d27f7bc74db262936d679229f25035d4463",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://61c6a681cd89640c4be44ae1d5eb2f90ca0c1333d432d94116738df8581cff6d",
+				"dweb:/ipfs/Qmd94cN94eQJZtsMzT9ptKBL6UF9f5Pq28pLMGy9LjUhkE"
+			]
+		},
+		"GaussGang/contracts/dependencies/utilities/BEP20Upgrade.sol": {
+			"keccak256": "0x2fde857a0672aafa5cacf46039e4fcb39123cf5545886ce82f93cead8e33d351",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://26ae04221ed305995baebf286d707af717d6553fb8c188dd6cbab266341a6e69",
+				"dweb:/ipfs/QmWnXiN7p2z7oqzdkv9Vrvof6MGLoWYQ9Em4aPL4UPyNH3"
+			]
+		},
+		"GaussGang/contracts/dependencies/utilities/UUPSUpgradable.sol": {
+			"keccak256": "0x06eeae7de7c0c87a2db815e2c308ffa8dcc9b53692dd24073fa945cfd6c2fe5e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e312752ca0f8986acaa18b501b10c6e577e2f406b3599de9e456afdb38957cd6",
+				"dweb:/ipfs/QmdoWYy8RD4Ye8xef3s43wDMw1VFhMoTrVsZ6qjpPKvRqx"
+			]
+		}
+	},
+	"version": 1
+}
