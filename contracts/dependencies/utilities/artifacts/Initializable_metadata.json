@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/libraries/Address.sol": "Address"
+			"GaussGang/contracts/dependencies/utilities/Initializable.sol": "Initializable"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -32,12 +32,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x991499c25ee6e38e2c07981a1abab1875d067034c3210e9e3a55324ba00f7d9c",
+		"GaussGang/contracts/dependencies/utilities/Initializable.sol": {
+			"keccak256": "0x1c54c9b9e2b726786d50579c986f78e6651354e207101775fd16ec27e6ec711d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c2b808bf2fea890bc6b8f4d93c4dddd90a3a3e6be6e778ec4484a657708a5b86",
-				"dweb:/ipfs/Qmf3gj7f3ztbsUBRrfm5g4wp44LMvKucLyAutNwpRH59iZ"
+				"bzz-raw://fa398e7e4ed6fa15ebcc59e462f6d6416a5b6e88fd530b9a4e5cdf25e8b37a99",
+				"dweb:/ipfs/QmSQFeEWpG2LyCE3Zx2CRM2VmyAQM7NYV84sfUea79g9KE"
 			]
 		}
 	},

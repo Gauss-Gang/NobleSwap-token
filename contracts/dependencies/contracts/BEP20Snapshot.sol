@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
-
 import "./BEP20.sol";
-import "./Ownable.sol";
+import "../access/Ownable.sol";
 import "../libraries/Arrays.sol";
 import "../libraries/Counters.sol";
 
@@ -18,9 +17,21 @@ import "../libraries/Counters.sol";
 
 */
 abstract contract BEP20Snapshot is BEP20 {
-
+    
+    // Initializes BEP20Snapshot contract
+    function __BEP20Snapshot_init() internal initializer {
+        __Context_init_unchained();
+        __BEP20Snapshot_init_unchained();
+    }
+    
+    
+    // Initializes BEP20Snapshot contract
+    function __BEP20Snapshot_init_unchained() internal initializer {}
+    
+    
     using Arrays for uint256[];
     using Counters for Counters.Counter;
+    
 
     /* Snapshotted values have arrays of ids and the value corresponding to that id. 
         - These could be an array of a Snapshot struct, but that would impede usage of functions that work on an array. */
@@ -28,12 +39,15 @@ abstract contract BEP20Snapshot is BEP20 {
         uint256[] ids;
         uint256[] values;
     }
+    
 
     mapping(address => Snapshots) private _accountBalanceSnapshots;
     Snapshots private _totalSupplySnapshots;
+    
 
     // Snapshot ids increase monotonically, with the first value being 1. An id of 0 is invalid.
     Counters.Counter private _currentSnapshotId;
+    
 
     // Emitted by {_snapshot} when a snapshot identified by `id` is created.
     event Snapshot(uint256 id);
@@ -155,4 +169,6 @@ abstract contract BEP20Snapshot is BEP20 {
             return ids[ids.length - 1];
         }
     }
+    
+    uint256[46] private __gap;
 }

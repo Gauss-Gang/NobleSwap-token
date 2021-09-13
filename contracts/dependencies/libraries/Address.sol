@@ -7,7 +7,6 @@ pragma solidity >=0.8.4 <0.9.0;
 // Collection of functions related to the address type.
 library Address {
     
-    
     /*  Returns true if `account` is a contract.
 
             - It is unsafe to assume that an address for which this function returns
@@ -39,7 +38,6 @@ library Address {
     }
 
     
-    // TODO: Make comment more concise, look over listed links
     /*  Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
 
         IMPORTANT: because control is transferred to `recipient`, care must be

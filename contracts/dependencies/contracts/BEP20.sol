@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.8.4 <0.9.0;
-
-import "./Context.sol";
-import "./Ownable.sol";
-import "./Pausable.sol";
+import "../utilities/Initializable.sol";
+import "../utilities/Context.sol";
+import "../access/Ownable.sol";
+import "../security/Pausable.sol";
 import "../interfaces/IBEP20.sol";
 import "../libraries/Address.sol";
 
 
 
 // Implementation of the IBEP20 Interface, using Context, Pausable, Ownable, and Snapshot Extenstions.
-contract BEP20 is Context, IBEP20, Pausable, Ownable {
+contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     
     // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
     using Address for address;
@@ -20,21 +20,30 @@ contract BEP20 is Context, IBEP20, Pausable, Ownable {
     mapping(address => uint256) public _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
     
-    // Initializes variables for the total Supply, name, symbol, and decimals of the BEP20 token.
-    uint256 private _totalSupply;
+    // Initializes variables for the name, symbol, decimals, and the total Supply of the BEP20 token.
     string private _name;
     string private _symbol;
     uint8 private _decimals;
+    uint256 private _totalSupply;
 
     
     // Sets the values for {name}, {symbol}, {decimals}, and {totalSupply}
-    constructor(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) {
+    function __BEP20_init(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
+        __Context_init_unchained();
+        __Ownable_init();
+        __Pausable_init();
+        __BEP20_init_unchained(name_, symbol_, decimals_, totalSupply_);
+    }
+
+
+    // Internal function to set the values for {name}, {symbol}, {decimals}, and {totalSupply}
+    function __BEP20_init_unchained(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
         _name = name_;
         _symbol = symbol_;
         _decimals = decimals_;
         _totalSupply = totalSupply_;
         _balances[msg.sender] = _totalSupply;
-        
+
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
     
@@ -184,4 +193,6 @@ contract BEP20 is Context, IBEP20, Pausable, Ownable {
             - `from` and `to` are never both zero.
      */
     function _afterTokenTransfer(address from, address to, uint256 amount) internal virtual {}
+    
+    uint256[45] private __gap;
 }

@@ -33,11 +33,11 @@
 	},
 	"sources": {
 		"GaussGang/contracts/dependencies/libraries/Arrays.sol": {
-			"keccak256": "0x1c60e20aeb9af0a335d58a264babdbdb7d59bccfdbec2486c9604a99cb017d28",
+			"keccak256": "0xffdc8b0143f182072b257b18e548caffb749762509f4d19b5fd2395d764de5c3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e5a1533bd9573ab503c6a7e4aee2939461c031d8ca7d0e06612be6729c7c2157",
-				"dweb:/ipfs/QmR7ecwFdZXhKmaS6bxqzR7XeJhHnQuc3HRQrjNViNjqLK"
+				"bzz-raw://bb41f460b8d1a30e0d85bdfd3654845e203b0e202ed4859838ceb28f77900492",
+				"dweb:/ipfs/Qmcws9mu37jfnAmJBBaGtpCjMJ15XVgFnLcrs2esus7sqc"
 			]
 		},
 		"GaussGang/contracts/dependencies/libraries/Math.sol": {
