@@ -485,11 +485,11 @@
 			]
 		},
 		"GaussGang/contracts/dependencies/contracts/BEP20.sol": {
-			"keccak256": "0xa41c3051990699d717aa2064210de732f3ef3ea377bba22246a4241c0ac11787",
+			"keccak256": "0xed889d4efb0a1ce85cbd17193c42ec8c40bf8a154d9a22c127ecc08d8a8dd9e7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://97302b3fbe9c606670757fdb688193f289a8c4e90b88edaeef97c254abaf2c5d",
-				"dweb:/ipfs/QmZXMczGmVNKAASuYH19dokX2QeZMBeuJUaPNVL6ryBnJU"
+				"bzz-raw://ef261f9b64c8114f61ed0119adf912f54537b6cd4fc32fa10d3ba7f64d636b59",
+				"dweb:/ipfs/QmYh9AFmj2MvstNEvURStpF9W9A3YCHRUh4uWVQSd1jmeA"
 			]
 		},
 		"GaussGang/contracts/dependencies/contracts/BEP20Snapshot.sol": {

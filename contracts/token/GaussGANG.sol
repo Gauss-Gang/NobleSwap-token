@@ -18,9 +18,7 @@
 pragma solidity >=0.8.4 <0.9.0;
 import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/contracts/BEP20.sol";
-import "../dependencies/access/Ownable.sol";
 import "../dependencies/contracts/BEP20Snapshot.sol";
-import "../dependencies/libraries/Address.sol";
 
 
 
@@ -76,25 +74,41 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot {
 
     // Allows 'owner' to change the wallet address for the Redistribution Wallet.
     function changeRedistributionWallet(address newRedistributionAddress) public onlyOwner() {
+        
+        // Removes old address from the excludedFromFee mapping, then updates the mapping with the new address.
+        _excludedFromFee[redistributionWallet] = false;
         redistributionWallet = newRedistributionAddress;
+        _excludedFromFee[redistributionWallet] = true;
     }
     
     
     // Allows 'owner' to change the wallet address for the Charitable Fund Wallet.
     function changeCharitableWallet(address newCharitableAddress) public onlyOwner() {
+        
+        // Removes old address from the excludedFromFee mapping, then updates the mapping with the new address.
+        _excludedFromFee[charitableFundWallet] = false;
         charitableFundWallet = newCharitableAddress;
+        _excludedFromFee[charitableFundWallet] = true;
     }
     
     
     // Allows 'owner' to change the wallet address for the Liquidity Pool Wallet.
     function changeLiquidityWallet(address newLiquidityAddress) public onlyOwner() {
+        
+        // Removes old address from the excludedFromFee mapping, then updates the mapping with the new address.
+        _excludedFromFee[liquidityWallet] = false;
         liquidityWallet = newLiquidityAddress;
+        _excludedFromFee[liquidityWallet] = true;
     }
     
     
     // Allows 'owner' to change the wallet address for the Gauss Gang Wallet.
     function changeGaussGangWallet(address newGaussGangAddress) public onlyOwner() {
+        
+        // Removes old address from the excludedFromFee mapping, then updates the mapping with the new address.
+        _excludedFromFee[ggWallet] = false;
         ggWallet = newGaussGangAddress;
+        _excludedFromFee[ggWallet] = true;
     }
     
     
@@ -135,48 +149,77 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot {
         _beforeTokenTransfer(sender, recipient, amount);
         
         // Checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
-        if (_excludedFromFee[msg.sender] == true) {
+        if (_checkIfExcluded(sender, recipient) == 1) {
             
             require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
             
-            _balances[sender] = _balances[sender] - amount;
-            _balances[recipient] = _balances[recipient] + amount;
+            unchecked {
+                _balances[sender] = _balances[sender] - amount;
+            }
             
+            _balances[recipient] = _balances[recipient] + amount;
             emit Transfer(sender, recipient, amount);
         }
         
         else {
-            
-            // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee.
-            uint256 redistributionAmount = (amount * redistributionFee) / 100;
-            uint256 charitableFundAmount = (amount * charitableFundFee) / 100;
-            uint256 liquidityAmount = (amount * liquidityFee) / 100;
-            uint256 ggAmount = (amount * ggFee) / 100;
-            uint256 finalAmount = amount - (redistributionAmount + charitableFundAmount + liquidityAmount + ggAmount);
-            
-            /*  This section performs the balance transfer from "sender" to "recipient".
-                    - First ensuring the original "amount" is removed from the "sender" and the "finalAmount" ("amount" - transaction fee)
-                        is sent to the "recipient".
-                    - After that transaction is complete, the transaction fee is divided up and sent to the respective pool addresses.
-            */
-            require(finalAmount <= _balances[sender], "BEP20: transfer amount exceeds balance");
-            
-            _balances[sender] = _balances[sender] - amount;
-            _balances[recipient] = _balances[recipient] + finalAmount;
-            _balances[redistributionWallet] = _balances[redistributionWallet] + redistributionAmount;
-            _balances[charitableFundWallet] = _balances[charitableFundWallet] + charitableFundAmount;
-            _balances[liquidityWallet] = _balances[liquidityWallet] + liquidityAmount;
-            _balances[ggWallet] = _balances[ggWallet] + ggAmount;
-            
-            emit Transfer(sender, recipient, finalAmount);
-            emit Transfer(sender, redistributionWallet, redistributionAmount);
-            emit Transfer(sender, charitableFundWallet, charitableFundAmount);
-            emit Transfer(sender, liquidityWallet, liquidityAmount);
-            emit Transfer(sender, ggWallet, ggAmount);
+            _transferWithFee(sender, recipient, amount);
         }
     }
     
     
+    // Internal function to process a transfer while applying the Transaction Fee.
+    function _transferWithFee(address sender, address recipient, uint256 amount) internal {
+        
+        // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee.
+        uint256 redistributionAmount = (amount * redistributionFee) / 100;
+        uint256 charitableFundAmount = (amount * charitableFundFee) / 100;
+        uint256 liquidityAmount = (amount * liquidityFee) / 100;
+        uint256 ggAmount = (amount * ggFee) / 100;
+        uint256 finalAmount = amount - (redistributionAmount + charitableFundAmount + liquidityAmount + ggAmount);
+            
+        /*  This section performs the balance transfer from "sender" to "recipient".
+                - First ensuring the original "amount" is removed from the "sender" and the "finalAmount" ("amount" - transaction fee)
+                    is sent to the "recipient".
+                - After those transactions are complete, the transaction fee is divided up and sent to the respective pool addresses.
+        */
+        require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
+        require(finalAmount < amount, "GaussGANG: finalAmount exceeds original amount");
+            
+        unchecked {
+            _balances[sender] = _balances[sender] - amount;
+        }
+            
+        _balances[recipient] = _balances[recipient] + finalAmount;
+        _balances[redistributionWallet] = _balances[redistributionWallet] + redistributionAmount;
+        _balances[charitableFundWallet] = _balances[charitableFundWallet] + charitableFundAmount;
+        _balances[liquidityWallet] = _balances[liquidityWallet] + liquidityAmount;
+        _balances[ggWallet] = _balances[ggWallet] + ggAmount;
+            
+        emit Transfer(sender, recipient, finalAmount);
+        emit Transfer(sender, redistributionWallet, redistributionAmount);
+        emit Transfer(sender, charitableFundWallet, charitableFundAmount);
+        emit Transfer(sender, liquidityWallet, liquidityAmount);
+        emit Transfer(sender, ggWallet, ggAmount);
+    }
+    
+    
+    // Internal function to check if sender or recipient are excluded from the Transaction Fee.
+    //      Dev-Note: Boolean cost more gas than uint256; using 0 to represent false, and 1 to represent true.
+    function _checkIfExcluded(address sender, address recipient) internal view returns (uint256) {
+        if (_excludedFromFee[sender] == true) {
+            return 1;
+        }
+        
+        else if (_excludedFromFee[recipient] == true) {
+            return 1;
+        }
+        
+        else {
+            return 0;
+        }
+    }
+    
+
     // Internal function; overriden to allow Snapshot to update values before a Transfer event.
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(BEP20, BEP20Snapshot) {
         super._beforeTokenTransfer(from, to, amount);
