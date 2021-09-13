@@ -46,10 +46,9 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     
     // Calls te BEP20 Initializer to create the Gauss GANG token and set required variables.
-   function initialize() initializer public {
-       __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
-       __BEP20Snapshot_init_unchained();
-       __UUPSUpgradeable_init();
+    function initialize() initializer public {
+        __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
+        __BEP20Snapshot_init_unchained();
         
         // TODO: Add more exclusions if needed; Possibly reword comment
         // Excludes the wallets that compose the Transaction Fee from the Fee itself.

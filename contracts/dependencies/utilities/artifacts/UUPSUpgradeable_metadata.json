@@ -95,7 +95,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/utilities/UUPSUpgradable.sol": "UUPSUpgradeable"
+			"GaussGang/contracts/dependencies/utilities/UUPSUpgradeable.sol": "UUPSUpgradeable"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -141,7 +141,7 @@
 				"dweb:/ipfs/QmWnXiN7p2z7oqzdkv9Vrvof6MGLoWYQ9Em4aPL4UPyNH3"
 			]
 		},
-		"GaussGang/contracts/dependencies/utilities/UUPSUpgradable.sol": {
+		"GaussGang/contracts/dependencies/utilities/UUPSUpgradeable.sol": {
 			"keccak256": "0x06eeae7de7c0c87a2db815e2c308ffa8dcc9b53692dd24073fa945cfd6c2fe5e",
 			"license": "MIT",
 			"urls": [
