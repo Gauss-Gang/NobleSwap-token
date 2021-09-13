@@ -39,7 +39,6 @@ contract ScheduledTokenLock is Context {
     uint256[] private _tokenLockTimes;
     
 
-
     // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally.
     constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) {
         
@@ -55,49 +54,49 @@ contract ScheduledTokenLock is Context {
     
 
     // Returns the address that this ScheduledTokenLock contract is deployed to.
-    function contractAddress() public view virtual returns (address) {
+    function contractAddress() public view returns (address) {
         return address(this);
     }
 
 
     // Returns the token being held.
-    function token() public view virtual returns (IBEP20) {
+    function token() public view returns (IBEP20) {
         return _token;
     }
     
 
     // Returns the beneficiary of the tokens.
-    function sender() public view virtual returns (address) {
+    function sender() public view returns (address) {
         return _sender;
     }
     
 
     // Returns the beneficiary of the tokens.
-    function beneficiary() public view virtual returns (address) {
+    function beneficiary() public view returns (address) {
         return _beneficiary;
     }
     
     
     // Returns the amount being held in the TimeLock contract.
-    function lockedAmount() public view virtual returns (uint256) {
+    function lockedAmount() public view returns (uint256) {
         return _lockedAmount;
     }
 
 
     // Returns the time when the tokens are released.
-    function releaseTime() public view virtual returns (uint256) {
+    function releaseTime() public view returns (uint256) {
         return _releaseTime;
     }
     
     
     // Initializes the transfer of tokens from the "sender" to the the Time Lock contract.  
-    function lockTokens() public virtual {
+    function lockTokens() public {
         _token.transferFrom(_sender, address(this), _lockedAmount);
     }
     
     
     // Transfers tokens held by TimeLock to beneficiary.
-    function release() public virtual {
+    function release() public {
         
         require(block.timestamp >= releaseTime(), "ScheduledTokenLock: current time is before release time");
         

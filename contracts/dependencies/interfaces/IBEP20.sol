@@ -24,11 +24,7 @@ interface IBEP20 {
     function name() external view returns (string memory);
     
     
-    // Returns the BEP20 token owner.
-    function getOwner() external view returns (address);
-    
-    
-    // Returns balance of the referenced 'account' address
+    // Returns balance of the referenced 'account' address.
     function balanceOf(address account) external view returns (uint256);
 
 

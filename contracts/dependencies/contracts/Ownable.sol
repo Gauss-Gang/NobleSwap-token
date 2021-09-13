@@ -6,7 +6,7 @@ import "./Context.sol";
 
 
 
-// Provides a basic access control mechanism, where an account '_owner' can be granted exclusive access to specific functions by using the modifier `onlyOwner`
+// Provides a basic access control mechanism, where an account '_owner' can be granted exclusive access to specific functions by using the modifier `onlyOwner`.
 abstract contract Ownable is Context {
     
     address private _owner;

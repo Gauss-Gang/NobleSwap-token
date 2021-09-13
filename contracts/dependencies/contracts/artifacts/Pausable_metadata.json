@@ -9,45 +9,39 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
+						"indexed": false,
 						"internalType": "address",
-						"name": "previousOwner",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "newOwner",
+						"name": "account",
 						"type": "address"
 					}
 				],
-				"name": "OwnershipTransferred",
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Unpaused",
 				"type": "event"
 			},
 			{
 				"inputs": [],
-				"name": "owner",
+				"name": "paused",
 				"outputs": [
 					{
-						"internalType": "address",
+						"internalType": "bool",
 						"name": "",
-						"type": "address"
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newOwner",
-						"type": "address"
-					}
-				],
-				"name": "transferOwnership",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -64,7 +58,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/contracts/Ownable.sol": "Ownable"
+			"GaussGang/contracts/dependencies/contracts/Pausable.sol": "Pausable"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -86,12 +80,12 @@
 				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
 			]
 		},
-		"GaussGang/contracts/dependencies/contracts/Ownable.sol": {
-			"keccak256": "0xa80ecf9c81ff593dd3f639756c515b10413804f1db38ac0af9bda6e7685712f7",
+		"GaussGang/contracts/dependencies/contracts/Pausable.sol": {
+			"keccak256": "0xa5c4d84f1c572dda7eff665bde68eefd90dfb333982e7f3e3b383e2377479813",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4f568a5db9f54dfcb839409316b5605cbd6f5fb68e5cfdb42aa08de2d52dbdaf",
-				"dweb:/ipfs/QmNknJiUqMaDaGccqi4qpi5Mgvy8TexKsQuG2yUVqgZEQ3"
+				"bzz-raw://ebc03178f5e77954d84da86e3177156172b1ff600fad817df1c1265df17dd7de",
+				"dweb:/ipfs/QmZ177PecEpkjdnBxsPPEnhGKav74mnegRmstyBASkET1n"
 			]
 		}
 	},

@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/dependencies/contracts/Context.sol": "Context"
+			"GaussGang/contracts/dependencies/libraries/Math.sol": "Math"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -32,12 +32,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"GaussGang/contracts/dependencies/contracts/Context.sol": {
-			"keccak256": "0x2286f6675b3713aa9f34fcf747e7a49b9b7a76a209b894d7393c0777eda27fab",
+		"GaussGang/contracts/dependencies/libraries/Math.sol": {
+			"keccak256": "0xdd2457b07bcea586ba5bdde78678900e9c23b76a4dc1eb6bbbe1efac9e313803",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0fa6fdbc5420fe8e590e09c61e161734c48996df6455484cec5316dff926bffe",
-				"dweb:/ipfs/Qme4q9QbJ7HmuJon5HrcrjZMc3TVSvKspE61RPrhB3pABX"
+				"bzz-raw://e1bce81cce7cd6537d7464f63e135ee9935ad5439f6c03f359201b0a363aaa22",
+				"dweb:/ipfs/QmVFtbx11BhpJZw1yWjPd35t49jrA2kyXfMtW8h4pQhaTR"
 			]
 		}
 	},

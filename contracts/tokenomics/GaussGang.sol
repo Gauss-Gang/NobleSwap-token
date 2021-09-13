@@ -17,174 +17,51 @@
 
 pragma solidity >=0.8.4 <0.9.0;
 
-import "../dependencies/contracts/Context.sol";
+import "../dependencies/contracts/BEP20.sol";
 import "../dependencies/contracts/Ownable.sol";
-import "../dependencies/interfaces/IBEP20.sol";
+import "../dependencies/contracts/BEP20Snapshot.sol";
 import "../dependencies/libraries/Address.sol";
-// import "./TimeLock/FunctionLockController.sol";
 
 
 
-// TODO: Create Comment
-contract GaussGang is Context, IBEP20, Ownable {
+// TODO: Create Comment (Possibly Use introduction from Litepaper, or iteration thereof)
+contract GaussGang is BEP20, BEP20Snapshot {
     
-    // Dev-Note: Solidity 0.8.0 has added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
-    using Address for address;
-    
-    // TODO: Reword
-    // Creates mapping for the collections of balances, allowances, and addresses excluded from the Transaction Fee for the Gauss(GANG) token
-    mapping (address => uint256) private _balances;
-    mapping (address => mapping (address => uint256)) private _allowances;
+    // Creates mapping for the collection of addresses excluded from the Transaction Fee.
     mapping (address => bool) private _excludedFromFee;
     
-    // Initializes variables for the total Supply, name, symbol, and decimals of Gauss(GANG) token.
-    uint256 private _totalSupply;
-    string private _name;
-    string private _symbol;
-    uint8  private _decimals;
-    
-    // TODO: Consider making private
+    // TODO: Consider changing variable, without the word Fee?
     // Initializes variables representing the seperate fees that comprise the Transaction Fee.
-    uint256 public _redistributionFee;
-    uint256 public _charitableFundFee;
-    uint256 public _liquidityFee;
-    uint256 public _ggFee;
-    uint256 private _totalFee;
+    uint256 public redistributionFee = 3;
+    uint256 public charitableFundFee = 3;
+    uint256 public liquidityFee = 3;
+    uint256 public ggFee = 3;
+    uint256 private _totalFee = 12;
     
-    // TODO: Consider making private
     // Initializes variables representing the seperate wwallets that receive the Transaction Fee.
-    address public _redistributionWallet;
-    address public _charitableFundWallet;
-    address public _liquidityWallet;
-    address public _ggWallet;
+    address public redistributionWallet = (0x9C34db8a1467c0F0F152C13Db098d7e0Ca0CE918);
+    address public charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
+    address public liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
+    address public ggWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
     
     
-    
-    // TODO: Expand and reword
-    // The constructor sets the state variables, listed above, to their initial states at launch.
-    constructor() {
-        _name = "Gauss";
-        _symbol = "GANG";
-        _decimals = 9;
-        _totalSupply = 250000000 * (10 ** _decimals);
-        _balances[msg.sender] = _totalSupply;
-        _redistributionFee = 3;
-        _charitableFundFee = 3;
-        _liquidityFee = 3;
-        _ggFee = 3;
-        _totalFee = 12;
-        
-        // Sets wallet addresses for each of the Pools spliting the Transaction Fee.
-        _redistributionWallet = (0x9C34db8a1467c0F0F152C13Db098d7e0Ca0CE918);
-        _charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
-        _liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
-        _ggWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
+    // Calls te BEP20 constructor to create the Gauss GANG token and set required variables.
+    constructor() BEP20("Gauss", "GANG", 9, (250000000 * (10 ** 9))) {
         
         // TODO: Add more exclusions if needed; Possibly reword comment
         // Excludes the wallets that compose the Transaction Fee from the Fee itself.
         _excludedFromFee[owner()] = true;
-        _excludedFromFee[_redistributionWallet] = true;
-        _excludedFromFee[_charitableFundWallet] = true;
-        _excludedFromFee[_liquidityWallet] = true;
-        _excludedFromFee[_ggWallet] = true;
-        
-        emit Transfer(address(0), msg.sender, _totalSupply);
+        _excludedFromFee[redistributionWallet] = true;
+        _excludedFromFee[charitableFundWallet] = true;
+        _excludedFromFee[liquidityWallet] = true;
+        _excludedFromFee[ggWallet] = true;
     }
     
     
-    // Returns the token name.
-    function name() public override view returns (string memory) {
-        return _name;
-    }
-    
-    
-    // Returns the token symbol.
-    function symbol() public override view returns (string memory) {
-        return _symbol;
-    }
-
- 
-    // Returns the token decimals.
-    function decimals() public override view returns (uint8) {
-        return _decimals;
-    }
-
-
-    // Returns the total supply of token.
-    function totalSupply() public override view returns (uint256) {
-        return _totalSupply;
-    }
-    
-    
-    // Returns the token owner.
-    function getOwner() external override view returns (address) {
-        return owner();
-    }
-    
-    
-    // Returns balance of the referenced 'account' address.
-    function balanceOf(address account) public override view returns (uint256) {
-        return _balances[account];
-    }
-
-
-    // Returns the remaining tokens that the 'spender' address can spend on behalf of the 'owner' address through the {transferFrom} function.
-    function allowance(address owner, address spender) public override view returns (uint256) {
-        return _allowances[owner][spender];
-    }
-    
-    
-    // Atomically increases the allowance granted to `spender` by the caller.
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-        _approve(_msgSender(), spender, (_allowances[_msgSender()][spender] + addedValue));
-        return true;
-    }
-    
-    
-    // Atomically decreases the allowance granted to `spender` by the caller.
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-        require((_allowances[_msgSender()][spender] - subtractedValue) >= 0, "BEP20: decreased allowance below zero");
-        _approve(_msgSender(), spender, (_allowances[_msgSender()][spender] - subtractedValue));
-        return true;
-    }
-
-
-    // Sets 'amount' as the allowance of 'spender' then returns a boolean indicating result of operation. Emits an {Approval} event.
-    function approve(address spender, uint256 amount) public override returns (bool) {
-        _approve(_msgSender(), spender, amount);
-        return true;
-    }
-    
-    
-    // Sets `amount` as the allowance of `spender` over the `owner`s tokens.
-    function _approve(address owner, address spender, uint256 amount) internal {
-        require(owner != address(0), 'BEP20: approve from the zero address');
-        require(spender != address(0), 'BEP20: approve to the zero address');
-
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
-    }
-    
-    
-    /*  Transfers an 'amount' of tokens from the callers account to the referenced 'recipient' address. Emits a {Transfer} event.
-            - NOTE: This calls the internal function {_transfer}, which may subtract a Transaction Fee from "amount".
-    */
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
-        _transfer(_msgSender(), recipient, amount);
-        return true;
-    }
-
-
-    /*  Transfers an 'amount' of tokens from the 'sender' address to the 'recipient' address. Emits a {Transfer} event.
-            - NOTE: This calls the internal function {_transfer}, which may subtract a Transaction Fee from "amount".
-    */
-    function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-        _transfer(sender, recipient, amount);
-        
-        require(amount <= _allowances[sender][_msgSender()], "BEP20: transfer amount exceeds allowance");
-        
-        _approve(sender, _msgSender(), (_allowances[sender][_msgSender()] - amount));
-        return true;
+    // Creates a Snapshot of the balances and totalsupply of token, returns the Snapshot ID. Can only be called by owner.
+    function snapshot() public onlyOwner returns (uint256) {
+        uint256 id = _snapshot();
+        return id;
     }
     
     
@@ -194,35 +71,30 @@ contract GaussGang is Context, IBEP20, Ownable {
     }
     
 
-    // TODO: TimeLock the function, 4 - 6 months
     // Allows 'owner' to change the wallet address for the Redistribution Wallet.
     function changeRedistributionWallet(address newRedistributionAddress) public onlyOwner() {
-        _redistributionWallet = newRedistributionAddress;
+        redistributionWallet = newRedistributionAddress;
     }
     
     
-    // TODO: TimeLock the function, 4 - 6 months
-    // Allows 'owner' to change the wallet address for the charitable Fund Wallet.
+    // Allows 'owner' to change the wallet address for the Charitable Fund Wallet.
     function changeCharitableWallet(address newCharitableAddress) public onlyOwner() {
-        _charitableFundWallet = newCharitableAddress;
+        charitableFundWallet = newCharitableAddress;
     }
     
     
-    // TODO: TimeLock the function, 4 - 6 months
     // Allows 'owner' to change the wallet address for the Liquidity Pool Wallet.
     function changeLiquidityWallet(address newLiquidityAddress) public onlyOwner() {
-        _liquidityWallet = newLiquidityAddress;
+        liquidityWallet = newLiquidityAddress;
     }
     
     
-    // TODO: TimeLock the function, 4 - 6 months
-    // Allows 'owner' to change the wallet address for the Liquidity Pool Wallet.
+    // Allows 'owner' to change the wallet address for the Gauss Gang Wallet.
     function changeGaussGangWallet(address newGaussGangAddress) public onlyOwner() {
-        _ggWallet = newGaussGangAddress;
+        ggWallet = newGaussGangAddress;
     }
     
     
-    // TODO: Considering a TimeLock of 1 or more months
     /*  Allows 'owner' to change the transaction fees at a later time, so long as the total Transaction Fee is lower than 12% (the initial fee ceiling).
             -An amount for each Pool is required to be entered, even if the specific fee amount won't be changed.         
             -Each variable should be entered as a single or double digit number to represent the intended percentage; 
@@ -234,10 +106,10 @@ contract GaussGang is Context, IBEP20, Ownable {
         newTotalFee = newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee;
 
         if (newTotalFee <= 12) {
-            _redistributionFee = newRedistributionFee;
-            _charitableFundFee = newCharitableFundFee;
-            _liquidityFee = newLiquidityFee;
-            _ggFee = newGGFee;
+            redistributionFee = newRedistributionFee;
+            charitableFundFee = newCharitableFundFee;
+            liquidityFee = newLiquidityFee;
+            ggFee = newGGFee;
             _totalFee = newTotalFee;
         }
     }
@@ -252,10 +124,12 @@ contract GaussGang is Context, IBEP20, Ownable {
                     the Liquidity pool,             (Initially, 3%)
                     and Gauss Gang pool             (Initially, 3%)
     */
-    function _transfer(address sender, address recipient, uint256 amount) internal {
+    function _transfer(address sender, address recipient, uint256 amount) internal whenNotPaused override(BEP20) {
         
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
+        
+        _beforeTokenTransfer(sender, recipient, amount);
         
         // Checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
         if (_excludedFromFee[msg.sender] == true) {
@@ -271,10 +145,10 @@ contract GaussGang is Context, IBEP20, Ownable {
         else {
             
             // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee.
-            uint256 redistributionAmount = (amount * _redistributionFee) / 100;
-            uint256 charitableFundAmount = (amount * _charitableFundFee) / 100;
-            uint256 liquidityAmount = (amount * _liquidityFee) / 100;
-            uint256 ggAmount = (amount * _ggFee) / 100;
+            uint256 redistributionAmount = (amount * redistributionFee) / 100;
+            uint256 charitableFundAmount = (amount * charitableFundFee) / 100;
+            uint256 liquidityAmount = (amount * liquidityFee) / 100;
+            uint256 ggAmount = (amount * ggFee) / 100;
             uint256 finalAmount = amount - (redistributionAmount + charitableFundAmount + liquidityAmount + ggAmount);
             
             /*  This section performs the balance transfer from "sender" to "recipient".
@@ -286,16 +160,22 @@ contract GaussGang is Context, IBEP20, Ownable {
             
             _balances[sender] = _balances[sender] - amount;
             _balances[recipient] = _balances[recipient] + finalAmount;
-            _balances[_redistributionWallet] = _balances[_redistributionWallet] + redistributionAmount;
-            _balances[_charitableFundWallet] = _balances[_charitableFundWallet] + charitableFundAmount;
-            _balances[_liquidityWallet] = _balances[_liquidityWallet] + liquidityAmount;
-            _balances[_ggWallet] = _balances[_ggWallet] + ggAmount;
+            _balances[redistributionWallet] = _balances[redistributionWallet] + redistributionAmount;
+            _balances[charitableFundWallet] = _balances[charitableFundWallet] + charitableFundAmount;
+            _balances[liquidityWallet] = _balances[liquidityWallet] + liquidityAmount;
+            _balances[ggWallet] = _balances[ggWallet] + ggAmount;
             
             emit Transfer(sender, recipient, finalAmount);
-            emit Transfer(sender, _redistributionWallet, redistributionAmount);
-            emit Transfer(sender, _charitableFundWallet, charitableFundAmount);
-            emit Transfer(sender, _liquidityWallet, liquidityAmount);
-            emit Transfer(sender, _ggWallet, ggAmount);
+            emit Transfer(sender, redistributionWallet, redistributionAmount);
+            emit Transfer(sender, charitableFundWallet, charitableFundAmount);
+            emit Transfer(sender, liquidityWallet, liquidityAmount);
+            emit Transfer(sender, ggWallet, ggAmount);
         }
+    }
+    
+    
+    // Internal function; overriden to allow Snapshot to update values before a Transfer event.
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(BEP20, BEP20Snapshot) {
+        super._beforeTokenTransfer(from, to, amount);
     }
 }

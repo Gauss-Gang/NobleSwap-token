@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.4+commit.c7e474f2"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -18,9 +18,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Gauss Gang/GaussGang/contracts/dependencies/libraries/Address.sol": "Address"
+			"GaussGang/contracts/dependencies/libraries/Address.sol": "Address"
 		},
-		"evmVersion": "istanbul",
+		"evmVersion": "london",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -32,12 +32,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Gauss Gang/GaussGang/contracts/dependencies/libraries/Address.sol": {
-			"keccak256": "0x530d76853547b4ced7ba754f9a6f4e5bbceafb44e0b28f0ebaf0f8c721352b27",
+		"GaussGang/contracts/dependencies/libraries/Address.sol": {
+			"keccak256": "0xfa9aaf09eceec182a7f76c1ad5a33a128fb3c769b7ba99567f5931b803ebfd8c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://df56f4118ac905aa1cf9081f376f4b33993363c471052fc26877b33eddd8b18f",
-				"dweb:/ipfs/QmNseZmEV21bHMiwL9zMRTJwGpGqE2VWmpca9bHTcnqoyj"
+				"bzz-raw://edd2c49af70dc723a393f336eb600ea3ad9508b60d772d6b3fbeee6d676508d9",
+				"dweb:/ipfs/QmYDfZtbEeB2z6GyWeqjKdgBqtQBgwC3frKs98fznS9LDu"
 			]
 		}
 	},

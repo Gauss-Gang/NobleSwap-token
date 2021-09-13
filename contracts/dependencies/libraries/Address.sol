@@ -4,7 +4,7 @@ pragma solidity >=0.8.4 <0.9.0;
 
 
 
-// Collection of functions related to the address type
+// Collection of functions related to the address type.
 library Address {
     
     
@@ -25,12 +25,12 @@ library Address {
         
         /* According to EIP-1052, 0x0 is the value returned for not-yet created accounts
             and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
-            for accounts without code, i.e. `keccak256('')`
+            for accounts without code, i.e. `keccak256('')`.
         */
         bytes32 codehash;
         bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         
-        // solhint-disable-next-line no-inline-assembly
+        // solhint-disable-next-line no-inline-assembly.
         assembly {
             codehash := extcodehash(account)
         }
@@ -108,10 +108,10 @@ library Address {
         
         else {
             
-            // Look for revert reason and bubble it up if present
+            // Look for revert reason and bubble it up if present.
             if (returndata.length > 0) {
                 
-                // The easiest way to bubble the revert reason is using memory via assembly; solhint-disable-next-line no-inline-assembly
+                // The easiest way to bubble the revert reason is using memory via assembly; solhint-disable-next-line no-inline-assembly.
                 assembly {
                     let returndata_size := mload(returndata)
                     revert(add(32, returndata), returndata_size)

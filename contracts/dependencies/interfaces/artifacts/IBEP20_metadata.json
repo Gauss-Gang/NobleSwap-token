@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.4+commit.c7e474f2"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -137,19 +137,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "getOwner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "name",
 				"outputs": [
 					{
@@ -254,9 +241,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Gauss Gang/GaussGang/contracts/dependencies/interfaces/IBEP20.sol": "IBEP20"
+			"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": "IBEP20"
 		},
-		"evmVersion": "istanbul",
+		"evmVersion": "london",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -268,12 +255,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Gauss Gang/GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
-			"keccak256": "0x7d851963a9b947d3e4ee0f84fd444f2a48364d92c1dea3692b64b15ff7fc8f16",
+		"GaussGang/contracts/dependencies/interfaces/IBEP20.sol": {
+			"keccak256": "0x68f22bcae10af0130ffac3efdb9603e52e774ba1389b8bd6bbb1ef41b4c804c9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a27d18ab746735e715cc87b5f72645e06bdeb2758d1f6d1f88e3d346b8918db4",
-				"dweb:/ipfs/QmZov1WHAughUAvQWqTBc5x9ZgnCc6Ve8Ez97PWL5B9SQJ"
+				"bzz-raw://c6839c26548ded5776b34c4c1f50f6775d30d2949dc6156c87d43787335340f5",
+				"dweb:/ipfs/QmbyKAkr2DhxzUnNzj7mX1HDFwqGRay5y2TpzijmY75wxj"
 			]
 		}
 	},

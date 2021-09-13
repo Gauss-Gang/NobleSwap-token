@@ -6,7 +6,28 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "name_",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "symbol_",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "decimals_",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalSupply_",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -65,19 +86,6 @@
 					}
 				],
 				"name": "Paused",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					}
-				],
-				"name": "Snapshot",
 				"type": "event"
 			},
 			{
@@ -205,136 +213,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "snapshotId",
-						"type": "uint256"
-					}
-				],
-				"name": "balanceOfAt",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newCharitableAddress",
-						"type": "address"
-					}
-				],
-				"name": "changeCharitableWallet",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newGaussGangAddress",
-						"type": "address"
-					}
-				],
-				"name": "changeGaussGangWallet",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newLiquidityAddress",
-						"type": "address"
-					}
-				],
-				"name": "changeLiquidityWallet",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "newRedistributionAddress",
-						"type": "address"
-					}
-				],
-				"name": "changeRedistributionWallet",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "newRedistributionFee",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newCharitableFundFee",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newLiquidityFee",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newGGFee",
-						"type": "uint256"
-					}
-				],
-				"name": "changeTransactionFees",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "charitableFundFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "charitableFundWallet",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "decimals",
 				"outputs": [
@@ -372,32 +250,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "ggFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "ggWallet",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -419,32 +271,6 @@
 					}
 				],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "liquidityFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "liquidityWallet",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -495,45 +321,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "redistributionFee",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "redistributionWallet",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "snapshot",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "symbol",
 				"outputs": [
 					{
@@ -548,38 +335,6 @@
 			{
 				"inputs": [],
 				"name": "totalSupply",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "snapshotId",
-						"type": "uint256"
-					}
-				],
-				"name": "totalSupplyAt",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "totalTransactionFee",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -677,7 +432,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"GaussGang/contracts/tokenomics/GaussGang.sol": "GaussGang"
+			"GaussGang/contracts/dependencies/contracts/BEP20.sol": "BEP20"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -697,14 +452,6 @@
 			"urls": [
 				"bzz-raw://d7fbe752bd06c728a6e2b9f907b1affbea834a55a2ff6ebbd056f236ffdd740f",
 				"dweb:/ipfs/Qmf5WAM89eddtJGUwAoAeEwA1ndYP6o4EE1pjhzTTYdEpN"
-			]
-		},
-		"GaussGang/contracts/dependencies/contracts/BEP20Snapshot.sol": {
-			"keccak256": "0x57b5ed1be1d568a9b2953aec6edb2db30fcd6bc4312e7978ec092f69394f2113",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://c6dca1c0a924777c05dea52cd63ea4dcdd5a5dd120cb83b611557164d990c1e1",
-				"dweb:/ipfs/QmaHRhQegikrJ5iQZ1woK7Mgu4uLcEubZcwj2RtW3J2dUH"
 			]
 		},
 		"GaussGang/contracts/dependencies/contracts/Context.sol": {
@@ -745,38 +492,6 @@
 			"urls": [
 				"bzz-raw://edd2c49af70dc723a393f336eb600ea3ad9508b60d772d6b3fbeee6d676508d9",
 				"dweb:/ipfs/QmYDfZtbEeB2z6GyWeqjKdgBqtQBgwC3frKs98fznS9LDu"
-			]
-		},
-		"GaussGang/contracts/dependencies/libraries/Arrays.sol": {
-			"keccak256": "0x1c60e20aeb9af0a335d58a264babdbdb7d59bccfdbec2486c9604a99cb017d28",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://e5a1533bd9573ab503c6a7e4aee2939461c031d8ca7d0e06612be6729c7c2157",
-				"dweb:/ipfs/QmR7ecwFdZXhKmaS6bxqzR7XeJhHnQuc3HRQrjNViNjqLK"
-			]
-		},
-		"GaussGang/contracts/dependencies/libraries/Counters.sol": {
-			"keccak256": "0x339e24c9e1080527c85410a23f7c6a706b3d5764727281de5fa43facd428cd82",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://f465702a2ed8aec21d96fc0eb3daa97ebc760b2c3881022a021d5211bbbfcfc8",
-				"dweb:/ipfs/QmPQJcy52cpZXMun4e4QWK5hkvTcdZfGf8x31XavneP9i1"
-			]
-		},
-		"GaussGang/contracts/dependencies/libraries/Math.sol": {
-			"keccak256": "0xdd2457b07bcea586ba5bdde78678900e9c23b76a4dc1eb6bbbe1efac9e313803",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://e1bce81cce7cd6537d7464f63e135ee9935ad5439f6c03f359201b0a363aaa22",
-				"dweb:/ipfs/QmVFtbx11BhpJZw1yWjPd35t49jrA2kyXfMtW8h4pQhaTR"
-			]
-		},
-		"GaussGang/contracts/tokenomics/GaussGang.sol": {
-			"keccak256": "0x0cce56006b76f8086c56baf6e833f3293f54c563c6710eef06f732d51cc24443",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://754daea974ec32ab63622e1ed1967cba0ce5d1a021af8a994c8cbef630be3607",
-				"dweb:/ipfs/QmZRAZNgWFJLPVrRnKVm12Ny2Z6Gr2Tbnx3GdrBCv7Jnyg"
 			]
 		}
 	},

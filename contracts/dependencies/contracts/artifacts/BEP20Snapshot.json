@@ -49,15 +49,25 @@
 		},
 		"gasEstimates": null,
 		"methodIdentifiers": {
+			"_balances(address)": "6ebcf607",
 			"allowance(address,address)": "dd62ed3e",
 			"approve(address,uint256)": "095ea7b3",
 			"balanceOf(address)": "70a08231",
+			"balanceOfAt(address,uint256)": "4ee2cd7e",
 			"decimals()": "313ce567",
+			"decreaseAllowance(address,uint256)": "a457c2d7",
+			"increaseAllowance(address,uint256)": "39509351",
 			"name()": "06fdde03",
+			"owner()": "8da5cb5b",
+			"pause()": "8456cb59",
+			"paused()": "5c975abb",
 			"symbol()": "95d89b41",
 			"totalSupply()": "18160ddd",
+			"totalSupplyAt(uint256)": "981b24d0",
 			"transfer(address,uint256)": "a9059cbb",
-			"transferFrom(address,address,uint256)": "23b872dd"
+			"transferFrom(address,address,uint256)": "23b872dd",
+			"transferOwnership(address)": "f2fde38b",
+			"unpause()": "3f4ba83a"
 		}
 	},
 	"abi": [
@@ -92,6 +102,51 @@
 				{
 					"indexed": true,
 					"internalType": "address",
+					"name": "previousOwner",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "newOwner",
+					"type": "address"
+				}
+			],
+			"name": "OwnershipTransferred",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Paused",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "id",
+					"type": "uint256"
+				}
+			],
+			"name": "Snapshot",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
 					"name": "from",
 					"type": "address"
 				},
@@ -112,10 +167,42 @@
 			"type": "event"
 		},
 		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "_owner",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "_balances",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "owner",
 					"type": "address"
 				},
 				{
@@ -179,6 +266,30 @@
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "snapshotId",
+					"type": "uint256"
+				}
+			],
+			"name": "balanceOfAt",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "decimals",
 			"outputs": [
@@ -192,6 +303,54 @@
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "subtractedValue",
+					"type": "uint256"
+				}
+			],
+			"name": "decreaseAllowance",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "spender",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "addedValue",
+					"type": "uint256"
+				}
+			],
+			"name": "increaseAllowance",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "name",
 			"outputs": [
@@ -199,6 +358,39 @@
 					"internalType": "string",
 					"name": "",
 					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "owner",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -220,6 +412,25 @@
 		{
 			"inputs": [],
 			"name": "totalSupply",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "snapshotId",
+					"type": "uint256"
+				}
+			],
+			"name": "totalSupplyAt",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -280,6 +491,26 @@
 					"type": "bool"
 				}
 			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "newOwner",
+					"type": "address"
+				}
+			],
+			"name": "transferOwnership",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		}
