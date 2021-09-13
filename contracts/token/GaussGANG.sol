@@ -17,6 +17,7 @@
 
 pragma solidity >=0.8.4 <0.9.0;
 import "../dependencies/utilities/Initializable.sol";
+import "../dependencies/utilities/UUPSUpgradeable.sol";
 import "../dependencies/contracts/BEP20.sol";
 import "../dependencies/contracts/BEP20Snapshot.sol";
 
@@ -24,7 +25,7 @@ import "../dependencies/contracts/BEP20Snapshot.sol";
 
 // TODO: Consider use of Gauss Gang as contract name
 // TODO: Create Comment (Possibly Use introduction from Litepaper, or iteration thereof)
-contract GaussGANG is Initializable, BEP20, BEP20Snapshot {
+contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     // Creates mapping for the collection of addresses excluded from the Transaction Fee.
     mapping (address => bool) private _excludedFromFee;
@@ -48,6 +49,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot {
    function initialize() initializer public {
        __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
        __BEP20Snapshot_init_unchained();
+       __UUPSUpgradeable_init();
         
         // TODO: Add more exclusions if needed; Possibly reword comment
         // Excludes the wallets that compose the Transaction Fee from the Fee itself.
@@ -224,4 +226,8 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot {
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(BEP20, BEP20Snapshot) {
         super._beforeTokenTransfer(from, to, amount);
     }
+    
+    
+    // Function to allow "owner" to upgarde the contract using a UUPS Proxy
+    function _authorizeUpgrade(address newImplementation) internal onlyOwner override {}
 }

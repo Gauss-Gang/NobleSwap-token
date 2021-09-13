@@ -22,19 +22,15 @@ library Address {
     */
     function isContract(address account) internal view returns (bool) {
         
-        /* According to EIP-1052, 0x0 is the value returned for not-yet created accounts
-            and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
-            for accounts without code, i.e. `keccak256('')`.
-        */
-        bytes32 codehash;
-        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
+        // This method relies on extcodesize, which returns 0 for contracts in construction,
+        //  since the code is only stored at the end of the constructor execution.
+        uint256 size;
         
-        // solhint-disable-next-line no-inline-assembly.
         assembly {
-            codehash := extcodehash(account)
+            size := extcodesize(account)
         }
         
-        return (codehash != accountHash && codehash != 0x0);
+        return size > 0;
     }
 
     
@@ -49,8 +45,8 @@ library Address {
         require(address(this).balance >= amount, 'Address: insufficient balance');
 
         // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
-        (bool success, ) = recipient.call{value: amount}('');
-        require(success, 'Address: unable to send value, recipient may have reverted');
+        (bool success, ) = recipient.call{value: amount}("");
+        require(success, "Address: unable to send value, recipient may have reverted");
     }
 
 
@@ -69,7 +65,7 @@ library Address {
 
     //  Same as `functionCall`, but with `errorMessage` as a fallback revert reason when `target` reverts.
     function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
-        return _functionCallWithValue(target, data, 0, errorMessage);
+        return functionCallWithValue(target, data, 0, errorMessage);
     }
 
 
@@ -81,35 +77,64 @@ library Address {
 
     */
     function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
-        return functionCallWithValue(target, data, value, 'Address: low-level call with value failed');
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
     }
 
 
     // Same as `functionCallWithValue`, but with `errorMessage` as a fallback revert reason when `target` reverts.
     function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
-        require(address(this).balance >= value, 'Address: insufficient balance for call');
-        return _functionCallWithValue(target, data, value, errorMessage);
+        
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        require(isContract(target), "Address: call to non-contract");
+        
+        (bool success, bytes memory returndata) = target.call{value: value}(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+    
+    
+    // Same as `functionCall`, but performing a static call.
+    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+        return functionStaticCall(target, data, "Address: low-level static call failed");
     }
 
 
-    // Internal function called from "functionCallWithValue" above (Same as `functionCallWithValue`, but with `errorMessage` as a fallback revert reason when `target` reverts.)
-    function _functionCallWithValue(address target, bytes memory data, uint256 weiValue, string memory errorMessage) private returns (bytes memory) {
-        
-        require(isContract(target), 'Address: call to non-contract');
+    // Same as `functionCall` with `errorMessage`, but performing a static call.
+    function functionStaticCall(address target, bytes memory data, string memory errorMessage) internal view returns (bytes memory) {
+        require(isContract(target), "Address: static call to non-contract");
 
-        // solhint-disable-next-line avoid-low-level-calls
-        (bool success, bytes memory returndata) = target.call{value: weiValue}(data);
+        (bool success, bytes memory returndata) = target.staticcall(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+
+
+    // Same as `functionCall`, but performing a delegate call.
+    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
+    }
+
+
+    // Same as `functionCall` with `errorMessage` ,but performing a delegate call.
+    function functionDelegateCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
+        require(isContract(target), "Address: delegate call to non-contract");
+
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+
+
+    // Tool to verifies that a low level call was successful, and revert if it wasn't, either by bubbling the revert reason using the provided one.
+    function verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) internal pure returns (bytes memory) {
         
         if (success) {
             return returndata;
-        }
+        } 
         
         else {
             
-            // Look for revert reason and bubble it up if present.
+            // Look for revert reason and bubble it up if present
             if (returndata.length > 0) {
-                
-                // The easiest way to bubble the revert reason is using memory via assembly; solhint-disable-next-line no-inline-assembly.
+                // The easiest way to bubble the revert reason is using memory via assembly
+
                 assembly {
                     let returndata_size := mload(returndata)
                     revert(add(32, returndata), returndata_size)

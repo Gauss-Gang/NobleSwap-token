@@ -73,11 +73,11 @@
 	},
 	"sources": {
 		"GaussGang/contracts/dependencies/security/Pausable.sol": {
-			"keccak256": "0x1bea3167511ed165e521dbb3bfe6b88e1c0f1da28603fb3d4506fb49bc1d101c",
+			"keccak256": "0x64d11e24f71526ab6be936aef2fed9ded2921e15157224730c10e37b9f585118",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b6ad23f3a572f3a256b3ba2ed589c3aa36c1958ea5df7b00e04a4592f288ddd9",
-				"dweb:/ipfs/QmY1D1b73MJSRmE3ypvpkDFaKkk3zZo7DvjGsLksj6m3mR"
+				"bzz-raw://1170dec1f936dd409f5935f5ddb1445fd85ae61e9d2d98296c41cbb687dffea8",
+				"dweb:/ipfs/QmVZ8wcqSzWpB7LFcNL455BdFibzmBYadqfUbdazyedDzN"
 			]
 		},
 		"GaussGang/contracts/dependencies/utilities/Context.sol": {

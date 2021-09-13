@@ -782,11 +782,11 @@
 			]
 		},
 		"GaussGang/contracts/token/GaussGANG.sol": {
-			"keccak256": "0x87a21bcb754d58abb33d334607c06ceadfec2000f36bd006d1de69bbf2f0d1b6",
+			"keccak256": "0x02a0864f1fd8ba5a8703656ec0f394685f02bb1256bf15cbdd60a1940a00e4b3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b7cda15d778cc2d7f8c9acaacec5caa7e48a5ced0a1f7f35bbdce2bf31379daa",
-				"dweb:/ipfs/QmesZDY1WNqtp5ohAjkGYjrjqhHvFRqJrL4hWcy2SZwwKN"
+				"bzz-raw://85e47421fb903319892a8abf5bd324662ff83b3349aa0ae2d2a24f211953322c",
+				"dweb:/ipfs/QmSTf4Wr3L2naEkwH5uyBVEL66mGybUBj33J1zswPpRywi"
 			]
 		}
 	},
