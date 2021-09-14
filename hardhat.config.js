@@ -1,7 +1,10 @@
 require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/ethers");
+require("chai");
+require("ethereum-waffle");
+require("ethers");
+require("solidity-coverage");
 require("@openzeppelin/hardhat-upgrades");
+
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
