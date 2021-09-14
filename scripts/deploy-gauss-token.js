@@ -3,7 +3,9 @@ const { ethers, upgrades } = require("hardhat");
 
 async function main() {
   const GaussGANG = await ethers.getContractFactory("GaussGANG");
-  const gg = await upgrades.deployProxy(gg);
+  console.log('Deploying GaussGANG...');
+  
+  const gg = await upgrades.deployProxy(GaussGANG);
 
   await gg.deployed();
 
