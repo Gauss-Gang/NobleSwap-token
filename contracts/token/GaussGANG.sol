@@ -32,24 +32,43 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     // TODO: Consider changing variable, without the word Fee?
     // Initializes variables representing the seperate fees that comprise the Transaction Fee.
-    uint256 public redistributionFee = 3;
-    uint256 public charitableFundFee = 3;
-    uint256 public liquidityFee = 3;
-    uint256 public ggFee = 3;
-    uint256 private _totalFee = 12;
+    uint256 public redistributionFee;
+    uint256 public charitableFundFee;
+    uint256 public liquidityFee;
+    uint256 public ggFee;
+    uint256 private _totalFee;
     
     // Initializes variables representing the seperate wallets that receive the Transaction Fee.
-    address public redistributionWallet = (0x9C34db8a1467c0F0F152C13Db098d7e0Ca0CE918);
-    address public charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
-    address public liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
-    address public ggWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
+    address public redistributionWallet;
+    address public charitableFundWallet;
+    address public liquidityWallet;
+    address public ggWallet;
     
     
     // Calls te BEP20 Initializer to create the Gauss GANG token and set required variables.
     function initialize() initializer public {
         __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
-        __BEP20Snapshot_init_unchained();
+        __BEP20Snapshot_init_unchained();        
+        __GaussGANG_init_unchained();        
+    }
+
+
+    // Sets initial values to 
+    function __GaussGANG_init_unchained() internal initializer {
         
+        // Sets values for the variables representing the seperate fees that comprise the Transaction Fee.
+        redistributionFee = 3;
+        charitableFundFee = 3;
+        liquidityFee = 3;
+        ggFee = 3;
+        _totalFee = 12;
+
+        // Sets the values for the variables representing the seperate wallets that receive the Transaction Fee.
+        redistributionWallet = (0x9C34db8a1467c0F0F152C13Db098d7e0Ca0CE918);
+        charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
+        liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
+        ggWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
+
         // TODO: Add more exclusions if needed; Possibly reword comment
         // Excludes the wallets that compose the Transaction Fee from the Fee itself.
         _excludedFromFee[owner()] = true;
@@ -135,7 +154,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     /*  Internal Transfer function; takes out transaction fees before sending remaining to 'recipient'.
             -At launch, the transaction fee is set to 12%, but will be lowered over time.
-            -The max transaction fee is also 12%, never raising beyond the intital fee set at launch.
+            -The max transaction fee is also 12%, never raising beyond the initial fee set at launch.
             -Fee is evenly split between 4 Pools: 
                     The Redistribution pool,        (Initially, 3%) 
                     the Charitable Fund pool,       (Initially, 3%)
