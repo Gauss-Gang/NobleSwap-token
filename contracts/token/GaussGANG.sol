@@ -23,14 +23,15 @@ import "../dependencies/contracts/BEP20Snapshot.sol";
 
 
 
-// TODO: Consider use of Gauss Gang as contract name
-// TODO: Create Comment (Possibly Use introduction from Litepaper, or iteration thereof)
+/*  A tokenized ecosystem to serve the evolving needs of any brand. 
+    The purpose of the Gauss ecosystem is to support and work with brands to launch utility tokens on 
+    our future blockchain and empower them to engage with their audiences in a new, captivating manner.
+*/
 contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     // Creates mapping for the collection of addresses excluded from the Transaction Fee.
     mapping (address => bool) private _excludedFromFee;
     
-    // TODO: Consider changing variable, without the word Fee?
     // Initializes variables representing the seperate fees that comprise the Transaction Fee.
     uint256 public redistributionFee;
     uint256 public charitableFundFee;
@@ -43,9 +44,10 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     address public charitableFundWallet;
     address public liquidityWallet;
     address public ggWallet;
+    address public internalDistributionWallet;
     
     
-    // Calls te BEP20 Initializer to create the Gauss GANG token and set required variables.
+    // Calls te BEP20 Initializer and internal Initializer to create the Gauss GANG token and set required variables.
     function initialize() initializer public {
         __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
         __BEP20Snapshot_init_unchained();        
@@ -68,14 +70,15 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
         charitableFundWallet = (0x765696087d95A84cbFa6FEEE857570A6eae19A14);
         liquidityWallet = (0x3f8c6910124F32aa5546a7103408FA995ab45f65);
         ggWallet = (0x206F10F88159590280D46f607af976F6d4d79Ce3);
+        internalDistributionWallet = (0xf532651735713E8671FE418124703ab662088C75);
 
-        // TODO: Add more exclusions if needed; Possibly reword comment
-        // Excludes the wallets that compose the Transaction Fee from the Fee itself.
+        // Excludes these wallets, that compose the Transaction Fee, from the Fee itself.
         _excludedFromFee[owner()] = true;
         _excludedFromFee[redistributionWallet] = true;
         _excludedFromFee[charitableFundWallet] = true;
         _excludedFromFee[liquidityWallet] = true;
         _excludedFromFee[ggWallet] = true;
+        _excludedFromFee[internalDistributionWallet] = true;
     }
     
     
@@ -130,6 +133,16 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
         ggWallet = newGaussGangAddress;
         _excludedFromFee[ggWallet] = true;
     }
+
+
+    // Allows 'owner' to change the wallet address for the Internal Distribution Wallet (used to transfer tokens between company controlled wallets).
+    function changeInternalDistributionWallet(address newInternalDistributionWallet) public onlyOwner() {
+        
+        // Removes old address from the excludedFromFee mapping, then updates the mapping with the new address.
+        _excludedFromFee[internalDistributionWallet] = false;
+        internalDistributionWallet = newInternalDistributionWallet;
+        _excludedFromFee[internalDistributionWallet] = true;
+    }
     
     
     /*  Allows 'owner' to change the transaction fees at a later time, so long as the total Transaction Fee is lower than 12% (the initial fee ceiling).
@@ -152,15 +165,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     }
     
     
-    /*  Internal Transfer function; takes out transaction fees before sending remaining to 'recipient'.
-            -At launch, the transaction fee is set to 12%, but will be lowered over time.
-            -The max transaction fee is also 12%, never raising beyond the initial fee set at launch.
-            -Fee is evenly split between 4 Pools: 
-                    The Redistribution pool,        (Initially, 3%) 
-                    the Charitable Fund pool,       (Initially, 3%)
-                    the Liquidity pool,             (Initially, 3%)
-                    and Gauss Gang pool             (Initially, 3%)
-    */
+    // Internal Transfer function; checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
     function _transfer(address sender, address recipient, uint256 amount) internal whenNotPaused override(BEP20) {
         
         require(sender != address(0), "BEP20: transfer from the zero address");
@@ -168,9 +173,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
         
         _beforeTokenTransfer(sender, recipient, amount);
         
-        // Checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
-        if (_checkIfExcluded(sender, recipient) == 1) {
-            
+        if (_checkIfExcluded(sender, recipient) == 1) {            
             require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
             
             unchecked {
@@ -187,7 +190,15 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     }
     
     
-    // Internal function to process a transfer while applying the Transaction Fee.
+    /*  Internal Transfer function; takes out transaction fees before sending remaining to 'recipient'.
+            -At launch, the transaction fee is set to 12%, but will be lowered over time.
+            -The max transaction fee is also 12%, never raising beyond the initial fee set at launch.
+            -Fee is evenly split between 4 Pools: 
+                    The Redistribution pool,        (Initially, 3%) 
+                    the Charitable Fund pool,       (Initially, 3%)
+                    the Liquidity pool,             (Initially, 3%)
+                    and Gauss Gang pool             (Initially, 3%)
+    */
     function _transferWithFee(address sender, address recipient, uint256 amount) internal {
         
         // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee.
@@ -247,5 +258,5 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     
     
     // Function to allow "owner" to upgarde the contract using a UUPS Proxy
-    function _authorizeUpgrade(address newImplementation) internal onlyOwner override {}
+    function _authorizeUpgrade(address newImplementation) internal whenPaused onlyOwner override {}
 }
