@@ -11,8 +11,7 @@
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-pragma solidity >=0.8.4 <0.9.0;
-
+pragma solidity 0.8.7;
 import "../dependencies/utilities/Context.sol";
 import "../dependencies/access/Ownable.sol";
 import "../dependencies/interfaces/IBEP20.sol";

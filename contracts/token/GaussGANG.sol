@@ -15,7 +15,7 @@
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.8.4 <0.9.0;
+pragma solidity 0.8.7;
 import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/UUPSUpgradeable.sol";
 import "../dependencies/contracts/BEP20.sol";
@@ -151,17 +151,17 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
                 Example: Entering a 3 for newRedistributionFee would set the Redistribution fee to 3% of the Transaction Amount.
     */      
     function changeTransactionFees(uint256 newRedistributionFee, uint256 newCharitableFundFee, uint256 newLiquidityFee, uint256 newGGFee) public onlyOwner() {
-        uint256 newTotalFee;
         
+        uint256 newTotalFee;
         newTotalFee = newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee;
 
-        if (newTotalFee <= 12) {
-            redistributionFee = newRedistributionFee;
-            charitableFundFee = newCharitableFundFee;
-            liquidityFee = newLiquidityFee;
-            ggFee = newGGFee;
-            _totalFee = newTotalFee;
-        }
+        require(newTotalFee <= 12, "GaussGANG: Transaction fee entered exceeds ceiling of 12%");
+        
+        redistributionFee = newRedistributionFee;
+        charitableFundFee = newCharitableFundFee;
+        liquidityFee = newLiquidityFee;
+        ggFee = newGGFee;
+        _totalFee = newTotalFee;
     }
     
     

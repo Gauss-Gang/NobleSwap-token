@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.7;
 import "./BEP20.sol";
 import "../access/Ownable.sol";
 import "../libraries/Arrays.sol";
@@ -14,10 +14,29 @@ import "../libraries/Counters.sol";
             snapshot id. To get the total supply at the time of a snapshot, call the function {totalSupplyAt} with the snapshot
             id. To get the balance of an account at the time of a snapshot, call the {balanceOfAt} function with the snapshot id
             and the account address.
-
 */
 abstract contract BEP20Snapshot is BEP20 {
+
+    using Arrays for uint256[];
+    using Counters for Counters.Counter;    
+
+    /* Snapshotted values have arrays of ids and the value corresponding to that id. 
+        - These could be an array of a Snapshot struct, but that would impede usage of functions that work on an array. */
+    struct Snapshots {
+        uint256[] ids;
+        uint256[] values;
+    }
     
+    mapping(address => Snapshots) private _accountBalanceSnapshots;
+    Snapshots private _totalSupplySnapshots;
+    
+    // Snapshot ids increase monotonically, with the first value being 1. An id of 0 is invalid.
+    Counters.Counter private _currentSnapshotId;
+    
+    // Emitted by {_snapshot} when a snapshot identified by `id` is created.
+    event Snapshot(uint256 id);
+    
+
     // Initializes BEP20Snapshot contract
     function __BEP20Snapshot_init() internal initializer {
         __Context_init_unchained();
@@ -27,32 +46,8 @@ abstract contract BEP20Snapshot is BEP20 {
     
     // Initializes BEP20Snapshot contract
     function __BEP20Snapshot_init_unchained() internal initializer {}
-    
-    
-    using Arrays for uint256[];
-    using Counters for Counters.Counter;
-    
 
-    /* Snapshotted values have arrays of ids and the value corresponding to that id. 
-        - These could be an array of a Snapshot struct, but that would impede usage of functions that work on an array. */
-    struct Snapshots {
-        uint256[] ids;
-        uint256[] values;
-    }
-    
 
-    mapping(address => Snapshots) private _accountBalanceSnapshots;
-    Snapshots private _totalSupplySnapshots;
-    
-
-    // Snapshot ids increase monotonically, with the first value being 1. An id of 0 is invalid.
-    Counters.Counter private _currentSnapshotId;
-    
-
-    // Emitted by {_snapshot} when a snapshot identified by `id` is created.
-    event Snapshot(uint256 id);
-
-    
     // Creates a new snapshot and returns its snapshot id. Emits a {Snapshot} event that contains the same id.
     function _snapshot() internal virtual returns (uint256) {
         _currentSnapshotId.increment();

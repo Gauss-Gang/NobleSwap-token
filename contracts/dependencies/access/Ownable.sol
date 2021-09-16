@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.8.4 <0.9.0;
+pragma solidity 0.8.7;
 import "../utilities/Initializable.sol";
 import "../utilities/Context.sol";
 
@@ -53,6 +53,3 @@ abstract contract Ownable is Initializable, Context {
         _owner = newOwner;
     }
 }
-
-
-

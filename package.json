@@ -11,7 +11,7 @@
     "local-testnet": "hardhat node"
   },
   "keywords": [],
-  "author": "Austin McCall",
+  "author": "Austin M",
   "license": "MIT",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

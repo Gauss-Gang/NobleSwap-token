@@ -1,15 +1,15 @@
-// scripts/create-box.js
+// Deploys the Guass GANG token while using the OpenZepplin UUPS Upgradable Pattern
 const { ethers, upgrades } = require("hardhat");
 
 async function main() {
   const GaussGANG = await ethers.getContractFactory("GaussGANG");
   console.log('Deploying GaussGANG...');
   
-  const gg = await upgrades.deployProxy(GaussGANG);
+  const contract = await upgrades.deployProxy(GaussGANG, { kind: 'uups'});
 
-  await gg.deployed();
+  await contract.deployed();
 
-  console.log("GaussGANG deployed to:", gg.address);
+  console.log("GaussGANG deployed to:", contract.address);
 }
 
 main()
