@@ -4,7 +4,7 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
     // Following code is to use the contract at the deployed address
-    const deplyedAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    const deplyedAddress = "0xFC5bE805c952f78661aE32703c4e0f8f8C6Bcd2E";
     const GaussGANG = await ethers.getContractFactory("GaussGANG");
     const contract = await GaussGANG.attach(deplyedAddress);
 
@@ -19,9 +19,9 @@ async function main() {
         console.log("GaussGANG Transaction Fee:", transactionFee);
 
         // Changes the Transaction Fee to a new int (must change the numbers passed in below)
-        await contract.changeTransactionFees(1,2,3,4);
-        const newFees = await contract.totalTransactionFee();
-        console.log("GaussGANG New Transaction Fee:", newFees);
+    //    await contract.changeTransactionFees(3,3,3,3);
+    //    const newFees = await contract.totalTransactionFee();
+    //    console.log("GaussGANG New Transaction Fee:", newFees);
 
 
         // Checks the current redistributionFee
@@ -29,8 +29,8 @@ async function main() {
         console.log("GaussGANG redistributionFee:", redistributionFee);
 
         // Checks current address for redistributionWallet
-        const redistributionWallet = await contract.redistributionWallet();
-        console.log("GaussGANG redistributionWallet address:", redistributionWallet);
+    //    const redistributionWallet = await contract.redistributionWallet();
+    //    console.log("GaussGANG redistributionWallet address:", redistributionWallet);
 
         // Changes the current Redistribution Wallet address (must add in the new address to the variable created below)
     //    const newRedistributionAddress = "";
@@ -43,8 +43,8 @@ async function main() {
         console.log("GaussGANG charitableFundFee:", charitableFundFee);
 
         // Checks current address for charitableFundWallet
-        const charitableFundWallet = await contract.charitableFundWallet();
-        console.log("GaussGANG charitableFundWallet address:", charitableFundWallet);
+    //    const charitableFundWallet = await contract.charitableFundWallet();
+    //    console.log("GaussGANG charitableFundWallet address:", charitableFundWallet);
 
         // Changes the current Charitable Fund Wallet address (must add in the new address to the variable created below)
     //    const newCharitableAddress = "";
@@ -57,8 +57,8 @@ async function main() {
         console.log("GaussGANG liquidityFee:", liquidityFee);
 
         // Checks current address for liquidityWallet
-        const liquidityWallet = await contract.liquidityWallet();
-        console.log("GaussGANG liquidityWallet address:", liquidityWallet);
+    //    const liquidityWallet = await contract.liquidityWallet();
+    //    console.log("GaussGANG liquidityWallet address:", liquidityWallet);
 
         // Changes the current Liquidity Wallet address (must add in the new address to the variable created below)
     //    const newLiquidityAddress = "";
@@ -71,8 +71,8 @@ async function main() {
         console.log("GaussGANG ggFee:", ggFee);
 
         // Checks current address for ggWallet
-        const ggWallet = await contract.ggWallet();
-        console.log("GaussGANG ggWallet address:", ggWallet);
+    //    const ggWallet = await contract.ggWallet();
+    //    console.log("GaussGANG ggWallet address:", ggWallet);
 
         // Changes the current ggWallet address (must add in the new address to the variable created below)
     //    const newGGWalletAddress = "";
@@ -81,8 +81,8 @@ async function main() {
 
 
         // Checks current address for internalDistributionWallet
-        const internalDistributionWallet = await contract.internalDistributionWallet();
-        console.log("GaussGANG internalDistributionWallet address:", internalDistributionWallet);
+    //    const internalDistributionWallet = await contract.internalDistributionWallet();
+    //    console.log("GaussGANG internalDistributionWallet address:", internalDistributionWallet);
 
         // Changes the current internalDistributionWallet address (must add in the new address to the variable created below)
     //    const newInternalDistributionAddress = "";
@@ -95,12 +95,12 @@ async function main() {
     //    console.log("GaussGANG Snapshot ID:", snapShotID);
 
         // Allows owner to Pause all Transfers
-        await contract.pause();
-        console.log("GaussGANG Transactions paused...");
+    //    await contract.pause();
+    //    console.log("GaussGANG Transactions paused...");
 
         // Allows owner to Unpause all Transfers
-        await contract.unpause();
-        console.log("GaussGANG Transactions unpaused...");
+    //    await contract.unpause();
+    //    console.log("GaussGANG Transactions unpaused...");
 
 
 
@@ -110,20 +110,20 @@ async function main() {
 
 
         // Returns the name of the BEP20 Token
-        const name = await contract.name();
-        console.log("BEP20 Token Name:", name);
+    //    const name = await contract.name();
+    //    console.log("BEP20 Token Name:", name);
 
         // Returns the symbol of the BEP20 Token
-        const symbol = await contract.symbol();
-        console.log("BEP20 Token symbol:", symbol);
+    //    const symbol = await contract.symbol();
+    //    console.log("BEP20 Token symbol:", symbol);
 
         // Returns the decimals of the BEP20 Token
-        const decimals = await contract.decimals();
-        console.log("BEP20 Token decimals:", decimals);
+    //    const decimals = await contract.decimals();
+    //    console.log("BEP20 Token decimals:", decimals);
 
         // Returns the totalSupply of the BEP20 Token
-        const totalSupply = await contract.totalSupply();
-        console.log("BEP20 Token totalSupply:", totalSupply);
+    //    const totalSupply = await contract.totalSupply();
+    //    console.log("BEP20 Token totalSupply:", totalSupply);
 
 
         // Returns the balance of the address entered below

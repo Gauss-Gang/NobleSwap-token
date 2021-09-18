@@ -153,7 +153,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     function changeTransactionFees(uint256 newRedistributionFee, uint256 newCharitableFundFee, uint256 newLiquidityFee, uint256 newGGFee) public onlyOwner() {
         
         uint256 newTotalFee;
-        newTotalFee = newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee;
+        newTotalFee = (newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee);
 
         require(newTotalFee <= 12, "GaussGANG: Transaction fee entered exceeds ceiling of 12%");
         
