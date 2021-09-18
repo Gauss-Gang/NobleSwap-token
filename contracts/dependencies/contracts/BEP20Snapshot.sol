@@ -8,7 +8,7 @@ import "../libraries/Counters.sol";
 
 
 
-/*  This contract extends an ERC20 token with a snapshot mechanism. When a snapshot is created, the balances and total supply at the time are recorded for later access.
+/*  This contract extends an BEP20 token with a snapshot mechanism. When a snapshot is created, the balances and total supply at the time are recorded for later access.
         
         - Snapshots are created by the internal {_snapshot} function, which will emit the {Snapshot} event and return a
             snapshot id. To get the total supply at the time of a snapshot, call the function {totalSupplyAt} with the snapshot
@@ -103,8 +103,8 @@ abstract contract BEP20Snapshot is BEP20 {
     
     // Returns the value held in the snapshot using the id as an identifier.
     function _valueAt(uint256 snapshotId, Snapshots storage snapshots) private view returns (bool, uint256) {
-        require(snapshotId > 0, "ERC20Snapshot: id is 0");
-        require(snapshotId <= _getCurrentSnapshotId(), "ERC20Snapshot: nonexistent id");
+        require(snapshotId > 0, "BEP20Snapshot: id is 0");
+        require(snapshotId <= _getCurrentSnapshotId(), "BEP20Snapshot: nonexistent id");
 
         /*  When a valid snapshot is queried, there are three possibilities:
                 a) The queried value was not modified after the snapshot was taken. Therefore, a snapshot entry was never created for this id,

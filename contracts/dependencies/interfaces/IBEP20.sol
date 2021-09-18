@@ -4,7 +4,7 @@ pragma solidity 0.8.7;
 
 
 
-// BEP20 Interface that creates basic functions for a BEP20 token. The Gauss(Gang) Contract inherits it's core functions from this interface.
+// BEP20 Interface that creates basic functions for a BEP20 token.
 interface IBEP20 {
     
     
