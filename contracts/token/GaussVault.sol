@@ -9,57 +9,51 @@
     _____________________________________________________________________________
 */
 
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 
 pragma solidity 0.8.7;
+import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/Context.sol";
 import "../dependencies/access/Ownable.sol";
 import "../dependencies/interfaces/IBEP20.sol";
 import "../dependencies/libraries/Address.sol";
-import "../dependencies/contracts/TokenLock.sol";                      // TODO: Refactor name to SimpleVesting
-import "../dependencies/contracts/ScheduledTokenLock.sol";             // TODO: Refactor name to ScheduledVesting
+import "../dependencies/contracts/TokenLock.sol";
+import "../dependencies/contracts/ScheduledTokenLock.sol";
 
 
 
 // TODO: Write Comment
-contract GaussVault is Context, Ownable {
+contract GaussVault is Initializable, Context, Ownable {
     
     // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
     using Address for address;
     
     // Initializes an event that will be called after each VestingLock contract is deployed
     event VestingCreated(address beneficiary, address lockAddress, uint256 initialAmount);
+       
+    // Initializes two arrays that will hold the deployed contracts of both Simple and Scheduled Time Locks.
+    TokenLock[] private _simpleVestingContracts;
+    ScheduledTokenLock[] private _scheduledVestingContracts;
     
-    // Initializes a Struct that will hold the information for each seperate Vesting Lock.
-    struct VestingLock {
-        address beneficiaryWallet;      // Sets the address for beneficiary wallet that tokens will be released to.
-        uint256 initialAmount;          // Sets the initial token amount for the Vesting Lock.
-        uint256[] releaseAmounts;       // Sets the amounts to be released over time.
-        uint256[] releaseTimes;         // Sets the time periods that tokens will be released over.
-    }
-    
-    // Initializes an array that will hold each VestingLock Struct and a simple index variable to call the last pushed element.
-    VestingLock[] public gaussVestings;
-    uint256 private indexLast = gaussVestings.length-1;
-    
-    address[] private contractAddresses;
-    
-
-    // Creates variables to hold the address of the Gauss(GANG) address as well as the "sender" of the tokens to be transferred.
-    address private _gaussAddress;
+    // Creates variables to hold the address of "sender" of the tokens to be transferred, as well as the address that the Gauss(GANG) is deployed to.
     address private _senderAddress;
-    IBEP20  private  gaussToken;
+    IBEP20  private _gaussToken;
     
 
     /*  The constructor sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
           as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens.                     */
-    constructor (address gaussOwner, address gaussGANGAddress) {     
-        
+    function initialize(address gaussOwner, address gaussGANGAddress) initializer public {
+        __Ownable_init();       
+        __GaussVault_init_unchained(gaussOwner, gaussGANGAddress);        
+    }
+
+
+    // Sets initial values to the Transaction Fees and wallets to be excluded from the Transaction Fee.
+    function __GaussVault_init_unchained(address gaussOwner, address gaussGANGAddress) internal initializer {
         require(msg.sender == gaussOwner);
         
-        _gaussAddress = gaussGANGAddress;
         _senderAddress = msg.sender;
-        gaussToken = IBEP20(_gaussAddress);
+        _gaussToken = IBEP20(gaussGANGAddress);
         
         _lockCommunityTokens();
         _lockLiquidityTokens();
@@ -69,23 +63,23 @@ contract GaussVault is Context, Ownable {
         _lockMarketingTokens();
         _lockOpsDevTokens();
         _lockVestingIncentiveTokens();
-        _lockReserveTokens;
-    }
-    
-    
-    // Returns the Contract owner.
-    function getOwner() external view returns (address) {
-        return owner();
+        _lockReserveTokens();
     }
     
     
     // Returns the beneficiary wallet address of each Vesting Lock, can be called by anyone.
     function beneficiaryVestingAddresses() public view returns (address[] memory) {
+
+        uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);        
+        address[] memory beneficiaryWallets = new address[](numberOfAddresses);
         
-        address[] memory beneficiaryWallets = new address[](gaussVestings.length);
-        
-        for (uint i = 0; i < gaussVestings.length; i++) {
-            beneficiaryWallets[i] = gaussVestings[i].beneficiaryWallet;
+        for (uint i = 0; i < numberOfAddresses; i++) {
+            if (i < _simpleVestingContracts.length) {
+                beneficiaryWallets[i] = _simpleVestingContracts[i].beneficiary();
+            }
+            else {
+                beneficiaryWallets[i] = _scheduledVestingContracts[i].beneficiary();
+            }
         }
         
         return beneficiaryWallets; 
@@ -94,6 +88,44 @@ contract GaussVault is Context, Ownable {
     
     // Returns the addresses of each Vesting Contract deployed, can be called by anyone.
     function vestingContractAddresses() public view returns (address[] memory) {
+
+        uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);        
+        address[] memory contractAddresses = new address[](numberOfAddresses);
+        
+        for (uint i = 0; i < numberOfAddresses; i++) {
+            if (i < _simpleVestingContracts.length) {
+                contractAddresses[i] = _simpleVestingContracts[i].contractAddress();
+            }
+            else {
+                contractAddresses[i] = _scheduledVestingContracts[i].contractAddress();
+            }
+        }
+        
+        return contractAddresses; 
+    }
+
+
+    // TODO: Rewrite comment
+    // Attempts to release every wallet, ultimately releasing the available amount per Token Lock Contract, and starts a new release time period per contract that releases funds.
+    //      - Returns addresses of every wallet that received tokens
+    function releaseAvailableTokens() public onlyOwner() returns (address[] memory) {
+
+        uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
+        address[] memory contractAddresses = new address[](numberOfAddresses);
+
+        for (uint i = 0; i < numberOfAddresses; i++) {
+            if (i < _simpleVestingContracts.length) {
+                if ((_simpleVestingContracts[i].release()) == true) {
+                    contractAddresses[i] = _simpleVestingContracts[i].contractAddress();
+                }
+            }
+            else {
+                if ((_scheduledVestingContracts[i].release()) == true) {
+                    contractAddresses[i] = _scheduledVestingContracts[i].contractAddress();
+                }
+            }
+        }
+
         return contractAddresses;
     }
     
@@ -101,20 +133,16 @@ contract GaussVault is Context, Ownable {
     // Vests the specified wallet address for the given time, Function can only be called by "owner". Returns the address it is deployed to. 
     function vestTokens(address sender, address beneficiary, uint256 amount, uint256 releaseTime) public onlyOwner() returns (address) {
         
-        // Creates a VestingLock Struct, sets beneficiary address and intial amount, and then pushes the Struct into an array holding all Gauss Vestings.
-        VestingLock memory newSimpleVesting = VestingLock (beneficiary, amount, new uint256[](0), new uint256[](0));
-        gaussVestings.push(newSimpleVesting);
-        
         // Creates an instance of a TokenLock contract.
-        TokenLock newVestedLock = new TokenLock(gaussToken, sender, beneficiary, amount, releaseTime);
+        TokenLock newVestedLock = new TokenLock(_gaussToken, sender, beneficiary, amount, releaseTime);
         
         // Transfers the tokens to the tokens to the TokenLock contract, locking the tokens over the specified schedule for each pool.
-        // Also adds the address of the deployed contract to an array of all deployed contracts.
+        // Also adds the deployed contract to an array of all deployed Simple Token Lock contracts.
         newVestedLock.lockTokens();
-        contractAddresses.push(newVestedLock.contractAddress());
-        return newVestedLock.contractAddress();
-        
+        _simpleVestingContracts.push(newVestedLock);
+
         emit VestingCreated(beneficiary, newVestedLock.contractAddress(), amount);
+        return newVestedLock.contractAddress();
     }
     
     
@@ -122,37 +150,28 @@ contract GaussVault is Context, Ownable {
     function scheduledVesting(address sender, address beneficiary, uint256 amount, uint256[] memory amountsList, uint256[] memory lockTimes) public onlyOwner() returns (address) {
         
         require(amountsList.length == lockTimes.length, "scheduledVesting(): amountsList and lockTimes do not containt the same number of items");
-        
-        // Creates a VestingLock Struct, sets beneficiary address and intial amount, and then pushes the Struct into the array holding all Gauss Vestings.
-        VestingLock memory newScheduledVesting = VestingLock (beneficiary, amount, new uint256[](0), new uint256[](0));
-        gaussVestings.push(newScheduledVesting);
-        
-        // Adds the memory arrays into the VestingLock Struct.
-        for (uint i = 0; i < amountsList.length; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(amountsList[i]);
-            gaussVestings[indexLast].releaseTimes.push(lockTimes[i]);
-        }
-        
+               
         // Creates an instance of a ScheduledTokenLock contract.
-        ScheduledTokenLock newVestedLock = new ScheduledTokenLock (
-            gaussToken,
+        ScheduledTokenLock newScheduledLock = new ScheduledTokenLock (
+            _gaussToken,
             sender,
-            gaussVestings[indexLast].beneficiaryWallet,
-            gaussVestings[indexLast].initialAmount,
-            gaussVestings[indexLast].releaseAmounts,
-            gaussVestings[indexLast].releaseTimes
+            beneficiary,
+            amount,
+            amountsList,
+            lockTimes
         );
         
         // Transfers the tokens to the tokens to the TokenLock contract, locking the tokens over the specified schedule for each pool.
-        // Also adds the address of the deployed contract to an array of all deployed contracts.
-        newVestedLock.lockTokens();
-        contractAddresses.push(newVestedLock.contractAddress());
-        return newVestedLock.contractAddress();
-        
-        emit VestingCreated(gaussVestings[indexLast].beneficiaryWallet, newVestedLock.contractAddress(), gaussVestings[indexLast].initialAmount);
+        // Also adds the address of the deployed contract to an array of all deployed Scheduled Token Lock contracts.
+        newScheduledLock.lockTokens();
+        _scheduledVestingContracts.push(newScheduledLock);
+
+        emit VestingCreated(beneficiary, newScheduledLock.contractAddress(), amount);
+        return newScheduledLock.contractAddress();
     }
 
 
+    // TODO: Check math in both for loops
     /*  Vests the wallet holding the Community Pool funds over a specific time period.
             - Total Community Pool Tokens are 112,500,000, 45% of total supply.
             - As the wallet is unlocked, the tokens will be distributed into the community supply pool.
@@ -164,51 +183,40 @@ contract GaussVault is Context, Ownable {
                 Month 24:           4,444,452 tokens released
     */
     function _lockCommunityTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory communityLock = VestingLock (
-            0x4249B05E707FeeA3FB034071C66e5A227C230C2f,
-            112500000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-            
-        gaussVestings.push(communityLock);
 
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x4249B05E707FeeA3FB034071C66e5A227C230C2f;
+        uint256 initialAmount = 112500000;
+        uint256 indexNum = 25;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        gaussVestings[indexLast].releaseAmounts.push(25000000);
-        
-        for (uint i = 0; i < 6; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(1250000);
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseAmounts[i] = 25000000;
+            }
+            else if (i > 0 && i <= 6){
+                releaseAmounts[i] = 1250000;
+            }
+            else if (i > 6 && i <= 23) {
+                releaseAmounts[i] = 4444444;
+            }
+            else {
+                releaseAmounts[i] = 4444452;
+            }
         }
-        
-        for (uint i = 0; i < 17; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(4444444);
-        }
-        
-        gaussVestings[indexLast].releaseAmounts.push(4444452);
-
+ 
         // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(1 seconds);
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseTimes[i] = (1 seconds);
+            }
+            releaseTimes[i] = ((30 days) * (i + 1));
+        }        
 
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-        }
-        
-        
-        /*
-        
-        // Creates instance of of the Community Pool TokenLock contract.
-        ScheduledTokenLock communityVesting = new ScheduledTokenLock(gaussToken, _senderAddress, communityWallet, communityAmount, _communityTokenAmountsList, _communityLockTimes);
-        
-        // Transfers the tokens to the Community Pool TokenLock contract, locking the tokens over the specified schedule above.
-        communityVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        communityLockAddress = communityVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
 
@@ -220,42 +228,28 @@ contract GaussVault is Context, Ownable {
                 Month 8:    10,000,000 tokens released
     */
     function _lockLiquidityTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory liquidityLock = VestingLock (
-            0x17cA40C901Af4C31Ed9F5d961b16deD9a4715505,
-            20000000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(liquidityLock);
-        
+
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x17cA40C901Af4C31Ed9F5d961b16deD9a4715505;
+        uint256 initialAmount = 20000000;
+        uint256 indexNum = 2;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        gaussVestings[indexLast].releaseAmounts.push(10000000);
-        gaussVestings[indexLast].releaseAmounts.push(10000000);
-
+        releaseAmounts[0] = 10000000;
+        releaseAmounts[1] = 10000000;
+ 
         // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(120 days);
-        gaussVestings[indexLast].releaseTimes.push(240 days);
-         
-        
-        /*
-        
-        // Creates instance of of the Liquidity Pool TokenLock contract.
-        ScheduledTokenLock liquidityVesting = new ScheduledTokenLock(gaussToken, _senderAddress, liquidityWallet, liquidityAmount, _liquidityTokenAmountsList, _liquidityLockTimes);
-        
-        // Transfers the tokens to the Liquidity Pool TokenLock contract, locking the tokens over the specified schedule above.
-        liquidityVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        liquidityLockAddress = liquidityVesting.contractAddress();
-        
-        */
+        releaseTimes[0] = (120 days);
+        releaseTimes[1] = (240 days);
+
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
+    // TODO: Completely redo for loops, add starting cliff
     /*  Vests the wallet holding the Charitable Fund over a specific time period.
             - Total Charitable Fund Tokens are 15,000,000, 6% of total supply.
         
@@ -266,50 +260,37 @@ contract GaussVault is Context, Ownable {
     */
     function _lockCharitableFundTokens() internal {
         
-        // TODO: Write Comment
-        VestingLock memory charitableFundLock = VestingLock (
-            0x7d74E237825Eba9f4B026555f17ecacb2b0d78fE,
-            15000000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-            
-        gaussVestings.push(charitableFundLock);
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x7d74E237825Eba9f4B026555f17ecacb2b0d78fE;
+        uint256 initialAmount = 15000000;
+        uint256 indexNum = 20;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
-        
-        // Initializes the amounts to be released over time.
-        gaussVestings[indexLast].releaseAmounts.push(1111111);
-        
-        for (uint i = 0; i < 18; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(771605);
+        // Initializes the amounts to be released over time.    // TODO: Completely redo for loop, add starting cliff
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseAmounts[i] = 1111111;
+            }
+            else if (i > 0 && i < 19){
+                releaseAmounts[i] = 771605;
+            }
+            else {
+                releaseAmounts[i] = 771604;
+            }
         }
-        
-        gaussVestings[indexLast].releaseAmounts.push(771604);
-        
-        // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(1 seconds);
+ 
+        // Initializes the time periods that tokens will be released over.  // TODO: Completely redo for loop, add starting cliff
+        for (uint i = 0; i < indexNum; i++) {
+            releaseTimes[i] = ((30 days) * (i + 1));
+        }        
 
-        for (uint i = 0; i < 19; i++) {                                                         // TODO: Completely redo for loop, add starting cliff
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-        }
-
-    
-        /*
-    
-        // Creates instance of of the Charitable Funds TokenLock contract.
-        ScheduledTokenLock charitableFundVesting = new ScheduledTokenLock(gaussToken, _senderAddress, charitableFundWallet, charitableFundAmount, _charitableFundTokenAmountsList, _charitableFundLockTimes);
-        
-        // Transfers the tokens to the Charitable Funds TokenLock contract, locking the tokens over the specified schedule above.
-        charitableFundVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        charitableFundLockAddress = charitableFundVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
-    // TODO: Remove amount of tokens alloted to Chris and move them to Reserved
+    // TODO: Check math for release schedule
     /*  Vests the wallet holding the Advisor Pool over a specific time period.
             - Total Advisor Pool Tokens are 6,500,000, 2.6% of total supply.
         
@@ -319,44 +300,30 @@ contract GaussVault is Context, Ownable {
     */
     function _lockAdvisorTokens() internal {
         
-        // Write Comment
-        VestingLock memory advisorLock = VestingLock (
-            0x3e3049A80590baF63B6aC8D74F5CbB31584059bB,
-            6500000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(advisorLock);
-        
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x3e3049A80590baF63B6aC8D74F5CbB31584059bB;
+        uint256 initialAmount = 6500000;
+        uint256 indexNum = 24;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        for (uint i = 0; i < 17; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(325000);
-        }
-        
-        for (uint i = 0; i < 7; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(162500);
+        for (uint i = 0; i < indexNum; i++) {
+            if (i < 18) {
+                releaseAmounts[i] = 325000;
+            }
+            else {
+                releaseAmounts[i] = 162500;
+            }
         }
  
         // Initializes the time periods that tokens will be released over.
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-        }
-        
-        
-        /*
+        for (uint i = 0; i < indexNum; i++) {
+            releaseTimes[i] = ((30 days) * (i + 1));
+        }        
 
-        // Creates instance of of the Advisor Funds TokenLock contract.
-        ScheduledTokenLock advisorVesting = new ScheduledTokenLock(gaussToken, _senderAddress, advisorWallet, advisorAmount, _advisorTokenAmountsList, _advisorLockTimes);
-        
-        // Transfers the tokens to the Advisor Funds TokenLock contract, locking the tokens over the specified schedule above.
-        advisorVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        advisorLockAddress = advisorVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
@@ -370,42 +337,26 @@ contract GaussVault is Context, Ownable {
                 Month 20:       6,250,000 tokens released
     */
     function _lockCoreTeamTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory coreTeamLock = VestingLock (
-            0x747dDE9cb0b8B86ef1d221077055EE9ec4E70b89,
-            25000000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(coreTeamLock);
 
-
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x747dDE9cb0b8B86ef1d221077055EE9ec4E70b89;
+        uint256 initialAmount = 25000000;
+        uint256 indexNum = 4;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
+        
         // Initializes the amounts to be released over time.
-        for (int i = 0; i < 4; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(6250000);
+        for (uint i = 0; i < indexNum; i++) {
+            releaseAmounts[i] = 6250000;
         }
-
+ 
         // Initializes the time periods that tokens will be released over.
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((150 days) + (i * 150 days)));
-        }
+        for (uint i = 0; i < indexNum; i++) {
+            releaseTimes[i] = ((150 days) + (i * 150 days));
+        }        
 
-
-        
-        /*
-            
-        // Creates instance of of the Core Team Funds TokenLock contract.
-        ScheduledTokenLock coreTeamVesting = new ScheduledTokenLock(gaussToken, _senderAddress, coreTeamWallet, coreTeamAmount, _coreTeamTokenAmountsList, _coreTeamLockTimes);
-        
-        // Transfers the tokens to the Core Team Pool TokenLock contract, locking the tokens over the specified schedule above.
-        coreTeamVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        coreTeamLockAddress = coreTeamVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
@@ -417,43 +368,31 @@ contract GaussVault is Context, Ownable {
                 Month 1 - 24:           600,000 tokens released per Month
     */
     function _lockMarketingTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory marketingLock = VestingLock (
-            0x46ceE8F5F3e30aF7b62374249907FB97563262f5,
-            15000000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(marketingLock);
 
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0x46ceE8F5F3e30aF7b62374249907FB97563262f5;
+        uint256 initialAmount = 15000000;
+        uint256 indexNum = 25;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        for (uint i = 0; i < 25; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(600000);
+        for (uint i = 0; i < indexNum; i++) {
+            releaseAmounts[i] = 600000;
         }
-
+ 
         // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(1 seconds);
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseTimes[i] = (1 seconds);   
+            }
+            else {
+                releaseTimes[i] = ((30 days) * i);
+            }
+        }        
 
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-        }
-        
-        
-        /*
-
-        // Creates instance of of the Marketing Funds TokenLock contract.
-        ScheduledTokenLock marketingVesting = new ScheduledTokenLock(gaussToken, _senderAddress, marketingWallet, marketingAmount, _marketingTokenAmountsList, _marketingLockTimes);
-        
-        // Transfers the tokens to the Marketing Funds Marketing Funds, locking the tokens over the specified schedule above.
-        marketingVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        marketingLockAddress = marketingVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
@@ -465,43 +404,31 @@ contract GaussVault is Context, Ownable {
                 Month 1 - 24:           600,000 tokens released per Month
     */
     function _lockOpsDevTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory opsDevLock = VestingLock (
-            0xF9f41Bd5C7B6CF9a3C6E13846035005331ed940e,
-            15000000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(opsDevLock);
 
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0xF9f41Bd5C7B6CF9a3C6E13846035005331ed940e;
+        uint256 initialAmount = 15000000;
+        uint256 indexNum = 25;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        for (uint i = 0; i < 25; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(600000);
+        for (uint i = 0; i < indexNum; i++) {
+            releaseAmounts[i] = 600000;
         }
-
+ 
         // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(1 seconds);
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseTimes[i] = (1 seconds);   
+            }
+            else {
+                releaseTimes[i] = ((30 days) * i);
+            }
+        }        
 
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-        }
-        
-        
-        /*
-
-        // Creates instance of of the Operations and Developement Funds TokenLock contract.
-        ScheduledTokenLock opsDevVesting = new ScheduledTokenLock(gaussToken, _senderAddress, operationsAndDevelopementWallet, opsDevAmount, _opsDevTokenAmountsList, _opsDevLockTimes);
-        
-        // Transfers the tokens to the Operations and Developement Funds TokenLock contract, locking the tokens over the specified schedule above.
-        opsDevVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable.
-        opsDevLockAddress = opsDevVesting.contractAddress();
-        
-        */
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
@@ -513,52 +440,31 @@ contract GaussVault is Context, Ownable {
                 Month 1 - 24:           500,000 tokens released per Month
     */
     function _lockVestingIncentiveTokens() internal {
-        
-        // TODO: Write Comment
-        VestingLock memory incentiveLock = VestingLock (
-            0xe3778Db10A5E8b2Bd1B68038F2cEFA835aa46b45,
-            12500000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(incentiveLock);
 
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0xe3778Db10A5E8b2Bd1B68038F2cEFA835aa46b45;
+        uint256 initialAmount = 12500000;
+        uint256 indexNum = 25;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        for (uint i = 0; i < 25; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(500000);
-        }
-       
-        // Initializes the time periods that tokens will be released over.
-        gaussVestings[indexLast].releaseTimes.push(1 seconds);
-        
-        for (uint i = 0; i < 24; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((30 days) * (i + 1)));
-
+        for (uint i = 0; i < indexNum; i++) {
+            releaseAmounts[i] = 500000;
         }
  
-    
-        /*
-        
-        // Creates instance of of the Vesting Incentive Funds TokenLock contract.
-        ScheduledTokenLock incentiveVesting = new ScheduledTokenLock (
-            gaussToken,
-            _senderAddress,
-            gaussVestings[indexLast].beneficiaryWallet,
-            gaussVestings[indexLast].initialAmount,
-            gaussVestings[indexLast].releaseAmounts,
-            gaussVestings[indexLast].releaseTimes
-        );
-        vestingContracts.push(reserveVesting.contractAddress());
-        
-        // Transfers the tokens to the Vesting Incentive Funds TokenLock contract, locking the tokens over the specified schedule above.
-        incentiveVesting.lockTokens();
-        
-        // Sets the address of the deployed contract to a callable variable
-        incentiveLockAddress = incentiveVesting.contractAddress();
-        
-        */
+        // Initializes the time periods that tokens will be released over.
+        for (uint i = 0; i < indexNum; i++) {
+            if (i == 0) {
+                releaseTimes[i] = (1 seconds);   
+            }
+            else {
+                releaseTimes[i] = ((30 days) * i);
+            }
+        }        
+
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
     
     
@@ -570,40 +476,24 @@ contract GaussVault is Context, Ownable {
     */
     function _lockReserveTokens() internal {
         
-        // TODO: Write Comment
-        VestingLock memory reserveLock = VestingLock (
-            0xf02fD116EEfB47E394721356B36D3350972Cc0c7,
-            28500000,
-            new uint256[](0),
-            new uint256[](0)
-        );
-        
-        gaussVestings.push(reserveLock);
-        
+        // Initializes the variables required for the ScheduledTokenLock contract.
+        address beneficiaryWallet = 0xf02fD116EEfB47E394721356B36D3350972Cc0c7;
+        uint256 initialAmount = 28500000;
+        uint256 indexNum = 6;
+        uint256[] memory releaseAmounts = new uint256[](indexNum);
+        uint256[] memory releaseTimes = new uint256[](indexNum);
         
         // Initializes the amounts to be released over time.
-        for (uint i = 0; i < 6; i++) {
-            gaussVestings[indexLast].releaseAmounts.push(4750000);
+        for (uint i = 0; i < indexNum; i++) {
+            releaseAmounts[i] = 4750000;
         }
  
         // Initializes the time periods that tokens will be released over.
-        for (uint i = 0; i < 6; i++) {
-            gaussVestings[indexLast].releaseTimes.push(((120 days) * i));
-        }
-        
+        for (uint i = 0; i < indexNum; i++) {
+            releaseTimes[i] = ((120 days) * i);
+        }        
 
-        // Creates instance of of the Advisor Funds TokenLock contract and adds the address of the deployed contract to an array of all deployed contracts.
-        ScheduledTokenLock reserveVesting = new ScheduledTokenLock (
-            gaussToken,
-            _senderAddress,
-            gaussVestings[indexLast].beneficiaryWallet,
-            gaussVestings[indexLast].initialAmount,
-            gaussVestings[indexLast].releaseAmounts,
-            gaussVestings[indexLast].releaseTimes
-        );
-        contractAddresses.push(reserveVesting.contractAddress());
-        
-        // Transfers the tokens to the Advisor Funds TokenLock contract, locking the tokens over the specified schedule above.
-        reserveVesting.lockTokens();
+        // Deploys a SceduledTokenLock contract amd transfers the tokens to said contract to be released over the above schedule
+        scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 }

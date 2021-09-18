@@ -85,7 +85,7 @@ contract TokenLock is Context {
     
     
     // Transfers tokens held by TimeLock to beneficiary.
-    function release() public {
+    function release() public returns (bool) {
         
         require(block.timestamp >= releaseTime(), "TokenLock: current time is before release time");
 
@@ -94,5 +94,7 @@ contract TokenLock is Context {
 
         token().transfer(beneficiary(), amount);
         _amount = 0;
+        
+        return true;
     }
 }

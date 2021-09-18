@@ -55,7 +55,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, UUPSUpgradeable {
     }
 
 
-    // Sets initial values to 
+    // Sets initial values to the Transaction Fees and wallets to be excluded from the Transaction Fee.
     function __GaussGANG_init_unchained() internal initializer {
         
         // Sets values for the variables representing the seperate fees that comprise the Transaction Fee.

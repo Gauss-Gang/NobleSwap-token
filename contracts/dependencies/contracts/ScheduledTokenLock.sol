@@ -95,7 +95,7 @@ contract ScheduledTokenLock is Context {
     
     
     // Transfers tokens held by TimeLock to beneficiary.
-    function release() public {
+    function release() public returns (bool){
         
         require(block.timestamp >= releaseTime(), "ScheduledTokenLock: current time is before release time");
         
@@ -107,5 +107,7 @@ contract ScheduledTokenLock is Context {
         _lockCounter = _lockCounter + 1;
         _releaseTime = _tokenLockTimes[_lockCounter];
         _lockedAmount = _lockedAmount - amount;
+
+        return true;
     }
 }
