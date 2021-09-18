@@ -1,6 +1,6 @@
 /*  _____________________________________________________________________________
 
-    Gauss(Gang) Initial Token Distribution Contract
+    GaussVault: Initial Token Distribution and Time Lock Contract
 
     Deployed to      : TODO
 
@@ -22,7 +22,8 @@ import "../dependencies/contracts/ScheduledTokenLock.sol";
 
 
 
-// TODO: Write Comment
+// TODO: Reowrd Comment
+// Initial Token Distribution and Time Lock Contract for the Gauss(GANG) token.
 contract GaussVault is Initializable, Context, Ownable {
     
     // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
@@ -40,17 +41,17 @@ contract GaussVault is Initializable, Context, Ownable {
     IBEP20  private _gaussToken;
     
 
-    /*  The constructor sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
+    /*  The initializer sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
           as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens.                     */
-    function initialize(address gaussOwner, address gaussGANGAddress) initializer public {
+    function initialize(address gaussGANGAddress) initializer public {
         __Ownable_init();       
-        __GaussVault_init_unchained(gaussOwner, gaussGANGAddress);        
+        __GaussVault_init_unchained(gaussGANGAddress);        
     }
 
 
-    // Sets initial values to the Transaction Fees and wallets to be excluded from the Transaction Fee.
-    function __GaussVault_init_unchained(address gaussOwner, address gaussGANGAddress) internal initializer {
-        require(msg.sender == gaussOwner);
+    /*  The initializer sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
+          as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens.                     */
+    function __GaussVault_init_unchained(address gaussGANGAddress) internal initializer {
         
         _senderAddress = msg.sender;
         _gaussToken = IBEP20(gaussGANGAddress);
