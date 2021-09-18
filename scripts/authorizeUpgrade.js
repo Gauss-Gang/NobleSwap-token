@@ -3,8 +3,9 @@ const { ethers, upgrades } = require("hardhat");
 
 async function main() {
 
-  // Following code is to upgrade the contract at later time
-  const previousIteration = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  // Following code is to upgrade the contract at later time.
+  // ENTER ADDRESS of previous interation before running script.
+  const previousIteration = "";
 
   const GaussV2 = await ethers.getContractFactory("GaussV2");
   console.log('Deploying Gauss GANG Upgrade...');
