@@ -9,7 +9,6 @@ npx hardhat compile
 npx hardhat clean
 npx hardhat test
 npx hardhat node
-node scripts/sample-script.js
 npx hardhat help
 
 # To deploy token on local test node, run the following commmand, then open a new terminal and run the second command
