@@ -31,14 +31,11 @@ contract TokenLock is Context {
 
     // The constructor sets internal the values of _token, _beneficiary, and _releaseTime to the variables passed in when called externally.
     constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256 releaseTime_) {
-        
-        require(releaseTime_ > block.timestamp, "TokenLock: release time is before current time");
         _token = token_;
         _sender = sender_;
         _beneficiary = beneficiary_;
         _amount = amount_;
-        _releaseTime = (releaseTime_);
-        
+        _releaseTime = (block.timestamp + releaseTime_);
     }
 
     
@@ -76,25 +73,17 @@ contract TokenLock is Context {
     function releaseTime() public view returns (uint256) {
         return _releaseTime;
     }
-    
-    
-    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract.
-    function lockTokens() public {
-        _token.transferFrom(_sender, address(this), _amount);
-    }
-    
-    
+
+
     // Transfers tokens held by TimeLock to beneficiary.
-    function release() public returns (bool) {
+    function release() public {
         
-        require(block.timestamp >= releaseTime(), "TokenLock: current time is before release time");
+        require (block.timestamp >= releaseTime(), "TokenLock: release time is before current time");
 
         uint256 amount = token().balanceOf(address(this));
         require(amount > 0, "TokenLock: no tokens to release");
 
         token().transfer(beneficiary(), amount);
         _amount = 0;
-        
-        return true;
     }
 }

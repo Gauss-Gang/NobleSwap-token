@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity 0.8.7;
+import "./Initializable.sol";
 import "../interfaces/IBeacon.sol";
 import "../libraries/Address.sol";
 import "../libraries/StorageSlot.sol";
@@ -8,9 +9,14 @@ import "../libraries/StorageSlot.sol";
 
 
 //  This abstract contract provides getters and event emitting update functions for slots.
-abstract contract BEP20Upgrade {
-    
-    using Address for address;
+abstract contract BEP20Upgrade is Initializable {
+
+    function __BEP20Upgrade_init() internal initializer {
+        __BEP20Upgrade_init_unchained();
+    }
+
+    function __BEP20Upgrade_init_unchained() internal initializer {
+    }
     
     // This is the keccak-256 hash of "eip1967.proxy.rollback" subtracted by 1.
     bytes32 private constant _ROLLBACK_SLOT = 0x4910fdfa16fed3260ed0e7147f7cc6da11a60208b5b9406d12a635614ffd9143;
@@ -48,7 +54,7 @@ abstract contract BEP20Upgrade {
         _upgradeTo(newImplementation);
         
         if (data.length > 0 || forceCall) {
-            Address.functionDelegateCall(newImplementation, data);
+            _functionDelegateCall(newImplementation, data);
         }
     }
 
@@ -60,7 +66,7 @@ abstract contract BEP20Upgrade {
         // Initial upgrade and setup call
         _setImplementation(newImplementation);
         if (data.length > 0 || forceCall) {
-            Address.functionDelegateCall(newImplementation, data);
+            _functionDelegateCall(newImplementation, data);
         }
 
         // Perform rollback test if not already in progress
@@ -69,7 +75,7 @@ abstract contract BEP20Upgrade {
             
             // Trigger rollback using upgradeTo from the new implementation
             rollbackTesting.value = true;
-            Address.functionDelegateCall(
+            _functionDelegateCall(
                 newImplementation,
                 abi.encodeWithSignature("upgradeTo(address)", oldImplementation)
             );
@@ -147,7 +153,18 @@ abstract contract BEP20Upgrade {
         emit BeaconUpgraded(newBeacon);
         
         if (data.length > 0 || forceCall) {
-            Address.functionDelegateCall(IBeacon(newBeacon).implementation(), data);
+            _functionDelegateCall(IBeacon(newBeacon).implementation(), data);
         }
     }
+
+
+    // Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`], but performing a delegate call.
+    function _functionDelegateCall(address target, bytes memory data) private returns (bytes memory) {
+        require(Address.isContract(target), "Address: delegate call to non-contract");
+
+        /// @custom:oz-upgrades-unsafe-allow delegatecall
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return Address.verifyCallResult(success, returndata, "Address: low-level delegate call failed");
+    }
+    uint256[50] private __gap;
 }

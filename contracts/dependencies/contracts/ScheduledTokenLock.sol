@@ -36,19 +36,21 @@ contract ScheduledTokenLock is Context {
         
     // Initializes the time periods that tokens will be released over.
     uint256[] private _tokenLockTimes;
+
+    // Creates a varaible that marks the start of the Time Lock.
+    uint256 private _startTime;
     
 
     // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally.
     constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) {
-        
         _token = token_;
         _sender = sender_;
         _beneficiary = beneficiary_;
         _lockedAmount = amount_;
         _tokenAmountsList = amountsList_;
         _tokenLockTimes = lockTimes_;
-        _releaseTime = (block.timestamp + _tokenLockTimes[0]);
-        
+        _startTime = block.timestamp;
+        _releaseTime = (_startTime + _tokenLockTimes[0]);
     }
     
 
@@ -86,18 +88,13 @@ contract ScheduledTokenLock is Context {
     function releaseTime() public view returns (uint256) {
         return _releaseTime;
     }
-    
-    
-    // Initializes the transfer of tokens from the "sender" to the the Time Lock contract.  
-    function lockTokens() public {
-        _token.transferFrom(_sender, address(this), _lockedAmount);
-    }
-    
-    
+
+
     // Transfers tokens held by TimeLock to beneficiary.
-    function release() public returns (bool){
+    function release() public {
         
-        require(block.timestamp >= releaseTime(), "ScheduledTokenLock: current time is before release time");
+        require(_lockedAmount > 0, "ScheduledTokenLock: no tokens left in contract" );
+        require (block.timestamp >= releaseTime(), "ScheduledTokenLock: release time is before current time");
         
         uint256 amount = _tokenAmountsList[_lockCounter];
         require(amount > 0, "ScheduledTokenLock: no tokens to release");
@@ -105,9 +102,11 @@ contract ScheduledTokenLock is Context {
         token().transfer(beneficiary(), amount);
         
         _lockCounter = _lockCounter + 1;
-        _releaseTime = _tokenLockTimes[_lockCounter];
         _lockedAmount = _lockedAmount - amount;
 
-        return true;
+        // Sanitation check to prevent out of bounds exceptions
+        if (_lockCounter < _tokenLockTimes.length) {
+            _releaseTime = (_startTime + _tokenLockTimes[_lockCounter]);
+        }
     }
 }
