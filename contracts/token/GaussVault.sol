@@ -11,7 +11,7 @@
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/Context.sol";
 import "../dependencies/utilities/UUPSUpgradeable.sol";
@@ -40,7 +40,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     TokenLock[] private _simpleVestingContracts;
     ScheduledTokenLock[] private _scheduledVestingContracts;
 
-    // Creates variables to hold the address of "sender" of the tokens to be transferred, as well as the address that the Gauss(GANG) is deployed to.
+    // Initializes variables to hold the address "sender" of the tokens to be transferred, as well as the address that the Gauss(GANG) is deployed to.
     address private _senderAddress;
     IBEP20  private _gaussToken;
     bool private _previouslyLocked;

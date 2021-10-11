@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 
 
 
@@ -34,13 +34,7 @@ library Address {
     }
 
     
-    /*  Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
-
-        IMPORTANT: because control is transferred to `recipient`, care must be
-            taken to not create reentrancy vulnerabilities. Consider using
-            {ReentrancyGuard} or the
-            https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
-    */
+    // Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, 'Address: insufficient balance');
 
@@ -54,9 +48,9 @@ library Address {
             - If `target` reverts with a revert reason, it is bubbled up by this function (like regular Solidity function calls).
             - Returns the raw returned data.
      
-        Requirements:
-            - `target` must be a contract.
-            - calling `target` with `data` must not revert.
+            Requirements:
+                - `target` must be a contract.
+                - calling `target` with `data` must not revert.
     */
     function functionCall(address target, bytes memory data) internal returns (bytes memory) {
         return functionCall(target, data, 'Address: low-level call failed');

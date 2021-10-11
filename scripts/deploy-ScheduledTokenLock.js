@@ -15,7 +15,6 @@ async function main() {
     const lockTimes = [];
   
     const contract = await ScheduledTokenLock.deploy(tokenAddress, senderAddress, beneficiaryAddress, amountToLock, amountsList, lockTimes);
-
     console.log("ScheduledTokenLock deployed to:", contract.address);
 }
 

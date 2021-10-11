@@ -4,9 +4,9 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
     // Following code is to use the contract at the deployed address.
-    const deplyedAddress = "";
+    const deployedAddress = "";
     const GaussVault = await ethers.getContractFactory("GaussVault");
-    const contract = await GaussVault.attach(deplyedAddress);
+    const contract = await GaussVault.attach(deployedAddress);
 
 
 //    // Locks the Vault, transferring the total amount in the GaussVault to various Time Lock contracts.
@@ -46,6 +46,13 @@ async function main() {
     //const lockTimes = ""; 
     //const newDeployedAddress = await contract.vestTokens(Sender, Beneficiary, totalAmount, amountsList, lockTimes);
     //console.log("GaussVault; Tokens vested; deployed Scheduled Token Lock contract:", newDeployedAddress)
+
+
+    // Allows owner to transfer ownership to another address.
+//   const newOwnerAddress = "";
+//   await contract.transferOwnership(newOwnerAddress);
+//   console.log("GaussVault ownership transfered to:", newOwnerAddress);
+
 }
 
 main()

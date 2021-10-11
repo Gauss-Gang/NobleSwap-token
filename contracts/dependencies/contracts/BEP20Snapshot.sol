@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 import "./BEP20.sol";
 import "../access/Ownable.sol";
 import "../libraries/Arrays.sol";

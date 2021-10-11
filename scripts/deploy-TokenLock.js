@@ -14,7 +14,6 @@ async function main() {
     const releaseTime = "";
   
     const contract = await TokenLock.deploy(tokenAddress, senderAddress, beneficiaryAddress, amountToLock, releaseTime);
-
     console.log("TokenLock deployed to:", contract.address);
 }
 

@@ -4,7 +4,7 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
   // Following code is to upgrade the contract at later time.
-  // ENTER ADDRESS of previous interation before running script.
+  // Enter ADDRESS of previous interation before running script.
   const previousIteration = "";
 
   const GaussV2 = await ethers.getContractFactory("GaussV2");

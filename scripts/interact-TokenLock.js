@@ -4,9 +4,9 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
     // Following code is to use the contract at the deployed address
-//    const deplyedAddress = "";
-//    const TokenLock = await ethers.getContractFactory("TokenLock");
-//    const contract = await TokenLock.attach(deplyedAddress);
+    const deployedAddress = "";
+    const TokenLock = await ethers.getContractFactory("TokenLock");
+    const contract = await TokenLock.attach(deployedAddress);
 
 
     // List the address for this Token Lock contract.

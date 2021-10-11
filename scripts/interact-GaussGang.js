@@ -4,9 +4,9 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
     // Following code is to use the contract at the deployed address.
-    const deplyedAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";    // Local-Testnet: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    const deployedAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";    // Local-Testnet: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
     const GaussGANG = await ethers.getContractFactory("GaussGANG");
-    const contract = await GaussGANG.attach(deplyedAddress);
+    const contract = await GaussGANG.attach(deployedAddress);
 
 
 /**** The next block of code is specific for the GaussGANG Token itself. ****\
@@ -74,6 +74,13 @@ async function main() {
     //    console.log("GaussGANG changed wallet address to:", newWalletAddress);
 
 
+        // Adds a wallet address to the AddressManager and excludes it from the Transaction Fee
+    //    const newWalletName = "";
+    //    const newAddress = "";
+    //    await contract.addWalletAddress(newWalletName, newAddress);
+    //    console.log("GaussGANG added new wallet address to AddressManager:", newAddress);
+
+
         // Creates Snapshot of current balances.
     //    const snapShotID = await contract.snapshot();
     //    console.log("GaussGANG Snapshot ID:", snapShotID);
@@ -87,6 +94,12 @@ async function main() {
         // Allows owner to Unpause all Transfers.
     //    await contract.unpause();
     //    console.log("GaussGANG Transactions unpaused...");
+
+
+        // Allows owner to transfer ownership to another address.
+    //    const newOwnerAddress = "";
+    //    await contract.transferOwnership(newOwnerAddress);
+    //    console.log("GaussGANG ownership transfered to:", newOwnerAddress);
 
 
 
