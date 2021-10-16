@@ -45,7 +45,7 @@ async function main() {
     const GaussCrowdsale = await ethers.getContractFactory("GaussCrowdsale");
     console.log('Deploying GaussCrowdsale...');
 
-    const startTime = "1633964400";
+    const startTime = "1634008800";
     const crowdsaleWallet = "0xf532651735713E8671FE418124703ab662088C75";
 
     const crowdsaleContract = await GaussCrowdsale.deploy(startTime, GaussGANGAddress, crowdsaleWallet);
@@ -59,9 +59,6 @@ async function main() {
     console.log("GaussGANG added GaussCrowdsale address to AddressManager:", gaussCrowdsaleAddress);
 
 
-    // TODO: Transfer tokens to GaussCrowdsale
-    
-    
 
     //** The Following code is to confirm a successful deployement of the GaussEcosystem **\\
     //**        Each address, balance, etc. should be checked for correctness            **\\
@@ -137,7 +134,9 @@ async function main() {
     
         // List the end time of the GaussCrowdsale.
         const endTime = await crowdsaleContract.endTime();
-        console.log("GaussCrowdsale; end time of the Crowdsale:", endTime);    
+        console.log("GaussCrowdsale; end time of the Crowdsale:", endTime);
+
+        console.log("GaussCrowdsale; transfer 15 million Gauss(Gang) tokens to GaussCrowdsale before start time listed above.");
 }
 
 main()

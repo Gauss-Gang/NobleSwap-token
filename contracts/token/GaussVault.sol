@@ -1,8 +1,8 @@
 /*  _____________________________________________________________________________
 
-    GaussVault: Initial Token Distribution and Time Lock Contract
+    GaussVault: Initial Token Distribution and Time Lock Controller
 
-    Deployed to      : TODO
+    Deployed to: TODO
 
     MIT License. (c) 2021 Gauss Gang Inc. 
 
@@ -25,15 +25,15 @@ import "../dependencies/contracts/ScheduledTokenLock.sol";
 
 /*  Initial Token Distribution and Time Lock Contract for the Gauss(GANG) token.
         - Acts as the "owner" for each TokenLock and ScheduledTokenLock that it deploys.
-        - There is a public function "releaseAvailableTokens()" that can be called to release any available token in all deployed contracts
-        - Allows the "owner" of this contract to add more TokenLocks or ScheduledTokenLocks at a later date (should their be sufficient tokens held by this contract)
+        - There is a public function "releaseAvailableTokens()" that can be called to release any available token in all deployed contracts.
+        - Allows the "owner" of this contract to add more TokenLocks or ScheduledTokenLocks at a later date (should their be sufficient tokens held by this contract).
 */
 contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
     // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
     using Address for address;
 
-    // Initializes an event that will be called after each VestingLock contract is deployed
+    // Initializes an event that will be called after each VestingLock contract is deployed.
     event VestingCreated(address beneficiary, address lockAddress, uint256 initialAmount);
 
     // Initializes two arrays that will hold the deployed contracts of both Simple and Scheduled Time Locks.
@@ -47,8 +47,8 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     uint256 private _decimalsAmount;
     
 
-    /*  The initializer sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
-          as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens.                     */
+    /*  The initializer sets internal the values of for the Gauss(GANG) token and _senderAddress
+            as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens. */
     function initialize(address gaussGANGAddress) initializer public {
         __Ownable_init();
         __UUPSUpgradeable_init(); 
@@ -56,7 +56,8 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     }
 
 
-    // The initializer sets internal the values of _gaussAddress, and _senderAddress to the variables passed in when called externally
+    /*  The initializer sets internal the values of for the Gauss(GANG) token and _senderAddress
+            as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens. */
     function __GaussVault_init_unchained(address gaussGANGAddress) internal initializer {
         _senderAddress = address(this);
         _gaussToken = IBEP20(gaussGANGAddress);
@@ -66,7 +67,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
 
     /*  Calls the internal functions that create a Vesting Lock contract for each Pool of tokens.
-            NOTE:   - Must be called from "owner"
+            NOTE:   - Must be called from "owner".
                     - Owner of GaussGANG Token must transfer the total supply, 250,000,000 tokens, to this contract address before calling function. */
     function lockGaussVault() public onlyOwner() {
 
@@ -125,7 +126,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
 
     /*  Attempts to release every wallet, ultimately releasing the available amount per Token Lock Contract.
-            - Only releases a wallet if the release time for said wallet has passed                       */
+            - Only releases a wallet if the release time for said wallet has passed.                       */
     function releaseAvailableTokens() public onlyOwner() {
 
         uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
@@ -167,7 +168,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     }
 
 
-    // Vests the specified wallet address for the given time, Function can only be called by "owner". Returns the address it is deployed to. 
+    // Vests the specified beneficiary wallet address for the given time, Function can only be called by "owner". Returns the address the contract is deployed to. 
     function vestTokens(address sender, address beneficiary, uint256 amount, uint256 releaseTime) public onlyOwner() returns (address) {
 
         // Creates an instance of a TokenLock contract.
@@ -183,7 +184,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     }
 
 
-    // Vests the specified wallet address for the given time, Function can only be called by "owner". Returns the address it is deployed to. 
+    // Vests the specified beneficiary wallet address for the given time, Function can only be called by "owner". Returns the address the contract is deployed to. 
     function scheduledVesting(address sender, address beneficiary, uint256 amount, uint256[] memory amountsList, uint256[] memory lockTimes) public onlyOwner() returns (address) {
 
         require(amountsList.length == lockTimes.length, "scheduledVesting(): amountsList and lockTimes do not containt the same number of items");
@@ -252,7 +253,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -280,7 +281,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
         releaseTimes[0] = (120 days);
         releaseTimes[1] = (240 days);
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -324,7 +325,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         } 
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -358,7 +359,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -390,7 +391,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             releaseTimes[i] = ((150 days) + (i * 150 days));
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -425,7 +426,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -460,7 +461,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -495,7 +496,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             }
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
@@ -524,11 +525,11 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             releaseTimes[i] = ((120 days) * i);
         }
 
-        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule
+        // Deploys a SceduledTokenLock contract and transfers the tokens to said contract to be released over the above schedule.
         scheduledVesting(_senderAddress, beneficiaryWallet, initialAmount, releaseAmounts, releaseTimes);
     }
 
 
-    // Function to allow "owner" to upgarde the contract using a UUPS Proxy
+    // Function to allow "owner" to upgarde the contract using a UUPS Proxy.
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override {}
 }

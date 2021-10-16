@@ -49,7 +49,7 @@ abstract contract UUPSUpgradeable is Initializable, BEP20Upgrade {
     }
 
 
-    /* Upgrade the implementation of the proxy to `newImplementation`, and subsequently execute the function call encoded in `data`.
+    /*  Upgrade the implementation of the proxy to `newImplementation`, and subsequently execute the function call encoded in `data`.
             - Calls {_authorizeUpgrade}; Emits an {Upgraded} event.                                                                 */
     function upgradeToAndCall(address newImplementation, bytes memory data) external payable virtual onlyProxy {
         _authorizeUpgrade(newImplementation);

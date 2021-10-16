@@ -34,7 +34,7 @@ library Address {
     }
 
     
-    // Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
+    // Replacement for Solidity's `transfer`: sends `amount` jager to `recipient`, forwarding all available gas and reverting on errors.
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, 'Address: insufficient balance');
 
@@ -63,7 +63,7 @@ library Address {
     }
 
 
-    /*  Same as 'functionCall`, but also transferring `value` wei to `target`.
+    /*  Same as 'functionCall`, but also transferring `value` jager to `target`.
      
         Requirements:
             - the calling contract must have an BNB balance of at least `value`.
@@ -76,8 +76,7 @@ library Address {
 
 
     // Same as `functionCallWithValue`, but with `errorMessage` as a fallback revert reason when `target` reverts.
-    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
-        
+    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {        
         require(address(this).balance >= value, "Address: insufficient balance for call");
         require(isContract(target), "Address: call to non-contract");
         
@@ -110,10 +109,10 @@ library Address {
         
         else {
             
-            // Look for revert reason and bubble it up if present
+            // Look for revert reason and bubble it up if present.
             if (returndata.length > 0) {
-                // The easiest way to bubble the revert reason is using memory via assembly
 
+                // The easiest way to bubble the revert reason is using memory via assembly.
                 assembly {
                     let returndata_size := mload(returndata)
                     revert(add(32, returndata), returndata_size)

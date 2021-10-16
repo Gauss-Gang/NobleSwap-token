@@ -49,7 +49,7 @@ contract RefundVault is Ownable {
     }
 
 
-    // Allows "onwer" to keep track of the buyer's wallet address and amount of BNB sent in purchase; can only be called when in an Active State.
+    // Allows "owner" to keep track of the buyer's wallet address and amount of BNB sent in purchase; can only be called when in an Active State.
     function deposit(address payable _wallet, uint256 _amount) onlyOwner public {
         require(_state == State.Active, "RefundVault: State not currently active.");
         buyers.push(Buyer(_wallet, _amount));

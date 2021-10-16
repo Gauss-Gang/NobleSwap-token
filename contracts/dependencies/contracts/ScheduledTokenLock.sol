@@ -8,7 +8,7 @@ import "../../dependencies/libraries/Address.sol";
 
 
 
-// Creates a Scheduled Time Lock contract for tokens transferred to it, releasing tokens over specific "lockTimes"
+// Creates a Scheduled Time Lock contract for tokens transferred to it, releasing tokens over specific "lockTimes".
 contract ScheduledTokenLock is Context {
 
     using Address for address;
@@ -104,7 +104,7 @@ contract ScheduledTokenLock is Context {
         _lockCounter = _lockCounter + 1;
         _lockedAmount = _lockedAmount - amount;
 
-        // Sanitation check to prevent out of bounds exceptions
+        // Sanitation check to prevent out of bounds exceptions before changing the "releaseTime".
         if (_lockCounter < _tokenLockTimes.length) {
             _releaseTime = (_startTime + _tokenLockTimes[_lockCounter]);
         }

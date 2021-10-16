@@ -1,12 +1,11 @@
 /*  _____________________________________________________________________________
 
-    Gauss(Gang) Contract
+    Gauss(Gang) Token Contract
 
     Deployed to      : TODO
     Name             : Gauss
     Symbol           : GANG
     Total supply     : 250,000,000 (250 Million)
-    Transaction Fee  : 12%
 
     MIT License. (c) 2021 Gauss Gang Inc. 
     
@@ -20,7 +19,7 @@ import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/UUPSUpgradeable.sol";
 import "../dependencies/contracts/BEP20.sol";
 import "../dependencies/contracts/BEP20Snapshot.sol";
-import "../dependencies/contracts/AddressManager.sol";
+import "../dependencies/contracts/AddressBook.sol";
 
 
 
@@ -28,7 +27,7 @@ import "../dependencies/contracts/AddressManager.sol";
     The purpose of the Gauss ecosystem is to support and work with brands to launch utility tokens on 
     our future blockchain and empower them to engage with their audiences in a new, captivating manner.
 */
-contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressManager, UUPSUpgradeable {
+contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgradeable {
         
     // Initializes variables representing the seperate fees that comprise the Transaction Fee.
     uint256 public redistributionFee;
@@ -108,7 +107,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressManager, UUPSU
                 _balances[sender] = _balances[sender] - amount;
             }
 
-            _balances[recipient] = _balances[recipient] + amount;
+            _balances[recipient] += amount;
             emit Transfer(sender, recipient, amount);
         }
 
@@ -148,28 +147,28 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressManager, UUPSU
             _balances[sender] = _balances[sender] - amount;
         }
 
-        _balances[recipient] = _balances[recipient] + finalAmount;
-        _balances[_gaussWallets["Redistribution Fee Wallet"]] = _balances[_gaussWallets["Redistribution Fee Wallet"]] + redistributionAmount;
-        _balances[_gaussWallets["Charitable Fee Wallet"]] = _balances[_gaussWallets["Charitable Fee Wallet"]] + charitableFundAmount;
-        _balances[_gaussWallets["Liquidity Fee Wallet"]] = _balances[_gaussWallets["Liquidity Fee Wallet"]] + liquidityAmount;
-        _balances[_gaussWallets["GG Fee Wallet"]] = _balances[_gaussWallets["GG Fee Wallet"]] + ggAmount;
+        _balances[recipient] += finalAmount;
+        _balances[gaussWallets["Redistribution Fee Wallet"]] += redistributionAmount;
+        _balances[gaussWallets["Charitable Fee Wallet"]] += charitableFundAmount;
+        _balances[gaussWallets["Liquidity Fee Wallet"]] += liquidityAmount;
+        _balances[gaussWallets["GG Fee Wallet"]] += ggAmount;
 
         emit Transfer(sender, recipient, finalAmount);
-        emit Transfer(sender, _gaussWallets["Redistribution Fee Wallet"], redistributionAmount);
-        emit Transfer(sender, _gaussWallets["Charitable Fee Wallet"], charitableFundAmount);
-        emit Transfer(sender, _gaussWallets["Liquidity Fee Wallet"], liquidityAmount);
-        emit Transfer(sender, _gaussWallets["GG Fee Wallet"], ggAmount);
+        emit Transfer(sender, gaussWallets["Redistribution Fee Wallet"], redistributionAmount);
+        emit Transfer(sender, gaussWallets["Charitable Fee Wallet"], charitableFundAmount);
+        emit Transfer(sender, gaussWallets["Liquidity Fee Wallet"], liquidityAmount);
+        emit Transfer(sender, gaussWallets["GG Fee Wallet"], ggAmount);
     }
 
 
     // Internal function to check if sender or recipient are excluded from the Transaction Fee.
     //      Dev-Note: Boolean cost more gas than uint256; using 0 to represent false, and 1 to represent true.
     function _checkIfExcluded(address sender, address recipient) internal view returns (uint256) {
-        if (_excludedFromFee[sender] == true) {
+        if (excludedFromFee[sender] == true) {
             return 1;
         }
 
-        else if (_excludedFromFee[recipient] == true) {
+        else if (excludedFromFee[recipient] == true) {
             return 1;
         }
 
@@ -185,6 +184,6 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressManager, UUPSU
     }
 
 
-    // Function to allow "owner" to upgarde the contract using a UUPS Proxy
+    // Function to allow "owner" to upgarde the contract using a UUPS Proxy.
     function _authorizeUpgrade(address newImplementation) internal whenPaused onlyOwner override {}
 }

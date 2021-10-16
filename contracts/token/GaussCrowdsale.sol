@@ -2,7 +2,7 @@
 
     GaussCrowdsale: Crowdsale for the Gauss Gang Ecosystem
 
-    Deployed to      : TODO
+    Deployed to: TODO
 
     MIT License. (c) 2021 Gauss Gang Inc. 
 
@@ -18,7 +18,7 @@ import "../dependencies/contracts/RefundVault.sol";
 
 
 
-/*  The GuassCrowdsale allows investors to purchase Gauss(GANG) tokens with BNB.
+/*  The GuassCrowdsale allows buyers to purchase Gauss(GANG) tokens with BNB.
         - Crowdsale is Staged, where each Stage has a different exchange rate of BNB to Gauss(GANG) tokens.
         - Crowdsale is Refundable if the minimum cap amount is not reached by the end of the sale.
         - Crowdsale has a Maximum Purchase amount of 100 BNB.
@@ -32,10 +32,10 @@ contract GaussCrowdsale is Ownable {
     // The token being sold.
     IBEP20 private _token;
 
-    // refund vault used to hold funds while Crowdsale is running
+    // Refund Vault used to hold funds while Crowdsale is running
     RefundVault private refundVault;
 
-    // How many Gauss(GANG) tokens a buyer gets per BNB. (shown with the Gauss(GANG) decimals applied)
+    // How many Gauss(GANG) tokens a buyer will receive per BNB. (shown with the Gauss(GANG) decimals applied)
     uint256[] private rates = [
         6800000000000,      // 6,800 tokens per 1 BNB during stage 0
         5667000000000,      // 5,667 tokens per 1 BNB during stage 1
@@ -127,7 +127,7 @@ contract GaussCrowdsale is Ownable {
     }
 
 
-    // Receive function to recieve BNB
+    // Receive function to recieve BNB.
     receive() external payable {
         buyTokens(msg.sender);
     }
@@ -136,7 +136,7 @@ contract GaussCrowdsale is Ownable {
     /*  Allows one to buy or gift Gauss(GANG) tokens using BNB. 
             - Amount of BNB the buyer transfers must be lower than the "purchaseCap" of 100 BNB.
             - Either transfers BNB to RefundVault or crowdsaleWallet, depending on if "minimumCap" has been reached.
-            - Keeps track of the token amounts purchased in the "balances" mapping, to be withdrawn after to Crowdsale is completed. */
+            - Keeps track of the token amounts purchased in the "balances" mapping, to be claimed after to Crowdsale is completed. */
     function buyTokens(address _beneficiary) public payable {
         uint256 jagerAmount = msg.value;
         _validatePurchase(_beneficiary, jagerAmount);
