@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 import "../utilities/Initializable.sol";
 import "../utilities/Context.sol";
 import "../access/Ownable.sol";
@@ -16,7 +16,7 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     // Dev-Note: Solidity 0.8.0 added built-in support for checked math, therefore the "SafeMath" library is no longer needed.
     using Address for address;
 
-    // Creates mapping for the collections of balances and allowances
+    // Creates mapping for the collections of balances and allowances.
     mapping(address => uint256) public _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
     
@@ -27,7 +27,7 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     uint256 private _totalSupply;
 
     
-    // Sets the values for {name}, {symbol}, {decimals}, and {totalSupply}
+    // Sets the values for {name}, {symbol}, {decimals}, and {totalSupply}.
     function __BEP20_init(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
         __Context_init_unchained();
         __Ownable_init();
@@ -36,7 +36,7 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     }
 
 
-    // Internal function to set the values for {name}, {symbol}, {decimals}, and {totalSupply}
+    // Internal function to set the values for {name}, {symbol}, {decimals}, and {totalSupply}.
     function __BEP20_init_unchained(string memory name_, string memory symbol_, uint8 decimals_, uint256 totalSupply_) internal initializer {
         _name = name_;
         _symbol = symbol_;
@@ -54,7 +54,7 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     }
 
     
-    // Allows "owner" to Un-Pause the token transactions, called after maintenance periods are finished or once upgrade is complete.
+    // Allows "owner" to Un-Pause the token transactions, used after maintenance periods are finished or once upgrade is complete.
     function unpause() public onlyOwner {
         _unpause();
     }
@@ -78,13 +78,13 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     }
 
 
-    // Returns the total supply of token
+    // Returns the total supply of token.
     function totalSupply() public override view returns (uint256) {
         return _totalSupply;
     }
 
 
-    // Returns balance of the referenced 'account' address
+    // Returns balance of the referenced 'account' address.
     function balanceOf(address account) public override view returns (uint256) {
         return _balances[account];
     }
@@ -122,7 +122,7 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     }
     
     
-    // Sets `amount` as the allowance of `spender` over the `owner`s tokens.
+    // Sets 'amount' as the allowance of 'spender' then returns a boolean indicating result of operation. Emits an {Approval} event.
     function _approve(address owner, address spender, uint256 amount) internal {
         require(owner != address(0), 'BEP20: approve from the zero address');
         require(spender != address(0), 'BEP20: approve to the zero address');
@@ -172,19 +172,18 @@ contract BEP20 is Initializable, Context, IBEP20, Pausable, Ownable {
     }
     
     
-    /*  Hook that is called before any transfer of tokens. This includes minting and burning.
+    /*  Hook that is called before any transfer of tokens. This includes minting and burning. (Though mint and burn functions are not used in the GaussGANG token)
      
         Calling conditions:
             - when `from` and `to` are both non-zero, `amount` of ``from``'s tokens will be transferred to `to`.
             - when `from` is zero, `amount` tokens will be minted for `to`.
             - when `to` is zero, `amount` of ``from``'s tokens will be burned.
             - `from` and `to` are never both zero.
-
     */
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual {}
 
 
-    /*  Hook that is called after any transfer of tokens. This includes minting and burning.
+    /*  Hook that is called after any transfer of tokens. This includes minting and burning.(Though mint and burn functions are not used in the GaussGANG token)
      
         Calling conditions:
             - when `from` and `to` are both non-zero, `amount` of ``from``'s tokenshas been transferred to `to`.

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 
 
 
-/*  Provides counters that can only be incremented, decremented or reset.
+/*  Provides counters that can only be incremented, decremented, or reset.
         - Example uses: to track the number of elements in a mapping, issuing ERC721 ids, or counting request ids.
         - Include with 'using Counters for Counters.Counter;'                                                    
 */

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 import "./Initializable.sol";
 
 
@@ -8,12 +8,12 @@ import "./Initializable.sol";
 abstract contract Context is Initializable  {
     
     
-    // Empty internal constructor, to prevent people from mistakenly deploying an instance of this contract, which should be used via inheritance.
+    // Empty initializer, to prevent people from mistakenly deploying an instance of this contract, which should be used via inheritance.
     function __Context_init() internal initializer {
         __Context_init_unchained();
     }
     
-    // Empty internal constructor
+    // Empty internal initializer.
     function __Context_init_unchained() internal initializer {
     }
 

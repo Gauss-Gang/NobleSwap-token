@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 
 
 
@@ -28,7 +28,7 @@ interface IBEP20 {
     function balanceOf(address account) external view returns (uint256);
 
 
-    // Transfers an 'amount' of tokens from callers account to the referenced 'recipient' address. Emits a {Transfer} event. 
+    // Transfers an 'amount' of tokens from the caller's account to the referenced 'recipient' address. Emits a {Transfer} event. 
     function transfer(address recipient, uint256 amount) external returns (bool);
     
     

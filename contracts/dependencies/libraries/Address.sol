@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.9;
 
 
 
@@ -34,13 +34,7 @@ library Address {
     }
 
     
-    /*  Replacement for Solidity's `transfer`: sends `amount` wei to `recipient`, forwarding all available gas and reverting on errors.
-
-        IMPORTANT: because control is transferred to `recipient`, care must be
-            taken to not create reentrancy vulnerabilities. Consider using
-            {ReentrancyGuard} or the
-            https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
-    */
+    // Replacement for Solidity's `transfer`: sends `amount` jager to `recipient`, forwarding all available gas and reverting on errors.
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, 'Address: insufficient balance');
 
@@ -54,9 +48,9 @@ library Address {
             - If `target` reverts with a revert reason, it is bubbled up by this function (like regular Solidity function calls).
             - Returns the raw returned data.
      
-        Requirements:
-            - `target` must be a contract.
-            - calling `target` with `data` must not revert.
+            Requirements:
+                - `target` must be a contract.
+                - calling `target` with `data` must not revert.
     */
     function functionCall(address target, bytes memory data) internal returns (bytes memory) {
         return functionCall(target, data, 'Address: low-level call failed');
@@ -69,7 +63,7 @@ library Address {
     }
 
 
-    /*  Same as 'functionCall`, but also transferring `value` wei to `target`.
+    /*  Same as 'functionCall`, but also transferring `value` jager to `target`.
      
         Requirements:
             - the calling contract must have an BNB balance of at least `value`.
@@ -82,8 +76,7 @@ library Address {
 
 
     // Same as `functionCallWithValue`, but with `errorMessage` as a fallback revert reason when `target` reverts.
-    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
-        
+    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {        
         require(address(this).balance >= value, "Address: insufficient balance for call");
         require(isContract(target), "Address: call to non-contract");
         
@@ -107,21 +100,6 @@ library Address {
     }
 
 
-    // Same as `functionCall`, but performing a delegate call.
-    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
-        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
-    }
-
-
-    // Same as `functionCall` with `errorMessage` ,but performing a delegate call.
-    function functionDelegateCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
-        require(isContract(target), "Address: delegate call to non-contract");
-
-        (bool success, bytes memory returndata) = target.delegatecall(data);
-        return verifyCallResult(success, returndata, errorMessage);
-    }
-
-
     // Tool to verifies that a low level call was successful, and revert if it wasn't, either by bubbling the revert reason using the provided one.
     function verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) internal pure returns (bytes memory) {
         
@@ -131,10 +109,10 @@ library Address {
         
         else {
             
-            // Look for revert reason and bubble it up if present
+            // Look for revert reason and bubble it up if present.
             if (returndata.length > 0) {
-                // The easiest way to bubble the revert reason is using memory via assembly
 
+                // The easiest way to bubble the revert reason is using memory via assembly.
                 assembly {
                     let returndata_size := mload(returndata)
                     revert(add(32, returndata), returndata_size)

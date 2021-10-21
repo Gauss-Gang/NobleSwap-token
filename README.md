@@ -1,17 +1,3 @@
-# Gauss GANG Token Smart Contract - Hardhat Project
+# Gauss(GANG) Token Smart Contract
 
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-
-# To deploy token on local test node, run the following commmand, then open a new terminal and run the second command
-npx hardhat local-testnet
-npx hardhat deploy:local  (Shortcut for hardhat run --network localhost scripts/deploy-gauss-token.js)
-```
+This project can be compiled, tested, deployed, and interacted with by using [Hardhat](https://hardhat.org/getting-started/#overview) in conjunction with the [OpenZeppelin Upgrades Plugin](https://docs.openzeppelin.com/upgrades-plugins/1.x/hardhat-upgrades).
