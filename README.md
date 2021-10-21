@@ -18,11 +18,11 @@ Gauss Gang, a Tokenized Ecosystem To Serve The Evolving Needs Of Any Brand.
 
      --[dependencies](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/contracts/dependencies "dependencies")/: contains [access controls](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/access "access") , [contracts](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/contracts "contracts"), [interfaces](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/interfaces "interfaces"), [libraries](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/libraries "libraries"), [security extensions](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/security "security"), and [utilities](https://github.com/Gauss-Gang/GaussGANG-Token/tree/main/contracts/dependencies/utilities "utilities") that are used by the main GaussGANG, GaussVault, and GaussCrowdsale smart contracts.
 
-     --[token](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/contracts/token "token") :/ contains GaussGANG, GaussVault, and GaussCrowdsale contracts.
+     --[token](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/contracts/token "token"):/ contains GaussGANG, GaussVault, and GaussCrowdsale contracts.
 
-     --[upgrades](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/contracts/upgrades "upgrades") :/ currently contains a template for to build off as well as test the upgrade functionality.
+     --[upgrades](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/contracts/upgrades "upgrades"):/ currently contains a template for GaussV2 to build off as well as to test the upgrade functionality.
 
-- [flattenedContracts](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/flattenedContracts "flattenedContracts")/:  this contains the flattened versions of the main smart contracts, containing all dependencies in each contract.
+- [flattenedContracts](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/flattenedContracts "flattenedContracts")/: contains the flattened versions of the main smart contracts, containing all dependencies in each contract.
 
 - [scripts](https://github.com/Gauss-Gang/GaussGANG-Token/tree/devMain/scripts "scripts")/: contains scripts to deploy, interact, and upgrade the main smart contracts.
 ---
