@@ -11,7 +11,8 @@ npx hardhat test
 npx hardhat node
 npx hardhat help
 
-# To deploy token on local test node, run the following commmand, then open a new terminal and run the second command
+# To deploy token ecosysytem on local test node, run the following commmands: 
 npx hardhat local-testnet
-npx hardhat deploy:local  (Shortcut for hardhat run --network localhost scripts/deploy-gaussEcosystem.js)
+//open a new terminal after node launches before launching next command
+npx hardhat deploy:local
 ```
