@@ -273,7 +273,7 @@ contract GaussCrowdsale is Ownable {
                 amount = balances[i].tokenAmount;
 
                 require(amount > 0, "Crowdsale: can not withdrawl 0 amount.");
-                _token.transfer(msg.sender, amount);
+                require(_token.transfer(msg.sender, amount));
                 balances[i].tokenAmount = 0;
             }
         }
