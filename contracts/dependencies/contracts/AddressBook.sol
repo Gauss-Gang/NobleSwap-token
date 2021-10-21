@@ -39,8 +39,8 @@ contract AddressBook is Initializable, Context, Ownable {
         gaussWallets["Charitable Fee Wallet"] = 0x765696087d95A84cbFa6FEEE857570A6eae19A14;
         gaussWallets["Liquidity Fee Wallet"] = 0x3f8c6910124F32aa5546a7103408FA995ab45f65;
         gaussWallets["GG Fee Wallet"] = 0x206F10F88159590280D46f607af976F6d4d79Ce3;
-        gaussWallets["Internal Distribution Wallet"] = 0xf532651735713E8671FE418124703ab662088C75;
-        gaussWallets["GaussGANG Owner"] = 0x64aCACeA417B39E9e6c92714e30f34763d512140;
+        gaussWallets["GaussGANG Owner"] = 0xf532651735713E8671FE418124703ab662088C75;
+        gaussWallets["Internal Distribution Wallet"] = 0x64aCACeA417B39E9e6c92714e30f34763d512140;
         gaussWallets["Community Pool"] = 0x4249B05E707FeeA3FB034071C66e5A227C230C2f;
         gaussWallets["Liquidity Pool"] = 0x17cA40C901Af4C31Ed9F5d961b16deD9a4715505;
         gaussWallets["Charitable Fund"] = 0x7d74E237825Eba9f4B026555f17ecacb2b0d78fE;

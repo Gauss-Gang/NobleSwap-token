@@ -30,22 +30,22 @@ async function main() {
 
 
     // Vests the token "amount" over the specified "releaseTime"
-    //const sender = "";
-    //const beneficiary = "";
-    //const amount = "";
-    //const releaseTime = "";
-    //const deployedAddress = await contract.vestTokens(sender, beneficiary, amount, releaseTime);
-    //console.log("GaussVault; Tokens vested; deployed Token Lock contract:", deplyedAddress)
+//    const sender = "";
+//    const beneficiary = "";
+//    const amount = "";
+//    const releaseTime = "";
+//    const deployedAddress = await contract.vestTokens(sender, beneficiary, amount, releaseTime);
+//    console.log("GaussVault; Tokens vested; deployed Token Lock contract:", deplyedAddress)
 
 
     // Vests the token "totalAmount" over the scheduled defined by "amountsList" and "lockTimes".
-    //const Sender = "";
-    //const Beneficiary = "";
-    //const totalAmount = "";
-    //const amountsList = "";
-    //const lockTimes = ""; 
-    //const newDeployedAddress = await contract.vestTokens(Sender, Beneficiary, totalAmount, amountsList, lockTimes);
-    //console.log("GaussVault; Tokens vested; deployed Scheduled Token Lock contract:", newDeployedAddress)
+//    const Sender = "";
+//    const Beneficiary = "";
+//    const totalAmount = "";
+//    const amountsList = "";
+//    const lockTimes = ""; 
+//    const newDeployedAddress = await contract.vestTokens(Sender, Beneficiary, totalAmount, amountsList, lockTimes);
+//    console.log("GaussVault; Tokens vested; deployed Scheduled Token Lock contract:", newDeployedAddress)
 
 
     // Allows owner to transfer ownership to another address.

@@ -28,7 +28,7 @@ import "../dependencies/contracts/AddressBook.sol";
     our future blockchain and empower them to engage with their audiences in a new, captivating manner.
 */
 contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgradeable {
-        
+
     // Initializes variables representing the seperate fees that comprise the Transaction Fee.
     uint256 public redistributionFee;
     uint256 public charitableFundFee;
@@ -49,7 +49,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgr
 
     // Sets initial values to the Transaction Fees and wallets to be excluded from the Transaction Fee.
     function __GaussGANG_init_unchained() internal initializer {
-        
+
         // Sets values for the variables representing the seperate fees that comprise the Transaction Fee.
         redistributionFee = 3;
         charitableFundFee = 3;
@@ -57,49 +57,49 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgr
         ggFee = 3;
         _totalFee = 12;
     }
-    
-    
+
+
     // Creates a Snapshot of the balances and totalsupply of token, returns the Snapshot ID. Can only be called by owner.
     function snapshot() public onlyOwner returns (uint256) {
         uint256 id = _snapshot();
         return id;
     }
-    
+
 
     // Returns the current total Transaction Fee.
     function totalTransactionFee() public view returns (uint256) {
         return _totalFee;
     }
-    
-    
+
+
     /*  Allows 'owner' to change the transaction fees at a later time, so long as the total Transaction Fee is lower than 12% (the initial fee ceiling).
             -An amount for each Pool is required to be entered, even if the specific fee amount won't be changed.
             -Each variable should be entered as a single or double digit number to represent the intended percentage; 
                 Example: Entering a 3 for newRedistributionFee would set the Redistribution fee to 3% of the Transaction Amount.
     */
-    function changeTransactionFees(uint256 newRedistributionFee, uint256 newCharitableFundFee, uint256 newLiquidityFee, uint256 newGGFee) public onlyOwner() {
+    function changeTransactionFees(uint256 newRedistributionFee, uint256 newCharitableFundFee, uint256 newLiquidityFee, uint256 newGGFee) external onlyOwner() {
 
         uint256 newTotalFee;
         newTotalFee = (newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee);
 
         require(newTotalFee <= 12, "GaussGANG: Transaction fee entered exceeds ceiling of 12%");
-        
+
         redistributionFee = newRedistributionFee;
         charitableFundFee = newCharitableFundFee;
         liquidityFee = newLiquidityFee;
         ggFee = newGGFee;
         _totalFee = newTotalFee;
     }
-    
-    
+
+
     // Internal Transfer function; checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
     function _transfer(address sender, address recipient, uint256 amount) internal whenNotPaused override(BEP20) {
 
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
-        
+
         _beforeTokenTransfer(sender, recipient, amount);
-        
+
         if (_checkIfExcluded(sender, recipient) == 1) {            
             require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
 

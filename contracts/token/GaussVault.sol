@@ -66,6 +66,10 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
     }
 
 
+    // Receive function to recieve BNB, necessary to cover gas fees.
+    receive() external payable {}
+
+
     /*  Calls the internal functions that create a Vesting Lock contract for each Pool of tokens.
             NOTE:   - Must be called from "owner".
                     - Owner of GaussGANG Token must transfer the total supply, 250,000,000 tokens, to this contract address before calling function. */
@@ -93,7 +97,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
         uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
         address[] memory beneficiaryWallets = new address[](numberOfAddresses);
 
-        for (uint i = 0; i < numberOfAddresses; i++) {
+        for (uint256 i = 0; i < numberOfAddresses; i++) {
             if (i < _simpleVestingContracts.length) {
                 beneficiaryWallets[i] = _simpleVestingContracts[i].beneficiary();
             }
@@ -112,7 +116,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
         uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
         address[] memory contractAddresses = new address[](numberOfAddresses);
 
-        for (uint i = 0; i < numberOfAddresses; i++) {
+        for (uint256 i = 0; i < numberOfAddresses; i++) {
             if (i < _simpleVestingContracts.length) {
                 contractAddresses[i] = _simpleVestingContracts[i].contractAddress();
             }
@@ -127,11 +131,11 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
     /*  Attempts to release every wallet, ultimately releasing the available amount per Token Lock Contract.
             - Only releases a wallet if the release time for said wallet has passed.                       */
-    function releaseAvailableTokens() public onlyOwner() {
+    function releaseAvailableTokens() external onlyOwner() {
 
         uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
 
-        for (uint i = 0; i < numberOfAddresses; i++) {
+        for (uint256 i = 0; i < numberOfAddresses; i++) {
             if (i < _simpleVestingContracts.length) {
                 if (block.timestamp >= _simpleVestingContracts[i].releaseTime()) {
                     _simpleVestingContracts[i].release();
@@ -147,13 +151,13 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
 
     // Returns releaseTimes for each TokenLock Contract.
-    function showReleaseTimes() public view returns (address[] memory, uint256[] memory) {
+    function showReleaseTimes() external view returns (address[] memory, uint256[] memory) {
 
         uint256 numberOfAddresses = (_simpleVestingContracts.length + _scheduledVestingContracts.length);
         address[] memory beneficiaryWallets = new address[](numberOfAddresses);
         uint256[] memory releaseTimes = new uint256[](numberOfAddresses);
 
-        for (uint i = 0; i < numberOfAddresses; i++) {
+        for (uint256 i = 0; i < numberOfAddresses; i++) {
             if (i < _simpleVestingContracts.length) {
                 beneficiaryWallets[i] = _simpleVestingContracts[i].contractAddress();
                 releaseTimes[i] = _simpleVestingContracts[i].releaseTime();
@@ -222,7 +226,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
         // Initializes the variables required for the ScheduledTokenLock contract.
         address beneficiaryWallet = 0x4249B05E707FeeA3FB034071C66e5A227C230C2f;
-        uint256 initialAmount = 112500000 * _decimalsAmount;
+        uint256 initialAmount = 97500000 * _decimalsAmount;     // Note: Less than total Pool size because 15 million tokens are immediately sent to the Crowdsale and thus do not get routed through the Vault.
         uint256 indexNum = 25;
         uint256[] memory releaseAmounts = new uint256[](indexNum);
         uint256[] memory releaseTimes = new uint256[](indexNum);
@@ -230,7 +234,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
         // Initializes the amounts to be released over time.
         for (uint i = 0; i < indexNum; i++) {
             if (i == 0) {
-                releaseAmounts[i] = 25000000 * _decimalsAmount;
+                releaseAmounts[i] = 10000000 * _decimalsAmount;
             }
             else if (i >= 1 && i <= 6){
                 releaseAmounts[i] = 1250000 * _decimalsAmount;

@@ -14,26 +14,31 @@
 pragma solidity 0.8.9;
 import "../dependencies/interfaces/IBEP20.sol";
 import "../dependencies/access/Ownable.sol";
-import "../dependencies/contracts/RefundVault.sol";
 
 
 
 /*  The GuassCrowdsale allows buyers to purchase Gauss(GANG) tokens with BNB.
         - Crowdsale is Staged, where each Stage has a different exchange rate of BNB to Gauss(GANG) tokens.
-        - Crowdsale is Refundable if the minimum cap amount is not reached by the end of the sale.
         - Crowdsale has a Maximum Purchase amount of 100 BNB.
-        - The tokens bought in the Crowdsale can only be claimed after the completetion of the Crowdsale.
+        - The tokens will be disbursed after the completion of the Crowdsale by way of a batch transfer.
+        - Should the batch transfer fail (due to gas limits), there is a provision in place for buyers to claim/withdraw their tokens after completion.
 */
 contract GaussCrowdsale is Ownable {
 
-    // Mapping that contains the addresses of each purchaser and the amount of tokens they will recieve.
-    mapping(address => uint256) private balances;
+    // Mapping that contains the addresses of each purchaser and the amount of BNB they have spent.
+    mapping(address => uint256) private purchaseTotals;
+
+    // A sctruct that will hold the address and Gauss(GANG) Token amount for each Buyer.
+    struct Buyer {
+        address payable wallet;
+        uint256 tokenAmount;
+    }
+
+    // Array of all Buyers, used to keep track of each Buyer's address and amount of Gauss(GANG) tokens they purchased.
+    Buyer[] private balances;
 
     // The token being sold.
     IBEP20 private _token;
-
-    // Refund Vault used to hold funds while Crowdsale is running
-    RefundVault private refundVault;
 
     // How many Gauss(GANG) tokens a buyer will receive per BNB. (shown with the Gauss(GANG) decimals applied)
     uint256[] private rates = [
@@ -57,34 +62,31 @@ contract GaussCrowdsale is Ownable {
 
     // Number of tokens per stage; the rate changes after each stage has been completed.
     uint256[] private stages = [
-        100000,     // 100,000 tokens in stage 0
-        250000,     // 150,000 tokens in stage 1
-        500000,     // 250,000 tokens in stage 2
-        750000,     // 250,000 tokens in stage 3
-        1250000,    // 500,000 tokens in stage 4
-        2000000,    // 750,000 tokens in stage 5
-        2750000,    // 750,000 tokens in stage 6
-        3500000,    // 750,000 tokens in stage 7
-        4250000,    // 750,000 tokens in stage 8
-        5000000,    // 750,000 tokens in stage 9
-        6000000,    // 1,000,000 tokens in stage 10
-        7000000,    // 1,000,000 tokens in stage 11
-        9000000,    // 2,000,000 tokens in stage 12
-        11000000,   // 2,000,000 tokens in stage 13
-        13000000,   // 2,000,000 tokens in stage 14
-        15000000    // 2,000,000 tokens in stage 15
+        100000000000000,     // 100,000 tokens in stage 0
+        250000000000000,     // 150,000 tokens in stage 1
+        500000000000000,     // 250,000 tokens in stage 2
+        750000000000000,     // 250,000 tokens in stage 3
+        1250000000000000,    // 500,000 tokens in stage 4
+        2000000000000000,    // 750,000 tokens in stage 5
+        2750000000000000,    // 750,000 tokens in stage 6
+        3500000000000000,    // 750,000 tokens in stage 7
+        4250000000000000,    // 750,000 tokens in stage 8
+        5000000000000000,    // 750,000 tokens in stage 9
+        6000000000000000,    // 1,000,000 tokens in stage 10
+        7000000000000000,    // 1,000,000 tokens in stage 11
+        9000000000000000,    // 2,000,000 tokens in stage 12
+        11000000000000000,   // 2,000,000 tokens in stage 13
+        13000000000000000,   // 2,000,000 tokens in stage 14
+        15000000000000000    // 2,000,000 tokens in stage 15
     ];
 
     // Address where BNB funds are collected.
     address payable public crowdsaleWallet;
 
-    // The amount, in Jager, that will represent the minimum amount before owner can release stored funds. (Set to 550 BNB)
-    uint256 private minimumCap;
-
     // The max amount, in Jager, a buyer can purchase; used to prevent potential whales from buying up too many tokens at once.
     uint256 private purchaseCap;
 
-    // Amount of Jager raised (BNB's smallest unit; BNB has 8 decimals).
+    // Amount of Jager raised (BNB's smallest unit).
     uint256 public jagerRaised;
 
     // Amount of remaining Gauss(GANG) tokens remaining in the GaussCrowdsale.
@@ -98,14 +100,17 @@ contract GaussCrowdsale is Ownable {
     uint256 public endTime;
 
     // A varaible to determine whether Crowdsale is closed or not.
-    bool private _hasClosed;
+    bool private _closed;
+
+    // A variable to determine whether buyers can directly withdraw tokens or not.
+    bool private _allowWithdrawals;
 
     // Initializes an event that will be called after each token purchase.
     event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
 
 
     // Constructor sets takes the variables passed in and initializes are state variables. 
-    constructor(uint256 _startTime, address _gaussAddress, address payable _crowdsaleWallet) {
+    constructor(uint256 _startTime, address _gaussAddress, address payable _crowdsaleWallet) payable {
 
         require(_startTime >= block.timestamp, "GaussCrowdsale: startTime can not be before current time.");
         require(_gaussAddress != address(0), "GaussCrowdsale: gaussAddress can not be Zero Address.");
@@ -114,56 +119,64 @@ contract GaussCrowdsale is Ownable {
 
         __Ownable_init();
         startTime = _startTime;
-        endTime = startTime + (30 days);
+        endTime = startTime + (42 days);
         crowdsaleWallet = _crowdsaleWallet;
         _token = IBEP20(_gaussAddress);
-        refundVault = new RefundVault(crowdsaleWallet);
-        minimumCap = (550 * 10**8);
-        purchaseCap = (100 * 10**8);
+        purchaseCap = (100 * 10**18);
         jagerRaised = 0;
         gaussSold = 0;
         currentStage = 0;
-        _hasClosed = false;        
+        _closed = false;
+        _allowWithdrawals = false;
     }
 
 
     // Receive function to recieve BNB.
     receive() external payable {
-        buyTokens(msg.sender);
+
+        // Allows owner to fill contract with BNB to cover gas costs.
+        if (msg.sender == owner()) {}
+
+        else {buyTokens(payable(msg.sender));}
     }
 
 
     /*  Allows one to buy or gift Gauss(GANG) tokens using BNB. 
             - Amount of BNB the buyer transfers must be lower than the "purchaseCap" of 100 BNB.
-            - Either transfers BNB to RefundVault or crowdsaleWallet, depending on if "minimumCap" has been reached.
-            - Keeps track of the token amounts purchased in the "balances" mapping, to be claimed after to Crowdsale is completed. */
-    function buyTokens(address _beneficiary) public payable {
+            - Transfers BNB to the crowdsaleWallet  after completion of the purchase          */
+    function buyTokens(address payable _beneficiary) public payable {
         uint256 jagerAmount = msg.value;
         _validatePurchase(_beneficiary, jagerAmount);
         _processPurchase(_beneficiary, jagerAmount);
-        _transferBNB(payable(msg.sender), msg.value);
     }
 
 
     // Validation of an incoming purchase. Uses require statements to revert state when conditions are not met.
     function _validatePurchase(address _beneficiary, uint256 _jagerAmount) internal view {
-        require(block.timestamp >= startTime && block.timestamp <= endTime, "GaussCrowdsale: current time is either before or after Crowdsale period.");
-        require(_hasClosed == false, "Crowdsale: sale is no longer open");
-        require(_beneficiary != address(0), "GaussCrowdsale: beneficiary can not be Zero Address.");
-        require(_jagerAmount != 0, "GaussCrowdsale: amount of BNB must be greater than 0.");
+        require(block.timestamp >= startTime && block.timestamp <= endTime, "Crowdsale: current time is either before or after Crowdsale period.");
+        require(_closed == false, "Crowdsale: sale is no longer open");
+        require(_beneficiary != address(0), "Crowdsale: beneficiary can not be Zero Address.");
+        require(_jagerAmount != 0, "Crowdsale: amount of BNB must be greater than 0.");
         require(_jagerAmount <= purchaseCap, "Crowdsale: amount of BNB sent must lower than 100");
-        require((balances[_beneficiary] + _jagerAmount) <= purchaseCap, "Crowdsale: amount of BNB entered exceeds buyers purchase cap.");
+        require((purchaseTotals[_beneficiary] + _jagerAmount) <= purchaseCap, "Crowdsale: amount of BNB entered exceeds buyers purchase cap.");
     }
 
 
     // Adds the "tokenAmount" (amount of Gauss(GANG) tokens) to the beneficiary's balance.
-    function _processPurchase(address _beneficiary, uint256 _jagerAmount) internal {
+    function _processPurchase(address payable _beneficiary, uint256 _jagerAmount) internal {
 
         // Calculates the token amount using the "jagerAmount" and the rate at the current stage.
-        uint256 tokenAmount = ((_jagerAmount * rates[currentStage])/(10**8));
-        
-        // Addes the "tokenAmount" to the beneficiary's balance.
-        balances[_beneficiary] = balances[_beneficiary] + tokenAmount;
+        uint256 tokenAmount = ((_jagerAmount * rates[currentStage])/(10**18));
+        require((gaussSold + tokenAmount) <= stages[15], "Crowdsale: token amount can not be more that total amount alloted to Crowdsale.");
+
+        // Adds the wallet address and "tokenAmount" to the beneficiary's balance.
+        balances.push(Buyer(_beneficiary, tokenAmount));
+
+        // Adds the "jagerAmount" to the purchaseTotal of the buyer.
+        purchaseTotals[_beneficiary] += _jagerAmount;
+
+        // Tranfers the BNB recieved in purchase to the Crowdsale Wallet.
+        crowdsaleWallet.transfer(_jagerAmount);
 
         _updatePurchasingState(tokenAmount, _jagerAmount); 
         emit TokenPurchase(msg.sender, _beneficiary, _jagerAmount, tokenAmount);
@@ -172,73 +185,114 @@ contract GaussCrowdsale is Ownable {
 
     // Updates the amount of tokens left in the Crowdsale; may change the stage if conditions are met.
     function _updatePurchasingState(uint256 _tokenAmount, uint256 _jagerAmount) internal {        
-        gaussSold = gaussSold + _tokenAmount;
-        jagerRaised = jagerRaised + _jagerAmount;
-        
+        gaussSold += _tokenAmount;
+        jagerRaised += _jagerAmount;
+
         if (gaussSold >= stages[currentStage]) {
             if (currentStage < stages.length) {
-                currentStage = currentStage + 1;
+                currentStage += 1;
             }
         }
     }
 
 
-    // Tranfers the BNB recieved in purchase to either the Crowdsale Wallet or RefundVault, depending on whether the "minimumCap" has been met.
-    function _transferBNB(address payable senderWallet, uint256 jagerAmount) internal {
-        if (refundVault.currentState() == 2){
-            crowdsaleWallet.transfer(jagerAmount);
+    // Allows owner to close the Crowdsale.
+    function closeCrowdsale() public onlyOwner() {
+        _closed = true;
+    }
+
+
+    // Owner can allow direct withdrawals for tokens purchases should the batch transfer hit the gas limit and fail.
+    function allowWithdrawals() external onlyOwner() {
+        _allowWithdrawals = true;
+    }
+
+
+    // Returns a receipt showing each buyer's wallet address, the amount of BNB spent, and the amount of Gauss(GANG) tokens bought.
+    function getReceipts() external view onlyOwner() returns (address[] memory, uint256[] memory, uint256[] memory) {
+        
+        // Assigning the balances storage array to a memory array to lower gas costs.
+        Buyer[] memory buyers = balances;
+
+        address[] memory wallets = new address[](buyers.length);
+        uint256[] memory bnbSpent = new uint256[](buyers.length);
+        uint256[] memory gaussBought = new uint256[](buyers.length);
+
+        for (uint256 i = 0; i < buyers.length; i++) {
+            wallets[i] = buyers[i].wallet;
+            bnbSpent[i] = purchaseTotals[buyers[i].wallet];
+            gaussBought[i] = buyers[i].tokenAmount;
         }
-        else {
-            payable(address(refundVault)).transfer(jagerAmount);
-            refundVault.deposit(senderWallet, jagerAmount);
-        }        
+
+        return (wallets, bnbSpent, gaussBought);
     }
 
 
-    // Closes the RefundVault if the "minimumCap" has been reached. 
-    function closeRefundVault() public onlyOwner() {
-        require(jagerRaised >= minimumCap, "Crowdsale: minimum sale cap not reached");
-        refundVault.closeVault();
+    // Allows owner to update the balances array if the batch release function only partially fails.
+    function updateBalances(address payable[] memory wallets, uint256[] memory tokenAmounts) external onlyOwner() {
+
+        require(_closed == true, "Crowdsale: sale has not been closed.");
+        require(wallets.length == tokenAmounts.length);
+
+        for (uint256 i = 0; i < wallets.length; i++) {
+            balances[i] = (Buyer(wallets[i], tokenAmounts[i]));
+        }
+
+        for (uint256 i = 0; i < balances.length; i++) {
+            if (i >= wallets.length) {
+                balances.pop();
+            }
+        }
     }
 
 
-    // Allows "owner" to issue refunds to all buyers should the minimum cap amount not be reached by the completion of the Crowdsale.
-    function issueRefunds() public onlyOwner() {
-        require(block.timestamp >= endTime, "GaussCrowdsale: current time is before Crowdsale end time.");
-        require(jagerRaised < minimumCap, "Crowdsale: minimum sale cap has been reached");
-        refundVault.issueRefunds();
+    // Batch release function that will transfer Gauss(GANG) tokens to each buyer; can only be called by owner.
+    function releaseTokens() external onlyOwner() {
+
+        require(_closed == true, "Crowdsale: sale has not been closed.");
+
+        // Assigning the balances storage array to a memory array to lower gas costs.
+        Buyer[] memory buyers = balances;
+        
+        for (uint256 i = 0; i < buyers.length; i++) {
+            require(_token.transfer(buyers[i].wallet, buyers[i].tokenAmount));
+        }
     }
 
 
-    /*  Transfer remaining Gauss(GANG) tokens back to the "crowdsaleWallet" as well BNB earned if "minimumCap" is reached.
+    // Can only be called once the Crowdsale has completed and the "owner" has closed the Crowdsale.
+    //      - Left as a backup in-case the batch release function fails due to gas limit.
+    function withdrawTokens() external {
+
+        require(_closed == true, "Crowdsale: sale has not been closed.");
+        require(_allowWithdrawals == true, "Crowdsale: withdrawals have not been authorized.");
+
+        uint256 amount;
+        for (uint256 i = 0; i < balances.length; i++) {
+            if (balances[i].wallet == msg.sender) {
+                amount = balances[i].tokenAmount;
+
+                require(amount > 0, "Crowdsale: can not withdrawl 0 amount.");
+                _token.transfer(msg.sender, amount);
+                balances[i].tokenAmount = 0;
+            }
+        }
+    }
+
+
+    /*  Transfer remaining Gauss(GANG) tokens back to the "crowdsaleWallet" as well as any BNB that may be left in the contract.
             NOTE:   - To be called at end of the Crowdsale to finalize and complete the Crowdsale.
                     - Can act as a backup in case the sale needs to be urgently stopped.
                     - Care should be taken when calling function as it could prematurely end the Crowdsale if accidentally called. */
     function finalizeCrowdsale() public onlyOwner() {
-          
+
         // Send remaining tokens back to the admin.
         uint256 tokensRemaining = _token.balanceOf(address(this));
         _token.transfer(crowdsaleWallet, tokensRemaining);
 
-        // Closes the Crowdsale and allows beneficiaries to withdrawl the purchased tokens.
-        _hasClosed = true;
+        // Transfers any BNB that may be left in contract back to the admin.
+        crowdsaleWallet.transfer(address(this).balance);
 
-        // If "minimumCap" has been reached, transfer BNB raised to the Crowdsale wallet.
-        if (address(this).balance >= minimumCap) {
-            crowdsaleWallet.transfer(address(this).balance);
-        }
-    }
-
-
-    // Can only be called once the Crowdsale has completed and the "owner" has finalized the Crowdsale.
-    function withdrawTokens() public {
-        
-        require(_hasClosed == true, "Crowdsale: sale has not been closed.");
-        uint256 amount = balances[msg.sender];
-        
-        require(amount > 0, "Crowdsale: can not withdrawl 0 amount.");
-        balances[msg.sender] = 0;
-
-        _token.transfer(msg.sender, amount);
+        closeCrowdsale();
     }
 }

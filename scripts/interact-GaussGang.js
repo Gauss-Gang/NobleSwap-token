@@ -4,15 +4,16 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
 
     // Following code is to use the contract at the deployed address.
-    const deployedAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";    // Local-Testnet: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    const deployedAddress = "";
     const GaussGANG = await ethers.getContractFactory("GaussGANG");
     const contract = await GaussGANG.attach(deployedAddress);
 
 
-/**** The next block of code is specific for the GaussGANG Token itself. ****\
-            (Does not contain the BEP20 standard function calls)           
-            To use, uncomment the call, or calls, you wish to use.           */
-
+    /*------------------------------------------------------------------------------------------------------------------------------------*/
+    /*-------------------------------------- GaussGANG Token Specific Function Calls -----------------------------------------------------*/
+    /*------------------------------- (Does not contain the BEP20 standard function calls) -----------------------------------------------*/
+    /*------------------------------- To use, uncomment the call, or calls, you wish to use ----------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------------------------------*/
 
         // Checks the current total Transaction Fee.
     //    const transactionFee = await contract.totalTransactionFee();
@@ -61,7 +62,9 @@ async function main() {
                     Marketing Pool
                     Ops-Dev Pool
                     Vesting Incentive Pool
-                    Reserve Pool                                            */
+                    Reserve Pool
+                    Gauss Vault
+                    Gauss Crowdsale                                            */
     //    const walletNameToCheck = "";
     //    const walletAddress = await contract.checkWalletAddress(walletNameToCheck);
     //    console.log("GaussGANG wallet address:", walletAddress);
@@ -103,10 +106,10 @@ async function main() {
 
 
 
-/**** The next block of code is specific for BEP20 Tokens that Gauss GANG Inherits ****\
-                    (Contains BEP20 Specific functions calls)
-                To use, uncomment the call, or calls, you wish to use                 */
-
+    /*------------------------------------------------------------------------------------------------------------------------------------*/
+    /*-------------------------------------- BEP20 Token Specific Function Calls ---------------------------------------------------------*/
+    /*------------------------------ To use, uncomment the call, or calls, you wish to use -----------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------------------------------*/
 
         // Returns the name of the BEP20 Token.
     //    const name = await contract.name();
