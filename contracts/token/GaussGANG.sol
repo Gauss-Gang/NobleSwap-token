@@ -141,7 +141,7 @@ contract GaussGANG is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgr
                 - After those transactions are complete, the transaction fee is divided up and sent to the respective pool addresses.
         */
         require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
-        require(finalAmount < amount, "GaussGANG: finalAmount exceeds original amount");
+        require(finalAmount <= amount, "GaussGANG: finalAmount exceeds original amount");
 
         unchecked {
             _balances[sender] = _balances[sender] - amount;

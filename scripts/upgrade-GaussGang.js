@@ -5,7 +5,7 @@ async function main() {
 
   // Following code is to upgrade the contract to a new version.
   // Enter ADDRESS of previous interationt and the contract name of the new version before running scrip.
-  const previousIteration = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const previousIteration = "";
   const newContractName = "GaussV2_Template";
 
 
