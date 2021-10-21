@@ -1,5 +1,4 @@
 # Gauss(GANG) README
-![Middle - Orange@3x](https://user-images.githubusercontent.com/85713806/138248294-dd4fb687-1238-47b0-ae97-47b75b3aa761.png)
 ![gg - strands@4x](https://user-images.githubusercontent.com/85713806/138234841-06c4116b-0fa7-432d-9d24-f1fcdc65b30a.png)
 ### ****CROWDSALE NOVEMBER 1st ****
 
@@ -48,9 +47,6 @@ npx hardhat help
 ```
 
 ## Project Introduction
-
-![Asset 37@4x](https://user-images.githubusercontent.com/85713806/138248142-ae55ae75-804b-4c45-b6ac-cac939e81c02.png)
-
 
   The Gauss ecosystem will be a frontrunner regarding token design for brands. End users of these tokens will be able to connect with the brand on a deeper level. We’re creating a unified experience for users to engage with brands, and for brands to engage with their audience. The core Gauss Gang service is token design for brands of a variety of sizes as these brands don’t have the in-house expertise or processes to be able to efficiently and effectively develop tokens. Gauss Gang enables brands to create tokens by collaborating with their team, then we’ll launch them into a powerful ecosystem complete with broad and deep functionality. GANG will begin as a token on the Binance Smart Chain (BSC). The logic behind this step is to catapult our user base around the time of the initial offering phase. Prompt adoption has a considerable impact on success rates when using existing blockchains rather than new blockchains.
 
