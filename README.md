@@ -6,7 +6,7 @@
 
 Gauss Gang, a Tokenized Ecosystem To Serve The Evolving Needs Of Any Brand.
 
-**Website:** [gaussgang](gaussgang.com)
+**Website:** [gaussgang](https://gaussgang.com)
 
 **Litepaper:** [webview](https://gaussgang.com/documentation/), [download](https://cutt.ly/JEEFrRD)
 
