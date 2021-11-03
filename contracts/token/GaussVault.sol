@@ -2,7 +2,6 @@
 
     GaussVault: Initial Token Distribution and Time Lock Controller
 
-    Deployed to: TODO
 
     MIT License. (c) 2021 Gauss Gang Inc. 
 
@@ -102,7 +101,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
                 beneficiaryWallets[i] = _simpleVestingContracts[i].beneficiary();
             }
             else {
-                beneficiaryWallets[i] = _scheduledVestingContracts[i].beneficiary();
+                beneficiaryWallets[i] = _scheduledVestingContracts[(i - _simpleVestingContracts.length)].beneficiary();
             }
         }
 
@@ -121,7 +120,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
                 contractAddresses[i] = _simpleVestingContracts[i].contractAddress();
             }
             else {
-                contractAddresses[i] = _scheduledVestingContracts[i].contractAddress();
+                contractAddresses[i] = _scheduledVestingContracts[(i - _simpleVestingContracts.length)].contractAddress();
             }
         }
 
@@ -142,8 +141,8 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
                 }
             }
             else {
-                if (block.timestamp >= _scheduledVestingContracts[i].releaseTime()) {
-                    _scheduledVestingContracts[i].release();
+                if (block.timestamp >= _scheduledVestingContracts[(i - _simpleVestingContracts.length)].releaseTime()) {
+                    _scheduledVestingContracts[(i - _simpleVestingContracts.length)].release();
                 }
             }
         }
@@ -163,8 +162,8 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
                 releaseTimes[i] = _simpleVestingContracts[i].releaseTime();
             }
             else {
-                beneficiaryWallets[i] = _scheduledVestingContracts[i].contractAddress();
-                releaseTimes[i] = _scheduledVestingContracts[i].releaseTime();
+                beneficiaryWallets[i] = _scheduledVestingContracts[(i - _simpleVestingContracts.length)].contractAddress();
+                releaseTimes[i] = _scheduledVestingContracts[(i - _simpleVestingContracts.length)].releaseTime();
             }
         }
 

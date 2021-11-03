@@ -2,7 +2,6 @@
 
     Gauss(Gang) Token Contract
 
-    Deployed to      : TODO
     Name             : Gauss
     Symbol           : GANG
     Total supply     : 250,000,000 (250 Million)

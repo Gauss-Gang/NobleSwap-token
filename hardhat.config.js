@@ -4,7 +4,9 @@ require("ethereum-waffle");
 require("ethers");
 require("solidity-coverage");
 require("@openzeppelin/hardhat-upgrades");
+require("@nomiclabs/hardhat-etherscan");
 const { mnemonic } = require('./secrets.json');
+const { apiKey} = require('./bscSecrets.json');
 
 
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -39,5 +41,8 @@ module.exports = {
       gasPrice: 20000000000,
       accounts: {mnemonic: mnemonic}
     }
+  },
+  etherscan: {
+    apiKey: {apiKey: apiKey}
   }
 };
