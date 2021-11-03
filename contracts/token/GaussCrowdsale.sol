@@ -2,7 +2,6 @@
 
     GaussCrowdsale: Crowdsale for the Gauss Gang Ecosystem
 
-    Deployed to: TODO
 
     MIT License. (c) 2021 Gauss Gang Inc. 
 

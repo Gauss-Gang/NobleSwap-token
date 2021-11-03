@@ -31,10 +31,10 @@ async function main() {
     const GaussCrowdsale = await ethers.getContractFactory("GaussCrowdsale");
     console.log('Deploying GaussCrowdsale...');
 
-    const startTime = "1635420641";     // November 1st 2021, 0:00am
+    const startTime = "1635782400";     // 1635782400 = November 1st 2021, 0:00am
     const crowdsaleWallet = "0x64aCACeA417B39E9e6c92714e30f34763d512140";
 
-    const crowdsaleContract = await GaussCrowdsale.deploy(startTime, GaussGANGAddress, crowdsaleWallet, {value: ethers.utils.parseEther("0.5")});
+    const crowdsaleContract = await GaussCrowdsale.deploy(startTime, GaussGANGAddress, crowdsaleWallet, {value: ethers.utils.parseEther("0.25")});
     console.log("GaussCrowdsale deployed to:", crowdsaleContract.address);
 
 
@@ -70,7 +70,7 @@ async function main() {
     [owner] = await ethers.getSigners();
     const transactionHash = await owner.sendTransaction({
         to: vaultContract.address,
-        value: ethers.utils.parseEther("0.5"), // Sends exactly 0.5 ether
+        value: ethers.utils.parseEther("0.25"), // Sends exactly 0.25 BNB
     });
     console.log("TransactionHash is:", transactionHash);
     

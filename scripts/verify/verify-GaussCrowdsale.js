@@ -3,6 +3,6 @@
 
 module.exports = [
     1635657600,
+    "Gauss GANG Address",
     "0x64aCACeA417B39E9e6c92714e30f34763d512140",
 ];
-  
