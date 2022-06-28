@@ -1,4 +1,6 @@
-# Gauss(GANG) README
+# Gauss(GANG) README (THIS TOKEN CONTRACT IS NOW DEFUNCT)
+## (Some of these contracts will be used on the Gauss Chain, Launching Q4 of 2022)
+
 ![gg - strands@4x](https://user-images.githubusercontent.com/85713806/138234841-06c4116b-0fa7-432d-9d24-f1fcdc65b30a.png)
 
 ## Project Overview
