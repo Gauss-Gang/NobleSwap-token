@@ -1,4 +1,4 @@
-# NobleSwap Token (Noble) README
+# NobleSwap Token (NOBLE) README
 
 ![gg - strands@4x](https://user-images.githubusercontent.com/85713806/138234841-06c4116b-0fa7-432d-9d24-f1fcdc65b30a.png)
 
