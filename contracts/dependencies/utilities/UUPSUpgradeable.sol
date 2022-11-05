@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity 0.8.17;
 import "./Initializable.sol";
-import "./BEP20Upgrade.sol";
+import "./GTS20Upgrade.sol";
 
 
 
@@ -15,10 +15,10 @@ import "./BEP20Upgrade.sol";
  
     NOTE:   The {_authorizeUpgrade} function must be overridden to include access restriction to the upgrade mechanism.
 */
-abstract contract UUPSUpgradeable is Initializable, BEP20Upgrade {
+abstract contract UUPSUpgradeable is Initializable, GTS20Upgrade {
 
     function __UUPSUpgradeable_init() internal initializer {
-        __BEP20Upgrade_init_unchained();
+        __GTS20Upgrade_init_unchained();
         __UUPSUpgradeable_init_unchained();
     }
     

@@ -1,12 +1,8 @@
-require("@nomiclabs/hardhat-waffle");
-require("chai");
-require("ethereum-waffle");
 require("ethers");
-require("solidity-coverage");
 require("@openzeppelin/hardhat-upgrades");
-require("@nomiclabs/hardhat-etherscan");
-const { mnemonic } = require('./secrets.json');
-const { apiKey} = require('./bscSecrets.json');
+
+//const { mnemonic } = require('./secrets.json');
+//const { apiKey} = require('./gcSecrets.json');
 
 
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -20,7 +16,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 module.exports = {
   solidity: {
-    version: "0.8.9",
+    version: "0.8.17",
     settings: {
         optimizer: {
         enabled: true,
@@ -28,21 +24,27 @@ module.exports = {
       },
     },
   },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
+  },
   networks: {
     testnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545",
       chainId: 97,
       gasPrice: 20000000000,
-      accounts: {mnemonic: mnemonic}
+      //accounts: {mnemonic: mnemonic}
     },
     mainnet: {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: {mnemonic: mnemonic}
+      //accounts: {mnemonic: mnemonic}
     }
-  },
-  etherscan: {
-    apiKey: {apiKey: apiKey}
   }
+//  etherscan: {
+//    apiKey: {apiKey: apiKey}
+//  }
 };

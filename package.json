@@ -1,27 +1,29 @@
 {
-  "name": "gauss-gang-token",
+  "name": "nobleswap-token",
   "version": "1.0.0",
-  "description": "",
+  "description": "NobleSwap token, a rewards token with gonvernance for the Noble Swap daap.",
   "main": "index.js",
   "scripts": {
     "build": "hardhat compile",
     "test:light": "hardhat test",
     "test": "hardhat coverage",
-    "deploy:local": "hardhat run --network localhost scripts/deploy-GaussEcosystem.js",
+    "deploy:local": "hardhat run --network localhost scripts/deploy-NobleSwap.js",
     "local-testnet": "hardhat node"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gauss-Gang/NobleSwap-token.git"
+  },
   "author": "Austin M",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gauss-Gang/NobleSwap-token/issues"
+  },
+  "homepage": "https://github.com/Gauss-Gang/NobleSwap-token#readme",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.2",
-    "@nomiclabs/hardhat-etherscan": "^2.1.7",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/hardhat-upgrades": "^1.10.0",
-    "chai": "^4.3.4",
-    "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.4.6",
-    "hardhat": "^2.6.4",
-    "solidity-coverage": "^0.7.17"
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
+    "@openzeppelin/hardhat-upgrades": "^1.21.0",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.12.2"
   }
 }

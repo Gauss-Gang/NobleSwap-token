@@ -10,12 +10,12 @@
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity 0.8.17;
 import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/Context.sol";
 import "../dependencies/utilities/UUPSUpgradeable.sol";
 import "../dependencies/access/Ownable.sol";
-import "../dependencies/interfaces/IBEP20.sol";
+import "../dependencies/interfaces/IGTS20.sol";
 import "../dependencies/libraries/Address.sol";
 import "../dependencies/contracts/TokenLock.sol";
 import "../dependencies/contracts/ScheduledTokenLock.sol";
@@ -41,7 +41,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
 
     // Initializes variables to hold the address "sender" of the tokens to be transferred, as well as the address that the Gauss(GANG) is deployed to.
     address private _senderAddress;
-    IBEP20  private _gaussToken;
+    IGTS20  private _gaussToken;
     bool private _previouslyLocked;
     uint256 private _decimalsAmount;
     
@@ -59,7 +59,7 @@ contract GaussVault is Initializable, Context, Ownable, UUPSUpgradeable {
             as well as calling the internal functions that create a Vesting Lock contract for each Pool of tokens. */
     function __GaussVault_init_unchained(address gaussGANGAddress) internal initializer {
         _senderAddress = address(this);
-        _gaussToken = IBEP20(gaussGANGAddress);
+        _gaussToken = IGTS20(gaussGANGAddress);
         _previouslyLocked = false;
         _decimalsAmount = (10 ** _gaussToken.decimals());
     }

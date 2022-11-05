@@ -1,192 +1,247 @@
 /*  _____________________________________________________________________________
 
-    Gauss(Gang) Token Contract
+    NobleSwap Token Contract
 
-    Deployed to      : TODO
-    Name             : Gauss
-    Symbol           : GANG
-    Total supply     : 250,000,000 (250 Million)
+    Name             : Noble Swap
+    Symbol           : NOBLE
+    Total supply     : 2,500,000,000 (2.5 Billion)
 
-    MIT License. (c) 2021 Gauss Gang Inc. 
+    MIT License. (c) 2022 Gauss Gang Inc. 
     
     _____________________________________________________________________________
 */
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity 0.8.17;
 import "../dependencies/utilities/Initializable.sol";
 import "../dependencies/utilities/UUPSUpgradeable.sol";
-import "../dependencies/contracts/BEP20.sol";
-import "../dependencies/contracts/BEP20Snapshot.sol";
+import "../dependencies/contracts/GTS20.sol";
+import "../dependencies/contracts/GTS20Snapshot.sol";
 import "../dependencies/contracts/AddressBook.sol";
 
 
 
-/*  A tokenized ecosystem to serve the evolving needs of any brand. 
-    The purpose of the Gauss ecosystem is to support and work with brands to launch utility tokens on 
-    our future blockchain and empower them to engage with their audiences in a new, captivating manner.
-*/
-contract GaussV2_Template is Initializable, BEP20, BEP20Snapshot, AddressBook, UUPSUpgradeable {
-        
-    // Initializes variables representing the seperate fees that comprise the Transaction Fee.
-    uint256 public redistributionFee;
-    uint256 public charitableFundFee;
-    uint256 public liquidityFee;
-    uint256 public ggFee;
-    uint256 private _totalFee;
+// A Upgrade Template for the NobleSwap Token
+contract NobleV2_Template is Initializable, GTS20, GTS20Snapshot, UUPSUpgradeable {
 
-    // Template variable for UUPS upgrade method.
+    
+    // NOTE: Template variable for UUPS upgrade method.
     uint256 private _upgradeTemplate;
 
-
-    // Calls te BEP20 Initializer and internal Initializer to create the Gauss GANG token and set required variables.
-    function initialize() initializer public {
-        __BEP20_init("Gauss", "GANG", 9, (250000000 * (10 ** 9)));
-        __BEP20Snapshot_init_unchained();
-        __UUPSUpgradeable_init();
-        __AddressManager_init();
-        __GaussGANG_init_unchained();
-    }
-
-
-    // Sets initial values to the Transaction Fees and wallets to be excluded from the Transaction Fee.
-    function __GaussGANG_init_unchained() internal initializer {
         
-        // Sets values for the variables representing the seperate fees that comprise the Transaction Fee.
-        redistributionFee = 3;
-        charitableFundFee = 3;
-        liquidityFee = 3;
-        ggFee = 3;
-        _totalFee = 12;
+    // A record of the Delegates for each account.
+    mapping (address => address) internal _delegates;
+
+    // A record of votes checkpoints for each account, by index
+    mapping (address => mapping (uint32 => Checkpoint)) public checkpoints;
+
+    // The number of checkpoints for each account
+    mapping (address => uint32) public numCheckpoints;
+
+    // A record of states for signing / validating signatures
+    mapping (address => uint) public nonces;
+
+    // A checkpoint for marking number of votes from a given block.
+    struct Checkpoint {
+        uint32 fromBlock;
+        uint256 votes;
     }
-    
-    
+
+    // The EIP-712 typehash for the contract's domain
+    bytes32 public DOMAIN_TYPEHASH;
+
+    // The EIP-712 typehash for the delegation struct used by the contract
+    bytes32 public DELEGATION_TYPEHASH;
+
+    // An event thats emitted when an account changes its delegate
+    event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);
+
+    // An event thats emitted when a delegate account's vote balance changes
+    event DelegateVotesChanged(address indexed delegate, uint previousBalance, uint newBalance);
+
+
+    // Calls te GTS20 Initializer and internal Initializer to create th NobleSwap token and set required variables.
+    function initialize() initializer public {
+        __GTS20_init("NobleSwap", "NOBLE", 18, (2500000000 * (10 ** 18)));
+        __GTS20Snapshot_init_unchained();
+        __UUPSUpgradeable_init();
+        __NobleSwap_init_unchained();
+    }
+
+
+    // TODO:
+    function __NobleSwap_init_unchained() internal initializer {
+        DOMAIN_TYPEHASH = keccak256("EIP712Domain(string name,uint256 chainId,address verifyingContract)");
+        DELEGATION_TYPEHASH = keccak256("Delegation(address delegatee,uint256 nonce,uint256 expiry)");
+    }
+
+
     // Creates a Snapshot of the balances and totalsupply of token, returns the Snapshot ID. Can only be called by owner.
     function snapshot() public onlyOwner returns (uint256) {
         uint256 id = _snapshot();
         return id;
     }
-    
 
-    // Returns the current total Transaction Fee.
-    function totalTransactionFee() public view returns (uint256) {
-        return _totalFee;
+    
+    // Returns the current "votes" balance for `account`
+    function getCurrentVotes(address account) external view returns (uint256) {
+        uint32 nCheckpoints = numCheckpoints[account];
+        return nCheckpoints > 0 ? checkpoints[account][nCheckpoints - 1].votes : 0;
     }
-    
-    
-    /*  Allows 'owner' to change the transaction fees at a later time, so long as the total Transaction Fee is lower than 12% (the initial fee ceiling).
-            -An amount for each Pool is required to be entered, even if the specific fee amount won't be changed.
-            -Each variable should be entered as a single or double digit number to represent the intended percentage; 
-                Example: Entering a 3 for newRedistributionFee would set the Redistribution fee to 3% of the Transaction Amount.
+
+
+    /*  Determines the prior number of votes for an 'account' per the given 'blockNnumber'.
+            NOTE: Block number must be a finalized block or else this function will revert to prevent misinformation.
     */
-    function changeTransactionFees(uint256 newRedistributionFee, uint256 newCharitableFundFee, uint256 newLiquidityFee, uint256 newGGFee) public onlyOwner() {
-
-        uint256 newTotalFee;
-        newTotalFee = (newRedistributionFee + newCharitableFundFee + newLiquidityFee + newGGFee);
-
-        require(newTotalFee <= 12, "GaussGANG: Transaction fee entered exceeds ceiling of 12%");
+    function getPriorVotes(address account, uint blockNumber) external view returns (uint256) {
         
-        redistributionFee = newRedistributionFee;
-        charitableFundFee = newCharitableFundFee;
-        liquidityFee = newLiquidityFee;
-        ggFee = newGGFee;
-        _totalFee = newTotalFee;
-    }
-    
-    
-    // Internal Transfer function; checks to see if "sender" is excluded from the transaction fee, attempts the transaction without fees if found true.
-    function _transfer(address sender, address recipient, uint256 amount) internal whenNotPaused override(BEP20) {
+        require(blockNumber < block.number, "NOBLE: getPriorVotes: not yet determined");
 
-        require(sender != address(0), "BEP20: transfer from the zero address");
-        require(recipient != address(0), "BEP20: transfer to the zero address");
-        
-        _beforeTokenTransfer(sender, recipient, amount);
-        
-        if (_checkIfExcluded(sender, recipient) == 1) {            
-            require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
-
-            unchecked {
-                _balances[sender] = _balances[sender] - amount;
-            }
-
-            _balances[recipient] += amount;
-            emit Transfer(sender, recipient, amount);
-        }
-
-        else {
-            _transferWithFee(sender, recipient, amount);
-        }
-    }
-
-
-    /*  Internal Transfer function; takes out transaction fees before sending remaining to 'recipient'.
-            -At launch, the transaction fee is set to 12%, but will be lowered over time.
-            -The max transaction fee is also 12%, never raising beyond the initial fee set at launch.
-            -Fee is evenly split between 4 Pools: 
-                    The Redistribution pool,        (Initially, 3%)
-                    the Charitable Fund pool,       (Initially, 3%)
-                    the Liquidity pool,             (Initially, 3%)
-                    and Gauss Gang pool             (Initially, 3%)
-    */
-    function _transferWithFee(address sender, address recipient, uint256 amount) internal {
-
-        // This section calculates the number of tokens, for the pools that comprise the transaction fee, that get pulled out of "amount" for the transaction fee.
-        uint256 redistributionAmount = (amount * redistributionFee) / 100;
-        uint256 charitableFundAmount = (amount * charitableFundFee) / 100;
-        uint256 liquidityAmount = (amount * liquidityFee) / 100;
-        uint256 ggAmount = (amount * ggFee) / 100;
-        uint256 finalAmount = amount - (redistributionAmount + charitableFundAmount + liquidityAmount + ggAmount);
-
-        /*  This section performs the balance transfer from "sender" to "recipient".
-                - First ensuring the original "amount" is removed from the "sender" and the "finalAmount" ("amount" - transaction fee)
-                    is sent to the "recipient".
-                - After those transactions are complete, the transaction fee is divided up and sent to the respective pool addresses.
-        */
-        require(amount <= _balances[sender], "BEP20: transfer amount exceeds balance");
-        require(finalAmount < amount, "GaussGANG: finalAmount exceeds original amount");
-
-        unchecked {
-            _balances[sender] = _balances[sender] - amount;
-        }
-
-        _balances[recipient] += finalAmount;
-        _balances[gaussWallets["Redistribution Fee Wallet"]] += redistributionAmount;
-        _balances[gaussWallets["Charitable Fee Wallet"]] += charitableFundAmount;
-        _balances[gaussWallets["Liquidity Fee Wallet"]] += liquidityAmount;
-        _balances[gaussWallets["GG Fee Wallet"]] += ggAmount;
-
-        emit Transfer(sender, recipient, finalAmount);
-        emit Transfer(sender, gaussWallets["Redistribution Fee Wallet"], redistributionAmount);
-        emit Transfer(sender, gaussWallets["Charitable Fee Wallet"], charitableFundAmount);
-        emit Transfer(sender, gaussWallets["Liquidity Fee Wallet"], liquidityAmount);
-        emit Transfer(sender, gaussWallets["GG Fee Wallet"], ggAmount);
-    }
-
-
-    // Internal function to check if sender or recipient are excluded from the Transaction Fee.
-    //      Dev-Note: Boolean cost more gas than uint256; using 0 to represent false, and 1 to represent true.
-    function _checkIfExcluded(address sender, address recipient) internal view returns (uint256) {
-        if (excludedFromFee[sender] == true) {
-            return 1;
-        }
-
-        else if (excludedFromFee[recipient] == true) {
-            return 1;
-        }
-
-        else {
+        uint32 nCheckpoints = numCheckpoints[account];
+        if (nCheckpoints == 0) {
             return 0;
         }
+
+        // First check most recent balance
+        if (checkpoints[account][nCheckpoints - 1].fromBlock <= blockNumber) {
+            return checkpoints[account][nCheckpoints - 1].votes;
+        }
+
+        // Next check implicit zero balance
+        if (checkpoints[account][0].fromBlock > blockNumber) {
+            return 0;
+        }
+
+        uint32 lower = 0;
+        uint32 upper = nCheckpoints - 1;
+        
+        while (upper > lower) {            
+            uint32 center = upper - (upper - lower) / 2; // ceil, avoiding overflow
+            Checkpoint memory cp = checkpoints[account][center];
+            
+            if (cp.fromBlock == blockNumber) {
+                return cp.votes;
+            } 
+            else if (cp.fromBlock < blockNumber) {
+                lower = center;
+            } 
+            else {
+                upper = center - 1;
+            }
+        }
+        return checkpoints[account][lower].votes;
     }
 
 
-    // Internal function; overriden to allow BEPSnapshot to update values before a Transfer event.
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(BEP20, BEP20Snapshot) {
+    // Delegate votes from `msg.sender` to `delegator`.
+    function delegates(address delegator) external view returns (address) {
+        return _delegates[delegator];
+    }
+
+
+    // Delegate votes from `msg.sender` to `delegatee`.
+    function delegate(address delegatee) external {
+        return _delegate(msg.sender, delegatee);
+    }
+
+
+    /* Delegates votes from signatory to `delegatee`.
+            Parameters:
+                delegatee - The address to delegate votes to.
+                nonce - The contract state required to match the signature.
+                expiry - The time at which to expire the signature.
+                v - The recovery byte of the signature.
+                r - Half of the ECDSA signature pair.
+                s - Half of the ECDSA signature pair.
+    */
+    function delegateBySig(address delegatee, uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) external {
+        bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name())), getChainId(), address(this)));
+
+        bytes32 structHash = keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, nonce, expiry));
+
+        bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
+
+        address signatory = ecrecover(digest, v, r, s);
+        require(signatory != address(0), "NOBLE: delegateBySig: invalid signature");
+        require(nonce == nonces[signatory]++, "NOBLE: delegateBySig: invalid nonce");
+        require(block.timestamp <= expiry, "NOBLE: delegateBySig: signature expired");
+        return _delegate(signatory, delegatee);
+    }
+
+
+    // TODO: Internal function to change the Delagate.
+    function _delegate(address delegator, address delegatee) internal {
+        address currentDelegate = _delegates[delegator];
+        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying NOBLE (not scaled);
+        _delegates[delegator] = delegatee;
+
+        emit DelegateChanged(delegator, currentDelegate, delegatee);
+
+        _moveDelegates(currentDelegate, delegatee, delegatorBalance);
+    }
+
+
+    // TODO: Internal function to move delegate votes from one Representative to another.
+    function _moveDelegates(address srcRep, address dstRep, uint256 amount) internal {
+        
+        if (srcRep != dstRep && amount > 0) {
+            if (srcRep != address(0)) {
+                // decrease old representative
+                uint32 srcRepNum = numCheckpoints[srcRep];
+                uint256 srcRepOld = srcRepNum > 0 ? checkpoints[srcRep][srcRepNum - 1].votes : 0;
+                uint256 srcRepNew = srcRepOld - amount;
+                _writeCheckpoint(srcRep, srcRepNum, srcRepOld, srcRepNew);
+            }
+
+            if (dstRep != address(0)) {
+                // increase new representative
+                uint32 dstRepNum = numCheckpoints[dstRep];
+                uint256 dstRepOld = dstRepNum > 0 ? checkpoints[dstRep][dstRepNum - 1].votes : 0;
+                uint256 dstRepNew = dstRepOld + amount;
+                _writeCheckpoint(dstRep, dstRepNum, dstRepOld, dstRepNew);
+            }
+        }
+    }
+
+
+    // TODO: Internal funtion to write the current delegate votes to the checkpoint struct.
+    function _writeCheckpoint(address delegatee, uint32 nCheckpoints, uint256 oldVotes, uint256 newVotes) internal {
+       
+        uint32 blockNumber = _safe32(block.number, "NOBLE: _writeCheckpoint: block number exceeds 32 bits");
+
+        if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
+            checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
+        } else {
+            checkpoints[delegatee][nCheckpoints] = Checkpoint(blockNumber, newVotes);
+            numCheckpoints[delegatee] = nCheckpoints + 1;
+        }
+
+        emit DelegateVotesChanged(delegatee, oldVotes, newVotes);
+    }
+
+
+    // Internal check to ensure entered Block Number is less than or equal the max 32 integer amount (2,147,483,647).
+    function _safe32(uint n, string memory errorMessage) internal pure returns (uint32) {
+        require(n < 2**32, errorMessage);
+        return uint32(n);
+    }
+
+
+    // Returns the current ChainID for the chain this contract is deployed to.
+    function getChainId() internal view returns (uint) {
+        uint256 chainId;
+        assembly { chainId := chainid() }
+        return chainId;
+    }
+
+
+    // Internal function; overriden to allow GTS20Snapshot to update values before a Transfer event.
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(GTS20, GTS20Snapshot) {
         super._beforeTokenTransfer(from, to, amount);
     }
 
-
+    
     // Function to allow "owner" to upgarde the contract using a UUPS Proxy.
     function _authorizeUpgrade(address newImplementation) internal whenPaused onlyOwner override {}
 

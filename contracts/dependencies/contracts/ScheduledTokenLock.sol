@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.9;
+pragma solidity 0.8.17;
 import "../../dependencies/utilities/Context.sol";
 import "../../dependencies/access/Ownable.sol";
-import "../../dependencies/interfaces/IBEP20.sol";
+import "../../dependencies/interfaces/IGTS20.sol";
 import "../../dependencies/libraries/Address.sol";
 
 
@@ -13,8 +13,8 @@ contract ScheduledTokenLock is Context {
 
     using Address for address;
 
-    // BEP20 basic token contract being held.
-    IBEP20 private immutable _token;
+    // GTS20 basic token contract being held.
+    IGTS20 private immutable _token;
     
     // Sender of tokens to be Time Locked.
     address private immutable _sender;
@@ -42,7 +42,7 @@ contract ScheduledTokenLock is Context {
     
 
     // The constructor sets internal the values of _token, _beneficiary, _tokenAmountsList, and _tokenLockTimes to the variables passed in when called externally.
-    constructor(IBEP20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) {
+    constructor(IGTS20 token_, address sender_, address beneficiary_, uint256 amount_, uint256[] memory amountsList_, uint256[] memory lockTimes_) {
         _token = token_;
         _sender = sender_;
         _beneficiary = beneficiary_;
@@ -61,7 +61,7 @@ contract ScheduledTokenLock is Context {
 
 
     // Returns the token being held.
-    function token() public view returns (IBEP20) {
+    function token() public view returns (IGTS20) {
         return _token;
     }
     
