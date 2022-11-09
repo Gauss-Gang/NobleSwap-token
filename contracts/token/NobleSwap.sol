@@ -22,7 +22,7 @@ import "../dependencies/contracts/AddressBook.sol";
 
 
 
-/*  TODO: Noble Swap Token (NOBLE)
+/*  Noble Swap Token (NOBLE)
 */
 contract NobleSwap is Initializable, GTS20, GTS20Snapshot, UUPSUpgradeable {
 
