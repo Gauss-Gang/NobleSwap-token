@@ -44,30 +44,3 @@ npx hardhat test
 npx hardhat node
 npx hardhat help
 ```
-
-## Project Introduction
-
-
-
-## Tokenomics
-
-The total supply of Noble will be fully minted upon it's launch and then distributed to multiple wallets, each representing the different pools listed in the image below. Each wallet and smart contract address will be disclosed and annotated to show what each will be used for. These tokens will have time locked schedules via smart contract, only unlocking based on the published release schedule.
-
-
----
-
-### Components of the Transaction Fee
-
-#### Liquidity
-Larger liquidity pools make for more stable ecosystems and allow for more expansions
-(into new pairings and exchanges). As such, we are allocating half of our
-transaction fees to building liquidity pools as well as paying staking rewards in
-the future.
-
-#### Treasury
-To help support the growth of Noble Swap, 25% of the transaction fee wiil be alloted to growing the Treasury
-
-#### Company Funds
-A portion of the transaction fees will fund Noble Swap's operations, development, and
-marketing. Individual pools will be allocated for each area and will be replenished via
-transaction fees.
